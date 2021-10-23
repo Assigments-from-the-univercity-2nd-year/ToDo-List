@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.data.Task
 import com.example.todolist.databinding.ItemTaskBinding
 
-class TastsAdapter : ListAdapter<Task, TastsAdapter.TasksViewHolder>(DiffCallBack()) {
+class TasksAdapter : ListAdapter<Task, TasksAdapter.TasksViewHolder>(DiffCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TasksViewHolder {
         val binding: ItemTaskBinding =
