@@ -33,6 +33,8 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
             //it?.let(binding.adapter::submitList())
 
         }
+
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -42,7 +44,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         val searchView = searchItem.actionView as SearchView
 
         searchView.onQueryTextChanged {
-            TODO("update search query")
+            viewModel.searchQuery.value = it
         }
     }
 
