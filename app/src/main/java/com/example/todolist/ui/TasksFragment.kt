@@ -52,7 +52,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
         viewLifecycleOwner.lifecycleScope.launch {
             menu.findItem(R.id.action_menuFragmentTasks_hideCompletedTasks).isChecked =
-                viewModel.preferences.first().hideCompleted
+                viewModel.preferencesFlow.first().hideCompleted
         }
     }
 
