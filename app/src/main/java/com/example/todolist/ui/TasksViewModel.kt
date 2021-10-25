@@ -3,6 +3,7 @@ package com.example.todolist.ui
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import com.example.todolist.data.SortOrder
 import com.example.todolist.data.TaskDao
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -27,9 +28,4 @@ class TasksViewModel @ViewModelInject constructor(
 
     val tasks = taskFlow.asLiveData()
 
-}
-
-enum class SortOrder {
-    BY_NAME,
-    BY_DATE
 }
