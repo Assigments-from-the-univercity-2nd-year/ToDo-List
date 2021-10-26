@@ -8,6 +8,10 @@
             name="task"
             type="com.example.todolist.data.Task" />
 
+        <variable
+            name="onItemClickListener"
+            type="com.example.todolist.ui.tasks.TasksAdapter.OnItemClickListener" />
+
         <import type="android.view.View"/>
 
     </data>
@@ -15,7 +19,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:padding="8dp"
+        android:onClick="@{() -> onItemClickListener.onItemClicked(task)}">
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/appCompatCheckBox"
@@ -24,6 +29,7 @@
             android:checked="@{task.isCompleted}"
             android:minWidth="0dp"
             android:minHeight="0dp"
+            android:onClick="@{() -> onItemClickListener.onCheckBoxClicked(task, task.isCompleted)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

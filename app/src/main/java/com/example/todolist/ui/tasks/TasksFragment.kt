@@ -1,4 +1,4 @@
-package com.example.todolist.ui
+package com.example.todolist.ui.tasks
 
 import android.os.Bundle
 import android.view.Menu
@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
 import com.example.todolist.data.SortOrder
+import com.example.todolist.data.Task
 import com.example.todolist.databinding.FragmentTasksBinding
 import com.example.todolist.util.onQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +20,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class TasksFragment : Fragment(R.layout.fragment_tasks) {
+class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClickListener {
 
     private val viewModel: TasksViewModel by viewModels()
 
@@ -27,7 +28,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentTasksBinding.bind(view)
-        binding.adapter = TasksAdapter()
+        binding.adapter = TasksAdapter(this)
         binding.layoutManager = LinearLayoutManager(requireContext())
         //TODO: setHasFixedSize(true)
         viewModel.tasks.observe(viewLifecycleOwner){
@@ -38,6 +39,14 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         }
 
         setHasOptionsMenu(true)
+    }
+
+    override fun onItemClicked(task: Task) {
+        viewModel.onTaskSelected(task)
+    }
+
+    override fun onCheckBoxClicked(task: Task, isChecked: Boolean) {
+        viewModel.onTaskCheckChanged(task, isChecked)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -1,4 +1,4 @@
-package com.example.todolist.ui
+package com.example.todolist.ui.tasks
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.data.Task
 import com.example.todolist.databinding.ItemTaskBinding
 
-class TasksAdapter : ListAdapter<Task, TasksAdapter.TasksViewHolder>(DiffCallBack()) {
+class TasksAdapter(private val onItemClickListener: OnItemClickListener) : ListAdapter<Task, TasksAdapter.TasksViewHolder>(DiffCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TasksViewHolder {
         val binding: ItemTaskBinding =
@@ -21,10 +21,21 @@ class TasksAdapter : ListAdapter<Task, TasksAdapter.TasksViewHolder>(DiffCallBac
         holder.bind(currentTask)
     }
 
-    class TasksViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class TasksViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.onItemClickListener = onItemClickListener
+        }
+
         fun bind(task: Task) {
             binding.task = task
         }
+
+    }
+
+    interface OnItemClickListener {
+        fun onItemClicked(task: Task)
+        fun onCheckBoxClicked(task: Task, isChecked: Boolean)
     }
 
     class DiffCallBack : DiffUtil.ItemCallback<Task>() {

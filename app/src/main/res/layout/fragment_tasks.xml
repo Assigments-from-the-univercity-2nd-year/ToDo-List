@@ -6,7 +6,7 @@
     <data>
         <variable
             name="adapter"
-            type="com.example.todolist.ui.TasksAdapter" />
+            type="com.example.todolist.ui.tasks.TasksAdapter" />
         <variable
             name="layoutManager"
             type="androidx.recyclerview.widget.RecyclerView.LayoutManager" />
@@ -15,7 +15,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.TasksFragment">
+        tools:context=".ui.tasks.TasksFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
