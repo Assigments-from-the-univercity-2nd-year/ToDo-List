@@ -1,60 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
 
-    <data>
-
-        <variable
-            name="task"
-            type="com.example.todolist.data.Task" />
-
-        <variable
-            name="onItemClickListener"
-            type="com.example.todolist.ui.tasks.TasksAdapter.OnItemClickListener" />
-
-        <import type="android.view.View"/>
-
-    </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/checkbox_itemtask_completed"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:onClick="@{() -> onItemClickListener.onItemClicked(task)}">
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/appCompatCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="@{task.isCompleted}"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:onClick="@{() -> onItemClickListener.onCheckBoxClicked(task, task.isCompleted)}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textview_itemtask_taskname"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Example item"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/checkbox_itemtask_completed"
+        app:layout_constraintEnd_toStartOf="@+id/appCompatImageView_itemTask_priority"
+        app:layout_constraintStart_toEndOf="@+id/checkbox_itemtask_completed"
+        app:layout_constraintTop_toTopOf="@+id/checkbox_itemtask_completed" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="@{task.name}"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/appCompatCheckBox"
-            app:layout_constraintEnd_toStartOf="@+id/appCompatImageView"
-            app:layout_constraintStart_toEndOf="@+id/appCompatCheckBox"
-            app:layout_constraintTop_toTopOf="@+id/appCompatCheckBox" />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/appCompatImageView_itemTask_priority"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_priority_high_24"
+        app:layout_constraintBottom_toBottomOf="@+id/checkbox_itemtask_completed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/checkbox_itemtask_completed" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/appCompatImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="@{task.important ? View.VISIBLE : View.GONE}"
-            android:src="@drawable/ic_baseline_priority_high_24"
-            app:layout_constraintBottom_toBottomOf="@+id/appCompatCheckBox"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/appCompatCheckBox" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>

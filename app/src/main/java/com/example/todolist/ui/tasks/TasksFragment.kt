@@ -28,15 +28,19 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
         super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentTasksBinding.bind(view)
-        binding.adapter = TasksAdapter(this)
-        binding.layoutManager = LinearLayoutManager(requireContext())
-        //TODO: setHasFixedSize(true)
-        viewModel.tasks.observe(viewLifecycleOwner){
-            binding.adapter?.submitList(it)
-            //it.let { adapter::submitlist }
-            //it?.let(binding.adapter::submitList())
-
+        val taskAdapter = TasksAdapter(this)
+        binding.apply {
+            recyclerviewFragmenttasksTasks.apply {
+                adapter = taskAdapter
+                layoutManager = LinearLayoutManager(requireContext())
+                setHasFixedSize(true)
+            }
         }
+
+        viewModel.tasks.observe(viewLifecycleOwner) {
+            taskAdapter.submitList(it)
+        }
+
 
         setHasOptionsMenu(true)
     }

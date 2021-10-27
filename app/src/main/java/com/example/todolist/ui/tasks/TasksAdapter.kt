@@ -2,6 +2,7 @@ package com.example.todolist.ui.tasks
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -24,11 +25,31 @@ class TasksAdapter(private val onItemClickListener: OnItemClickListener) : ListA
     inner class TasksViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.onItemClickListener = onItemClickListener
+            binding.apply {
+                root.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val task = getItem(position)
+                        onItemClickListener.onItemClicked(task)
+                    }
+                }
+                checkboxItemtaskCompleted.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val task = getItem(position)
+                        onItemClickListener.onCheckBoxClicked(task, checkboxItemtaskCompleted.isChecked)
+                    }
+                }
+            }
         }
 
         fun bind(task: Task) {
-            binding.task = task
+            binding.apply {
+                checkboxItemtaskCompleted.isChecked = task.isCompleted
+                textviewItemtaskTaskname.text = task.name
+                textviewItemtaskTaskname.paint.isStrikeThruText = task.isCompleted
+                appCompatImageViewItemTaskPriority.isVisible = task.isImportant
+            }
         }
 
     }
