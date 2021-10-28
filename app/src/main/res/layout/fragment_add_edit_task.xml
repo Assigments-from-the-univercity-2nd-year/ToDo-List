@@ -14,18 +14,21 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/edittext_addedittask_taskname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Task name"
             android:inputType="text"/>
         <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/checkbox_addedittask_importance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="important task"/>
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textview_addedittask_datecreated"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Date created: "/>
+            android:text="Created: "/>
 
     </LinearLayout>
 
@@ -34,6 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_baseline_edit_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
