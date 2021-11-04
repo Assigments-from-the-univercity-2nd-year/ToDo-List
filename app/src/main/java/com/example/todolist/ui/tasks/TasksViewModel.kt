@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.util.Comparator
 
 class TasksViewModel @ViewModelInject constructor(
     private val taskDao: TaskDao,
@@ -37,16 +38,14 @@ class TasksViewModel @ViewModelInject constructor(
         Triple(searchQuery, currentFolderId, preferencesFlow)
     }.flatMapLatest { (searchQuery, currentFolderId, preferences) ->
         combine(
-            taskDao.getTasksOfFolder(searchQuery, preferences.sortOrder, preferences.hideCompleted, currentFolderId),
+            taskDao.getTasksOfFolder(searchQuery, preferences.sortOrder, preferences.hideCompleted, currentFolderId, true),
+            taskDao.getTasksOfFolder(searchQuery, preferences.sortOrder, preferences.hideCompleted, currentFolderId, false),
             folderDao.getFoldersOfFolder(currentFolderId)
-        ) { tasks, folders ->
-            Pair(tasks, folders)
-        }/*.flatMapLatest { (tasks, folders) ->
-            val t: Component = tasks
-            folders as Component
-            tasks.plus(folders)
-            flowOf(tasks)
-        }*/
+        ) { importantTasks, unimportantTasks, folders ->
+            Triple(importantTasks, unimportantTasks, folders)
+        }.flatMapLatest { (importantTasks, unimportantTasks, folders) ->
+            flowOf(importantTasks.plus<Component>(folders).plus<Component>(unimportantTasks))
+        }
     }
 
     val tasks = taskFlow.asLiveData()

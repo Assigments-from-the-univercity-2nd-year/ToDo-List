@@ -25,8 +25,21 @@ interface TaskDao {
         folderId: Long
     ): Flow<List<Task>> {
         return when (sortOrder) {
-            SortOrder.BY_DATE -> getImportantTasksOfFolderSortedByDate(searchQuery, hideCompleted, folderId)
-            SortOrder.BY_NAME -> getImportantTasksOfFolderSortedByName(searchQuery, hideCompleted, folderId)
+            SortOrder.BY_DATE -> getTasksOfFolderSortedByDate(searchQuery, hideCompleted, folderId)
+            SortOrder.BY_NAME -> getTasksOfFolderSortedByName(searchQuery, hideCompleted, folderId)
+        }
+    }
+
+    fun getTasksOfFolder(
+        searchQuery: String,
+        sortOrder: SortOrder,
+        hideCompleted: Boolean,
+        folderId: Long,
+        isImportant: Boolean
+    ): Flow<List<Task>> {
+        return when (sortOrder) {
+            SortOrder.BY_DATE -> getTasksOfFolderSortedByDate(searchQuery, hideCompleted, folderId, isImportant)
+            SortOrder.BY_NAME -> getTasksOfFolderSortedByName(searchQuery, hideCompleted, folderId, isImportant)
         }
     }
 
@@ -36,11 +49,17 @@ interface TaskDao {
     @Query("SELECT * FROM task WHERE (isCompleted != :hideCompleted OR isCompleted = 0) AND title LIKE '%' || :searchQuery || '%' ORDER BY isImportant DESC, createdDate")
     fun getTasksSortedByDate(searchQuery: String, hideCompleted: Boolean): Flow<List<Task>>
 
-    @Query("SELECT * FROM task WHERE (isCompleted != :hideCompleted OR isCompleted = 0) AND title LIKE '%' || :searchQuery || '%' AND folderId = :folderId ORDER BY isImportant DESC, createdDate")
-    fun getImportantTasksOfFolderSortedByName(searchQuery: String, hideCompleted: Boolean, folderId: Long): Flow<List<Task>>
+    @Query("SELECT * FROM task WHERE (isCompleted != :hideCompleted OR isCompleted = 0) AND title LIKE '%' || :searchQuery || '%' AND folderId = :folderId ORDER BY isImportant DESC, title")
+    fun getTasksOfFolderSortedByName(searchQuery: String, hideCompleted: Boolean, folderId: Long): Flow<List<Task>>
 
     @Query("SELECT * FROM task WHERE (isCompleted != :hideCompleted OR isCompleted = 0) AND title LIKE '%' || :searchQuery || '%' AND folderId = :folderId ORDER BY isImportant DESC, createdDate")
-    fun getImportantTasksOfFolderSortedByDate(searchQuery: String, hideCompleted: Boolean, folderId: Long): Flow<List<Task>>
+    fun getTasksOfFolderSortedByDate(searchQuery: String, hideCompleted: Boolean, folderId: Long): Flow<List<Task>>
+
+    @Query("SELECT * FROM task WHERE (isCompleted != :hideCompleted OR isCompleted = 0) AND title LIKE '%' || :searchQuery || '%' AND folderId = :folderId AND isImportant = :isImportant ORDER BY title")
+    fun getTasksOfFolderSortedByName(searchQuery: String, hideCompleted: Boolean, folderId: Long, isImportant: Boolean): Flow<List<Task>>
+
+    @Query("SELECT * FROM task WHERE (isCompleted != :hideCompleted OR isCompleted = 0) AND title LIKE '%' || :searchQuery || '%' AND folderId = :folderId AND isImportant = :isImportant ORDER BY createdDate")
+    fun getTasksOfFolderSortedByDate(searchQuery: String, hideCompleted: Boolean, folderId: Long, isImportant: Boolean): Flow<List<Task>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTask(task: Task)
