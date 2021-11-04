@@ -16,10 +16,10 @@ interface TaskDao {
             SortOrder.BY_NAME -> getTasksSortedByName(searchQuery, hideCompleted)
         }
 
-    @Query("SELECT * FROM task WHERE (isCompleted != :hideCompleted OR isCompleted = 0) AND name LIKE '%' || :searchQuery || '%' ORDER BY isImportant DESC, name")
+    @Query("SELECT * FROM task WHERE (isCompleted != :hideCompleted OR isCompleted = 0) AND title LIKE '%' || :searchQuery || '%' ORDER BY isImportant DESC, title")
     fun getTasksSortedByName(searchQuery: String, hideCompleted: Boolean): Flow<List<Task>>
 
-    @Query("SELECT * FROM task WHERE (isCompleted != :hideCompleted OR isCompleted = 0) AND name LIKE '%' || :searchQuery || '%' ORDER BY isImportant DESC, createdDate")
+    @Query("SELECT * FROM task WHERE (isCompleted != :hideCompleted OR isCompleted = 0) AND title LIKE '%' || :searchQuery || '%' ORDER BY isImportant DESC, createdDate")
     fun getTasksSortedByDate(searchQuery: String, hideCompleted: Boolean): Flow<List<Task>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

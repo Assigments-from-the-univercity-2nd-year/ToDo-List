@@ -9,9 +9,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
 
-@Database(entities = [Task::class], version = 1)
+@Database(entities = [Task::class, Folder::class], version = 1)
 abstract class TaskDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
+    abstract fun folderDao(): FolderDao
 
     class CallBack @Inject constructor(
         private val database: Provider<TaskDatabase>,
@@ -20,14 +21,18 @@ abstract class TaskDatabase : RoomDatabase() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
 
-            val dao = database.get().taskDao()
+            val folderDao = database.get().folderDao()
+            val taskDao = database.get().taskDao()
+
             applicationScope.launch {
-                dao.insertTask(Task("Do your homework!"))
-                dao.insertTask(Task("Go get fruits", isCompleted = true))
-                dao.insertTask(Task("Workout", isImportant = true))
-                dao.insertTask(Task("Have a haircut", isCompleted = true))
-                dao.insertTask(Task("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"))
-                dao.insertTask(Task("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM", isImportant = true))
+                val rootFolder = folderDao.insertFolder(Folder("All", null))
+
+                taskDao.insertTask(Task("Do your homework!", rootFolder))
+                taskDao.insertTask(Task("Go get fruits", rootFolder, isCompleted = true))
+                taskDao.insertTask(Task("Workout", rootFolder, isImportant = true))
+                taskDao.insertTask(Task("Have a haircut", rootFolder, isCompleted = true))
+                taskDao.insertTask(Task("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM", rootFolder))
+                taskDao.insertTask(Task("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM", rootFolder, isImportant = true))
             }
         }
     }

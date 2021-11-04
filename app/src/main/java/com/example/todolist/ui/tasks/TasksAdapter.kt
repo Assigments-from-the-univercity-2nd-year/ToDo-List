@@ -46,7 +46,7 @@ class TasksAdapter(private val onItemClickListener: OnItemClickListener) : ListA
         fun bind(task: Task) {
             binding.apply {
                 checkboxItemtaskCompleted.isChecked = task.isCompleted
-                textviewItemtaskTaskname.text = task.name
+                textviewItemtaskTaskname.text = task.title
                 textviewItemtaskTaskname.paint.isStrikeThruText = task.isCompleted
                 appCompatImageViewItemTaskPriority.isVisible = task.isImportant
             }
