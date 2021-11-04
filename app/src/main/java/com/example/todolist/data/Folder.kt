@@ -13,4 +13,4 @@ data class Folder(
     val isPinned: Boolean = false,
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0
-) : Parcelable
+) : Component(), Parcelable

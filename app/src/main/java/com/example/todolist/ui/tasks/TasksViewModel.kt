@@ -3,37 +3,51 @@ package com.example.todolist.ui.tasks
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import com.example.todolist.data.PreferencesManager
-import com.example.todolist.data.SortOrder
-import com.example.todolist.data.Task
-import com.example.todolist.data.TaskDao
+import com.example.todolist.data.*
 import com.example.todolist.ui.ADD_TASK_RESULT_OK
 import com.example.todolist.ui.EDIT_TASK_RESULT_OK
 import com.example.todolist.util.exhaustive
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class TasksViewModel @ViewModelInject constructor(
     private val taskDao: TaskDao,
+    private val folderDao: FolderDao,
     private val preferencesManager: PreferencesManager,
     @Assisted private val state: SavedStateHandle
 ) : ViewModel() {
 
     val searchQuery = state.getLiveData("searchQuery", "")//MutableStateFlow("")
+    private val currentFolderId = state.getLiveData("currentFolder", 1L)
+    //private val foldersFlow = folderDao.getFoldersOfFolder(currentFolderId)
     val preferencesFlow = preferencesManager.preferencesFlow
     private val tasksEventChannel = Channel<TasksEvent>()
     val tasksEvent = tasksEventChannel.receiveAsFlow()
 
     private val taskFlow = combine(
         searchQuery.asFlow(),
+        currentFolderId.asFlow(),
         preferencesFlow
-    ) { searchQuery, preferencesFlow -> Pair(searchQuery, preferencesFlow) }
-        .flatMapLatest {(searchQuery, preferences) ->
-            taskDao.getTasks(searchQuery, preferences.sortOrder, preferences.hideCompleted)
-        }
+    ) { searchQuery, currentFolderId, preferencesFlow ->
+        Triple(searchQuery, currentFolderId, preferencesFlow)
+    }.flatMapLatest { (searchQuery, currentFolderId, preferences) ->
+        combine(
+            taskDao.getTasksOfFolder(searchQuery, preferences.sortOrder, preferences.hideCompleted, currentFolderId),
+            folderDao.getFoldersOfFolder(currentFolderId)
+        ) { tasks, folders ->
+            Pair(tasks, folders)
+        }/*.flatMapLatest { (tasks, folders) ->
+            val t: Component = tasks
+            folders as Component
+            tasks.plus(folders)
+            flowOf(tasks)
+        }*/
+    }
 
     val tasks = taskFlow.asLiveData()
 
