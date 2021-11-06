@@ -39,7 +39,7 @@ class TasksViewModel @ViewModelInject constructor(
         combine(
             taskDao.getTasksOfFolder(searchQuery, preferences.sortOrder, preferences.hideCompleted, currentFolderId, true),
             taskDao.getTasksOfFolder(searchQuery, preferences.sortOrder, preferences.hideCompleted, currentFolderId, false),
-            folderDao.getFoldersOfFolder(currentFolderId)
+            folderDao.getFoldersOfFolder(currentFolderId, searchQuery)
         ) { importantTasks, unimportantTasks, folders ->
             Triple(importantTasks, unimportantTasks, folders)
         }.flatMapLatest { (importantTasks, unimportantTasks, folders) ->
