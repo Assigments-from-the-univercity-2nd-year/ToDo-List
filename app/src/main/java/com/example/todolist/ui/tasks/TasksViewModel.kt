@@ -74,6 +74,17 @@ class TasksViewModel @ViewModelInject constructor(
         tasksEventChannel.send(TasksEvent.ShowUndoDeleteTaskMessage(task))
     }
 
+    fun onFolderSwiped(folder: Folder) = viewModelScope.launch {
+        // TODO: tha action when holder swiped
+    }
+
+    fun onComponentSwiped(component: Component) {
+        when(component) {
+            is Folder -> onFolderSwiped(component)
+            is Task -> onTaskSwiped(component)
+        }.exhaustive
+    }
+
     fun onUndoDeleteClicked(task: Task) = viewModelScope.launch {
         taskDao.insertTask(task)
     }

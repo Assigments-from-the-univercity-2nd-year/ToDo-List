@@ -61,9 +61,8 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
                 }
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    val task = taskAdapter.currentList[viewHolder.adapterPosition]
-                    //TODO implement this case methods
-                    //viewModel.onTaskSwiped(task)
+                    val component = taskAdapter.currentList[viewHolder.adapterPosition]
+                    viewModel.onComponentSwiped(component)
                 }
             }).attachToRecyclerView(recyclerviewFragmenttasksTasks)
 
