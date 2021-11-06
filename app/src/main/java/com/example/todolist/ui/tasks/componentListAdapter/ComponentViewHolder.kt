@@ -14,7 +14,7 @@ sealed class ComponentViewHolder(binding: ViewBinding) :
 
     abstract fun onBindViewHolder(component: Component)
 
-    class NoteViewHolder(
+    class TaskViewHolder(
         private val binding: ItemTaskBinding,
         private val onComponentClickListener: OnComponentClickListener
     ) : ComponentViewHolder(binding) {
@@ -28,7 +28,7 @@ sealed class ComponentViewHolder(binding: ViewBinding) :
                 appCompatImageViewItemTaskPriority.isVisible = currentTask.isImportant
 
                 root.setOnClickListener {
-                    onComponentClickListener.onNoteClicked(currentTask)
+                    onComponentClickListener.onTaskClicked(currentTask)
                 }
                 checkboxItemtaskCompleted.setOnClickListener {
                     onComponentClickListener.onCheckBoxClicked(
@@ -50,7 +50,7 @@ sealed class ComponentViewHolder(binding: ViewBinding) :
             val currentFolder = component as Folder
             binding.apply {
                 textviewItemfolderFoldername.text = currentFolder.title
-                //TODO: set the number of notes in folder
+                //TODO: set the number of tasks in folder
                 //TODO: show an icon if this folder is pinned
 
                 root.setOnClickListener {

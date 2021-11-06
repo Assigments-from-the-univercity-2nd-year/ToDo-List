@@ -19,12 +19,12 @@ class ComponentAdapter(
                     ItemFolderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 ComponentViewHolder.FolderViewHolder(binding, onComponentClickListener)
             }
-            TYPE_NOTE -> {
+            TYPE_TASK -> {
                 val binding: ItemTaskBinding =
                     ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                ComponentViewHolder.NoteViewHolder(binding, onComponentClickListener)
+                ComponentViewHolder.TaskViewHolder(binding, onComponentClickListener)
             }
-            else -> throw Exception() //TODO("handling exception that it is not a folder or a note")
+            else -> throw Exception() //TODO("handling exception that it is not a folder or a task")
         }
     }
 
@@ -34,11 +34,11 @@ class ComponentAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when(getItem(position)) {
-            is Task -> TYPE_NOTE
+            is Task -> TYPE_TASK
             is Folder -> TYPE_FOLDER
         }
     }
 }
 
 private const val TYPE_FOLDER = 0
-private const val TYPE_NOTE = 1
+private const val TYPE_TASK = 1

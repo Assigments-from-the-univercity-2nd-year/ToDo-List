@@ -37,6 +37,8 @@ data class Task(
 ) : Component(), Parcelable {
     val createdDateFormatted: String
         get() = DateFormat.getDateTimeInstance().format(createdDate)
+    val modifiedDateFormatted: String
+        get() = DateFormat.getDateTimeInstance().format(modifiedDate)
     override val uniqueStringId: String
         get() = "0${id}"
 }

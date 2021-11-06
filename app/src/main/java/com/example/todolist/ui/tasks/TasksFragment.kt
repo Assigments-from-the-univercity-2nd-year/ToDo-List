@@ -40,7 +40,6 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
         super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentTasksBinding.bind(view)
-        //val taskAdapter = TasksAdapter(this)
         val taskAdapter = ComponentAdapter(this)
         binding.apply {
             recyclerviewFragmenttasksTasks.apply {
@@ -116,7 +115,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
             }
         }
 
-        if (viewModel.currentFolderId != 1L) {
+        if (viewModel.currentFolderId != 1L) { // 1L is an id of the root folder
             (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
 
@@ -135,7 +134,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
         viewModel.onFolderSelected(folder)
     }
 
-    override fun onNoteClicked(task: Task) {
+    override fun onTaskClicked(task: Task) {
         viewModel.onTaskSelected(task)
     }
 

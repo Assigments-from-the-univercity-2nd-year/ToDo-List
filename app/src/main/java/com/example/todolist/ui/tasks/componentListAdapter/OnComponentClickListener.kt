@@ -5,6 +5,6 @@ import com.example.todolist.data.Task
 
 interface OnComponentClickListener {
     fun onFolderClicked(folder: Folder)
-    fun onNoteClicked(task: Task)
+    fun onTaskClicked(task: Task)
     fun onCheckBoxClicked(task: Task, isChecked: Boolean)
 }
