@@ -26,11 +26,12 @@ abstract class TaskDatabase : RoomDatabase() {
 
             applicationScope.launch {
                 val rootFolder = folderDao.insertFolder(Folder("All", null))
+                val folder = folderDao.insertFolder(Folder("Folder name", rootFolder))
 
                 taskDao.insertTask(Task("Do your homework!", rootFolder))
                 taskDao.insertTask(Task("Go get fruits", rootFolder, isCompleted = true))
                 taskDao.insertTask(Task("Workout", rootFolder, isImportant = true))
-                taskDao.insertTask(Task("Have a haircut", rootFolder, isCompleted = true))
+                taskDao.insertTask(Task("Have a haircut", folder, isCompleted = true))
                 taskDao.insertTask(Task("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM", rootFolder))
                 taskDao.insertTask(Task("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM", rootFolder, isImportant = true))
             }
