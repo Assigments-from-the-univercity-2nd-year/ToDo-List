@@ -23,20 +23,19 @@ class TasksViewModel @ViewModelInject constructor(
     @Assisted private val state: SavedStateHandle
 ) : ViewModel() {
 
-    val searchQuery = state.getLiveData("searchQuery", "")//MutableStateFlow("")
-    private val currentFolderId = state.getLiveData("currentFolder", 1L)
-    //private val foldersFlow = folderDao.getFoldersOfFolder(currentFolderId)
+    val searchQuery = state.getLiveData("searchQuery", "")
+    private val currentFolder = state.get<Folder>("currentFolder")
+    val currentFolderId = currentFolder?.id ?: 1L
     val preferencesFlow = preferencesManager.preferencesFlow
     private val tasksEventChannel = Channel<TasksEvent>()
     val tasksEvent = tasksEventChannel.receiveAsFlow()
 
     private val taskFlow = combine(
         searchQuery.asFlow(),
-        currentFolderId.asFlow(),
         preferencesFlow
-    ) { searchQuery, currentFolderId, preferencesFlow ->
-        Triple(searchQuery, currentFolderId, preferencesFlow)
-    }.flatMapLatest { (searchQuery, currentFolderId, preferences) ->
+    ) { searchQuery, preferencesFlow ->
+        Pair(searchQuery, preferencesFlow)
+    }.flatMapLatest { (searchQuery, preferences) ->
         combine(
             taskDao.getTasksOfFolder(searchQuery, preferences.sortOrder, preferences.hideCompleted, currentFolderId, true),
             taskDao.getTasksOfFolder(searchQuery, preferences.sortOrder, preferences.hideCompleted, currentFolderId, false),
@@ -64,6 +63,10 @@ class TasksViewModel @ViewModelInject constructor(
 
     fun onTaskCheckChanged(task: Task, isChecked: Boolean) = viewModelScope.launch {
         taskDao.updateTask(task.copy(isCompleted = isChecked))
+    }
+
+    fun onFolderSelected(folder: Folder) = viewModelScope.launch {
+        tasksEventChannel.send(TasksEvent.NavigateToFolderScreen(folder))
     }
 
     fun onTaskSwiped(task: Task) = viewModelScope.launch {
@@ -97,6 +100,7 @@ class TasksViewModel @ViewModelInject constructor(
     sealed class TasksEvent {
         object NavigateToAddTaskScreen : TasksEvent()
         data class NavigateToEditTaskScreen(val task: Task) : TasksEvent()
+        data class NavigateToFolderScreen(val folder: Folder) : TasksEvent()
         data class ShowUndoDeleteTaskMessage(val task: Task) : TasksEvent()
         data class ShowTaskSavedConfirmationMessage(val msg: String) : TasksEvent()
         object NavigateToDeleteAllCompletedScreen : TasksEvent()

@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -40,10 +41,6 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
 
         val binding = FragmentTasksBinding.bind(view)
         //val taskAdapter = TasksAdapter(this)
-
-        //val baseViewHolderProvider = MultiViewViewHolderProvider()
-        //baseViewHolderProvider.registerViewHolderClass(R.layout.item_task, TaskViewHolder::class.java)
-        //baseViewHolderProvider.registerViewHolderClass(R.layout.item_type2, ViewHolder2::class.java)
         val taskAdapter = ComponentAdapter(this)
         binding.apply {
             recyclerviewFragmenttasksTasks.apply {
@@ -111,8 +108,16 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
                         val action = TasksFragmentDirections.actionGlobalDeleteAllCompletedDialogFragment()
                         findNavController().navigate(action)
                     }
+                    is TasksViewModel.TasksEvent.NavigateToFolderScreen -> {
+                        val action = TasksFragmentDirections.actionTasksFragmentSelf(event.folder)
+                        findNavController().navigate(action)
+                    }
                 }.exhaustive
             }
+        }
+
+        if (viewModel.currentFolderId != 1L) {
+            (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
 
         setHasOptionsMenu(true)
@@ -127,7 +132,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
     }
 
     override fun onFolderClicked(folder: Folder) {
-        //viewModel.onFolderSelected(folder)
+        viewModel.onFolderSelected(folder)
     }
 
     override fun onNoteClicked(task: Task) {
@@ -177,6 +182,15 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                findNavController().navigateUp()
+            }
+        }
+        return super.onContextItemSelected(item)
     }
 
     override fun onDestroyView() {
