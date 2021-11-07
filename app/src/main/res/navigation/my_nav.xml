@@ -43,4 +43,8 @@
         android:id="@+id/deleteAllCompletedDialogFragment"
         android:name="com.example.todolist.ui.delteAllCompeted.DeleteAllCompletedDialogFragment"
         android:label="DeleteAllCompletedDialogFragment" /><action android:id="@+id/action_global_deleteAllCompletedDialogFragment" app:destination="@id/deleteAllCompletedDialogFragment"/>
+    <dialog
+        android:id="@+id/deleteFolderDialogFragment"
+        android:name="com.example.todolist.ui.deleteFolder.DeleteFolderDialogFragment"
+        android:label="DeleteFolderDialogFragment" /><action android:id="@+id/action_global_deleteFolderDialogFragment" app:destination="@id/deleteFolderDialogFragment"/>
 </navigation>

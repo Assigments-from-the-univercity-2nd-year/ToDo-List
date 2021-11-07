@@ -117,8 +117,12 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
                         val action = TasksFragmentDirections.actionTasksFragmentSelf(event.folder)
                         findNavController().navigate(action)
                     }
-                    is TasksViewModel.TasksEvent.NotifyAdapterItemChaged -> {
+                    is TasksViewModel.TasksEvent.NotifyAdapterItemChanged -> {
                         taskAdapter.notifyItemChanged(event.position)
+                    }
+                    is TasksViewModel.TasksEvent.NavigateToDeleteFolderScreen -> {
+                        val action = TasksFragmentDirections.actionGlobalDeleteFolderDialogFragment()
+                        findNavController().navigate(action)
                     }
                 }.exhaustive
             }

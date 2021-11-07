@@ -7,14 +7,12 @@ import com.example.todolist.data.*
 import com.example.todolist.ui.ADD_TASK_RESULT_OK
 import com.example.todolist.ui.EDIT_TASK_RESULT_OK
 import com.example.todolist.util.exhaustive
-import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import java.util.Comparator
 
 class TasksViewModel @ViewModelInject constructor(
     private val taskDao: TaskDao,
@@ -75,8 +73,8 @@ class TasksViewModel @ViewModelInject constructor(
     }
 
     fun onFolderSwiped(folder: Folder, position: Int) = viewModelScope.launch {
-        // TODO: tha action when holder swiped
-        tasksEventChannel.send(TasksEvent.NotifyAdapterItemChaged(position))
+        tasksEventChannel.send(TasksEvent.NavigateToDeleteFolderScreen(folder))
+        tasksEventChannel.send(TasksEvent.NotifyAdapterItemChanged(position))
     }
 
     fun onComponentSwiped(component: Component, position: Int) {
@@ -116,6 +114,7 @@ class TasksViewModel @ViewModelInject constructor(
         data class ShowUndoDeleteTaskMessage(val task: Task) : TasksEvent()
         data class ShowTaskSavedConfirmationMessage(val msg: String) : TasksEvent()
         object NavigateToDeleteAllCompletedScreen : TasksEvent()
-        data class NotifyAdapterItemChaged(val position: Int) : TasksEvent()
+        data class NotifyAdapterItemChanged(val position: Int) : TasksEvent()
+        data class NavigateToDeleteFolderScreen(val folder: Folder) : TasksEvent()
     }
 }
