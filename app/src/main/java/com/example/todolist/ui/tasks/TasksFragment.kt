@@ -91,12 +91,19 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
                     }
                     is TasksViewModel.TasksEvent.NavigateToAddTaskScreen -> {
                         val action =
-                            TasksFragmentDirections.actionTasksFragmentToAddEditTaskFragment(title = "New Task")
+                            TasksFragmentDirections.actionTasksFragmentToAddEditTaskFragment(
+                                title = "New Task",
+                                folderId = viewModel.currentFolderId
+                            )
                         findNavController().navigate(action)
                     }
                     is TasksViewModel.TasksEvent.NavigateToEditTaskScreen -> {
                         val action =
-                            TasksFragmentDirections.actionTasksFragmentToAddEditTaskFragment(event.task, "Edit Task")
+                            TasksFragmentDirections.actionTasksFragmentToAddEditTaskFragment(
+                                event.task,
+                                "Edit Task",
+                                viewModel.currentFolderId
+                            )
                         findNavController().navigate(action)
                     }
                     is TasksViewModel.TasksEvent.ShowTaskSavedConfirmationMessage -> {
