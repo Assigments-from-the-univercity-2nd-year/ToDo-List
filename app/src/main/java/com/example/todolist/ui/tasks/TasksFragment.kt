@@ -83,13 +83,13 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.tasksEvent.collect { event ->
                 when (event) {
-                    is TasksViewModel.TasksEvent.ShowUndoDeleteTaskMessage -> {
+                    is TasksViewModel.TasksEvent.MessageEvent.ShowUndoDeleteTaskMessage -> {
                         Snackbar.make(requireView(), "Task deleted", Snackbar.LENGTH_LONG)
                             .setAction("UNDO") {
                                 viewModel.onUndoDeleteClicked(event.task)
                             }.show()
                     }
-                    is TasksViewModel.TasksEvent.NavigateToAddTaskScreen -> {
+                    is TasksViewModel.TasksEvent.NavigationEvent.NavigateToAddTaskScreen -> {
                         val action =
                             TasksFragmentDirections.actionTasksFragmentToAddEditTaskFragment(
                                 title = "New Task",
@@ -97,7 +97,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
                             )
                         findNavController().navigate(action)
                     }
-                    is TasksViewModel.TasksEvent.NavigateToEditTaskScreen -> {
+                    is TasksViewModel.TasksEvent.NavigationEvent.NavigateToEditTaskScreen -> {
                         val action =
                             TasksFragmentDirections.actionTasksFragmentToAddEditTaskFragment(
                                 event.task,
@@ -106,21 +106,21 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
                             )
                         findNavController().navigate(action)
                     }
-                    is TasksViewModel.TasksEvent.ShowTaskSavedConfirmationMessage -> {
+                    is TasksViewModel.TasksEvent.MessageEvent.ShowTaskSavedConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
                     }
-                    is TasksViewModel.TasksEvent.NavigateToDeleteAllCompletedScreen -> {
+                    is TasksViewModel.TasksEvent.NavigationEvent.NavigateToDeleteAllCompletedScreen -> {
                         val action = TasksFragmentDirections.actionGlobalDeleteAllCompletedDialogFragment()
                         findNavController().navigate(action)
                     }
-                    is TasksViewModel.TasksEvent.NavigateToFolderScreen -> {
+                    is TasksViewModel.TasksEvent.NavigationEvent.NavigateToFolderScreen -> {
                         val action = TasksFragmentDirections.actionTasksFragmentSelf(event.folder)
                         findNavController().navigate(action)
                     }
                     is TasksViewModel.TasksEvent.NotifyAdapterItemChanged -> {
                         taskAdapter.notifyItemChanged(event.position)
                     }
-                    is TasksViewModel.TasksEvent.NavigateToDeleteFolderScreen -> {
+                    is TasksViewModel.TasksEvent.NavigationEvent.NavigateToDeleteFolderScreen -> {
                         val action = TasksFragmentDirections.actionGlobalDeleteFolderDialogFragment()
                         findNavController().navigate(action)
                     }

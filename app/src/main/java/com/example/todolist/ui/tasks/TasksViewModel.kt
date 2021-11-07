@@ -56,7 +56,7 @@ class TasksViewModel @ViewModelInject constructor(
     }
 
     fun onTaskSelected(task: Task) = viewModelScope.launch {
-        tasksEventChannel.send(TasksEvent.NavigateToEditTaskScreen(task))
+        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToEditTaskScreen(task))
     }
 
     fun onTaskCheckChanged(task: Task, isChecked: Boolean) = viewModelScope.launch {
@@ -64,16 +64,16 @@ class TasksViewModel @ViewModelInject constructor(
     }
 
     fun onFolderSelected(folder: Folder) = viewModelScope.launch {
-        tasksEventChannel.send(TasksEvent.NavigateToFolderScreen(folder))
+        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToFolderScreen(folder))
     }
 
     fun onTaskSwiped(task: Task) = viewModelScope.launch {
         taskDao.deleteTask(task)
-        tasksEventChannel.send(TasksEvent.ShowUndoDeleteTaskMessage(task))
+        tasksEventChannel.send(TasksEvent.MessageEvent.ShowUndoDeleteTaskMessage(task))
     }
 
     fun onFolderSwiped(folder: Folder, position: Int) = viewModelScope.launch {
-        tasksEventChannel.send(TasksEvent.NavigateToDeleteFolderScreen(folder))
+        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToDeleteFolderScreen(folder))
         tasksEventChannel.send(TasksEvent.NotifyAdapterItemChanged(position))
     }
 
@@ -89,7 +89,7 @@ class TasksViewModel @ViewModelInject constructor(
     }
 
     fun onAddNewTaskClicked() = viewModelScope.launch {
-        tasksEventChannel.send(TasksEvent.NavigateToAddTaskScreen)
+        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToAddTaskScreen)
     }
 
     fun onAddEditResult(result: Int) {
@@ -100,21 +100,25 @@ class TasksViewModel @ViewModelInject constructor(
     }
 
     private fun showTaskSavedConfirmationMessage(msg: String) = viewModelScope.launch {
-        tasksEventChannel.send(TasksEvent.ShowTaskSavedConfirmationMessage(msg))
+        tasksEventChannel.send(TasksEvent.MessageEvent.ShowTaskSavedConfirmationMessage(msg))
     }
 
     fun onDeleteAllCompletedClicked() = viewModelScope.launch {
-        tasksEventChannel.send(TasksEvent.NavigateToDeleteAllCompletedScreen)
+        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToDeleteAllCompletedScreen)
     }
 
     sealed class TasksEvent {
-        object NavigateToAddTaskScreen : TasksEvent()
-        data class NavigateToEditTaskScreen(val task: Task) : TasksEvent()
-        data class NavigateToFolderScreen(val folder: Folder) : TasksEvent()
-        data class ShowUndoDeleteTaskMessage(val task: Task) : TasksEvent()
-        data class ShowTaskSavedConfirmationMessage(val msg: String) : TasksEvent()
-        object NavigateToDeleteAllCompletedScreen : TasksEvent()
+        sealed class NavigationEvent {
+            object NavigateToAddTaskScreen : TasksEvent()
+            data class NavigateToEditTaskScreen(val task: Task) : TasksEvent()
+            data class NavigateToFolderScreen(val folder: Folder) : TasksEvent()
+            object NavigateToDeleteAllCompletedScreen : TasksEvent()
+            data class NavigateToDeleteFolderScreen(val folder: Folder) : TasksEvent()
+        }
+        sealed class MessageEvent {
+            data class ShowUndoDeleteTaskMessage(val task: Task) : TasksEvent()
+            data class ShowTaskSavedConfirmationMessage(val msg: String) : TasksEvent()
+        }
         data class NotifyAdapterItemChanged(val position: Int) : TasksEvent()
-        data class NavigateToDeleteFolderScreen(val folder: Folder) : TasksEvent()
     }
 }
