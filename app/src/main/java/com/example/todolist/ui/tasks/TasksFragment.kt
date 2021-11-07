@@ -62,7 +62,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val component = taskAdapter.currentList[viewHolder.adapterPosition]
-                    viewModel.onComponentSwiped(component)
+                    viewModel.onComponentSwiped(component, viewHolder.adapterPosition)
                 }
             }).attachToRecyclerView(recyclerviewFragmenttasksTasks)
 
@@ -109,7 +109,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
                     is TasksViewModel.TasksEvent.ShowTaskSavedConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
                     }
-                    TasksViewModel.TasksEvent.NavigateToDeleteAllCompletedScreen -> {
+                    is TasksViewModel.TasksEvent.NavigateToDeleteAllCompletedScreen -> {
                         val action = TasksFragmentDirections.actionGlobalDeleteAllCompletedDialogFragment()
                         findNavController().navigate(action)
                     }
@@ -117,10 +117,14 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
                         val action = TasksFragmentDirections.actionTasksFragmentSelf(event.folder)
                         findNavController().navigate(action)
                     }
+                    is TasksViewModel.TasksEvent.NotifyAdapterItemChaged -> {
+                        taskAdapter.notifyItemChanged(event.position)
+                    }
                 }.exhaustive
             }
         }
 
+        // showing back button manually
         if (viewModel.currentFolderId != 1L) { // 1L is an id of the root folder
             (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }

@@ -74,13 +74,14 @@ class TasksViewModel @ViewModelInject constructor(
         tasksEventChannel.send(TasksEvent.ShowUndoDeleteTaskMessage(task))
     }
 
-    fun onFolderSwiped(folder: Folder) = viewModelScope.launch {
+    fun onFolderSwiped(folder: Folder, position: Int) = viewModelScope.launch {
         // TODO: tha action when holder swiped
+        tasksEventChannel.send(TasksEvent.NotifyAdapterItemChaged(position))
     }
 
-    fun onComponentSwiped(component: Component) {
+    fun onComponentSwiped(component: Component, position: Int) {
         when(component) {
-            is Folder -> onFolderSwiped(component)
+            is Folder -> onFolderSwiped(component, position)
             is Task -> onTaskSwiped(component)
         }.exhaustive
     }
@@ -115,5 +116,6 @@ class TasksViewModel @ViewModelInject constructor(
         data class ShowUndoDeleteTaskMessage(val task: Task) : TasksEvent()
         data class ShowTaskSavedConfirmationMessage(val msg: String) : TasksEvent()
         object NavigateToDeleteAllCompletedScreen : TasksEvent()
+        data class NotifyAdapterItemChaged(val position: Int) : TasksEvent()
     }
 }
