@@ -8,16 +8,6 @@ import kotlinx.coroutines.flow.flowOf
 @Dao
 interface TaskDao {
 
-    fun getTasks(
-        searchQuery: String,
-        sortOrder: SortOrder,
-        hideCompleted: Boolean
-    ): Flow<List<Task>> =
-        when (sortOrder) {
-            SortOrder.BY_DATE -> getTasksSortedByDate(searchQuery, hideCompleted)
-            SortOrder.BY_NAME -> getTasksSortedByName(searchQuery, hideCompleted)
-        }
-
     fun getTasksOfFolder(
         searchQuery: String,
         sortOrder: SortOrder,

@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClickListener, OnComponentClickListener {
+class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListener {
 
     private val viewModel: TasksViewModel by viewModels()
     private lateinit var searchView: SearchView
@@ -134,10 +134,6 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
         }
 
         setHasOptionsMenu(true)
-    }
-
-    override fun onItemClicked(task: Task) {
-        viewModel.onTaskSelected(task)
     }
 
     override fun onCheckBoxClicked(task: Task, isChecked: Boolean) {
