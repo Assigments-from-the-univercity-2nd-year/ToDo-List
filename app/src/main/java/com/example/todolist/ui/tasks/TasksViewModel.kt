@@ -48,7 +48,17 @@ class TasksViewModel @ViewModelInject constructor(
         ) { tasks, folders ->
             Pair(tasks, folders)
         }.flatMapLatest { (tasks, folders) ->
-            flowOf(tasks.plus<Component>(folders).sortedByDescending { it.modifiedDate })
+            when(preferences.sortOrder) {
+                SortOrder.BY_DATE -> {
+                    flowOf(tasks.plus<Component>(folders)
+                    .sortedByDescending { it.modifiedDate }
+                    .sortedWith(CompareComponents))
+                }
+                SortOrder.BY_NAME ->flowOf(tasks.plus<Component>(folders)
+                    .sortedBy { it.title }
+                    .sortedWith(CompareComponents))
+            }
+
         }
     }
 

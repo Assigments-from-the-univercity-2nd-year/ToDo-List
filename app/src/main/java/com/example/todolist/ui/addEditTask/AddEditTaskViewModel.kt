@@ -43,8 +43,13 @@ class AddEditTaskViewModel @ViewModelInject constructor(
         }
 
         if (task != null) {
-            val updatedTask = task.copy(title = taskName, isImportant = taskImportance)
+            val updatedTask = task.copy(
+                title = taskName,
+                isImportant = taskImportance,
+                modifiedDate = System.currentTimeMillis()
+            )
             updateTask(updatedTask)
+            // TODO: update folder modifiedDate
         } else {
             val newTask = Task(taskName, folderId, taskImportance)
             insertTask(newTask)

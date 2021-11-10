@@ -9,12 +9,13 @@ import java.text.DateFormat
 sealed class Component {
     abstract val uniqueStringId: String
     abstract val modifiedDate: Long
+    abstract val title: String?
 }
 
 @Parcelize
 @Entity
 data class Folder(
-    val title: String,
+    override val title: String,
     val folderId: Long?,
     val isPinned: Boolean = false,
     override val modifiedDate: Long = System.currentTimeMillis(),
@@ -28,7 +29,7 @@ data class Folder(
 @Parcelize
 @Entity
 data class Task(
-    val title: String?,
+    override val title: String?,
     val folderId: Long,
     val isImportant: Boolean = false,
     val isCompleted: Boolean = false,
