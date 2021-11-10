@@ -15,8 +15,11 @@ interface FolderDao {
     suspend fun deleteTask(folder: Folder)
 
     @Query("SELECT * FROM folder WHERE folderId IS NULL")
-    fun getRootFolder(): Folder
+    suspend fun getRootFolder(): Folder
 
     @Query("SELECT * FROM folder WHERE folderId = :folderId AND title LIKE '%' || :searchQuery || '%'")
     fun getFoldersOfFolder(folderId: Long, searchQuery: String): Flow<List<Folder>>
+
+    @Query("SELECT * FROM folder WHERE id = :id")
+    suspend fun getFolder(id: Long): Folder
 }

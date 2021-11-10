@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -93,7 +94,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
                         val action =
                             TasksFragmentDirections.actionTasksFragmentToAddEditTaskFragment(
                                 title = "New Task",
-                                folderId = viewModel.currentFolderId
+                                folderId = viewModel.currentFolder.value?.id ?: 1L
                             )
                         findNavController().navigate(action)
                     }
@@ -102,7 +103,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
                             TasksFragmentDirections.actionTasksFragmentToAddEditTaskFragment(
                                 event.task,
                                 "Edit Task",
-                                viewModel.currentFolderId
+                                viewModel.currentFolder.value?.id ?: 1L
                             )
                         findNavController().navigate(action)
                     }
@@ -111,10 +112,6 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
                     }
                     is TasksViewModel.TasksEvent.NavigationEvent.NavigateToDeleteAllCompletedScreen -> {
                         val action = TasksFragmentDirections.actionGlobalDeleteAllCompletedDialogFragment()
-                        findNavController().navigate(action)
-                    }
-                    is TasksViewModel.TasksEvent.NavigationEvent.NavigateToFolderScreen -> {
-                        val action = TasksFragmentDirections.actionTasksFragmentSelf(event.folder)
                         findNavController().navigate(action)
                     }
                     is TasksViewModel.TasksEvent.NotifyAdapterItemChanged -> {
@@ -129,8 +126,12 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
         }
 
         // showing back button manually
-        if (viewModel.currentFolderId != 1L) { // 1L is an id of the root folder
-            (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        viewModel.currentFolder.observe(viewLifecycleOwner) {
+            if (it.id != 1L) { // 1L is an id of the root folder
+                (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            } else {
+                (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            }
         }
 
         setHasOptionsMenu(true)
@@ -141,7 +142,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
     }
 
     override fun onFolderClicked(folder: Folder) {
-        viewModel.onFolderSelected(folder)
+        viewModel.onSubFolderSelected(folder)
     }
 
     override fun onTaskClicked(task: Task) {
@@ -189,17 +190,12 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
                 viewModel.onDeleteAllCompletedClicked()
                 true
             }
+            android.R.id.home -> {
+                viewModel.onHomeButtonSelected()
+                return true
+            }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                findNavController().navigateUp()
-            }
-        }
-        return super.onContextItemSelected(item)
     }
 
     override fun onDestroyView() {

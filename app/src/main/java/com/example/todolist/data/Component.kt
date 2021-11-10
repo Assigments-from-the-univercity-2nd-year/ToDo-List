@@ -8,6 +8,7 @@ import java.text.DateFormat
 
 sealed class Component {
     abstract val uniqueStringId: String
+    abstract val modifiedDate: Long
 }
 
 @Parcelize
@@ -16,6 +17,7 @@ data class Folder(
     val title: String,
     val folderId: Long?,
     val isPinned: Boolean = false,
+    override val modifiedDate: Long = System.currentTimeMillis(),
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0
 ) : Component(), Parcelable {
@@ -31,7 +33,7 @@ data class Task(
     val isImportant: Boolean = false,
     val isCompleted: Boolean = false,
     val createdDate: Long = System.currentTimeMillis(),
-    val modifiedDate: Long = System.currentTimeMillis(),
+    override val modifiedDate: Long = System.currentTimeMillis(),
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0
 ) : Component(), Parcelable {

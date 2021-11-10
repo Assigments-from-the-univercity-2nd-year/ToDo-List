@@ -7,6 +7,7 @@ import com.example.todolist.data.*
 import com.example.todolist.ui.ADD_TASK_RESULT_OK
 import com.example.todolist.ui.EDIT_TASK_RESULT_OK
 import com.example.todolist.util.exhaustive
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
@@ -22,26 +23,32 @@ class TasksViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     val searchQuery = state.getLiveData("searchQuery", "")
-    private val currentFolder = state.get<Folder>("currentFolder")
-    val currentFolderId = currentFolder?.id ?: 1L
+    val currentFolder = state.getLiveData<Folder>("currentFolder")
     val preferencesFlow = preferencesManager.preferencesFlow
     private val tasksEventChannel = Channel<TasksEvent>()
     val tasksEvent = tasksEventChannel.receiveAsFlow()
+    init {
+        if (currentFolder.value == null) {
+            viewModelScope.launch {
+                currentFolder.postValue(folderDao.getRootFolder())
+            }
+        }
+    }
 
     private val taskFlow = combine(
         searchQuery.asFlow(),
-        preferencesFlow
-    ) { searchQuery, preferencesFlow ->
-        Pair(searchQuery, preferencesFlow)
-    }.flatMapLatest { (searchQuery, preferences) ->
+        preferencesFlow,
+        currentFolder.asFlow()
+    ) { searchQuery, preferencesFlow, currentFolder ->
+        Triple(searchQuery, preferencesFlow, currentFolder)
+    }.flatMapLatest { (searchQuery, preferences, currentFolder) ->
         combine(
-            taskDao.getTasksOfFolder(searchQuery, preferences.sortOrder, preferences.hideCompleted, currentFolderId, true),
-            taskDao.getTasksOfFolder(searchQuery, preferences.sortOrder, preferences.hideCompleted, currentFolderId, false),
-            folderDao.getFoldersOfFolder(currentFolderId, searchQuery)
-        ) { importantTasks, unimportantTasks, folders ->
-            Triple(importantTasks, unimportantTasks, folders)
-        }.flatMapLatest { (importantTasks, unimportantTasks, folders) ->
-            flowOf(importantTasks.plus<Component>(folders).plus<Component>(unimportantTasks))
+            taskDao.getTasksOfFolder(searchQuery, preferences.hideCompleted, currentFolder.id),
+            folderDao.getFoldersOfFolder(currentFolder.id, searchQuery)
+        ) { tasks, folders ->
+            Pair(tasks, folders)
+        }.flatMapLatest { (tasks, folders) ->
+            flowOf(tasks.plus<Component>(folders).sortedByDescending { it.modifiedDate })
         }
     }
 
@@ -63,8 +70,13 @@ class TasksViewModel @ViewModelInject constructor(
         taskDao.updateTask(task.copy(isCompleted = isChecked))
     }
 
-    fun onFolderSelected(folder: Folder) = viewModelScope.launch {
-        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToFolderScreen(folder))
+    fun onSubFolderSelected(folder: Folder) = viewModelScope.launch {
+        currentFolder.postValue(folderDao.getFolder(folder.id))
+        // TODO: change search query and collapse searcing
+    }
+
+    fun onHomeButtonSelected() = viewModelScope.launch {
+        currentFolder.postValue(folderDao.getFolder(currentFolder.value?.folderId ?: 1L))
     }
 
     fun onTaskSwiped(task: Task) = viewModelScope.launch {
@@ -111,7 +123,6 @@ class TasksViewModel @ViewModelInject constructor(
         sealed class NavigationEvent {
             object NavigateToAddTaskScreen : TasksEvent()
             data class NavigateToEditTaskScreen(val task: Task) : TasksEvent()
-            data class NavigateToFolderScreen(val folder: Folder) : TasksEvent()
             object NavigateToDeleteAllCompletedScreen : TasksEvent()
             data class NavigateToDeleteFolderScreen(val folder: Folder) : TasksEvent()
         }
