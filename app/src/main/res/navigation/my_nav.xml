@@ -38,5 +38,9 @@
     <dialog
         android:id="@+id/deleteFolderDialogFragment"
         android:name="com.example.todolist.ui.deleteFolder.DeleteFolderDialogFragment"
-        android:label="DeleteFolderDialogFragment" /><action android:id="@+id/action_global_deleteFolderDialogFragment" app:destination="@id/deleteFolderDialogFragment"/>
+        android:label="DeleteFolderDialogFragment" >
+        <argument
+            android:name="folder"
+            app:argType="com.example.todolist.data.Folder" />
+    </dialog><action android:id="@+id/action_global_deleteFolderDialogFragment" app:destination="@id/deleteFolderDialogFragment"/>
 </navigation>

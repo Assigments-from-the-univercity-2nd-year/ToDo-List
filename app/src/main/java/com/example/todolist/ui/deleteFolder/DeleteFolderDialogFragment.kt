@@ -5,7 +5,9 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DeleteFolderDialogFragment : DialogFragment() {
     private val viewModel: DeleteFolderViewModel by viewModels()
 
@@ -15,8 +17,16 @@ class DeleteFolderDialogFragment : DialogFragment() {
             .setMessage("Do you really want to delete this folder?")
             .setNegativeButton("Cancel", null)
             .setPositiveButton("Delete this folder") { _, _ ->
-                viewModel.onDeleteFolderClicked()
+                viewModel.onDeleteFolderClicked(
+                    DeleteFolderDialogFragmentArgs.fromBundle(
+                        arguments ?: Bundle.EMPTY
+                    ).folder
+                )
             }.setNeutralButton("Delete all completed tasks") { _, _ ->
-                viewModel.onDeleteCompletedInFolderClicked()
+                viewModel.onDeleteCompletedInFolderClicked(
+                    DeleteFolderDialogFragmentArgs.fromBundle(
+                        arguments ?: Bundle.EMPTY
+                    ).folder
+                )
             }.create()
 }
