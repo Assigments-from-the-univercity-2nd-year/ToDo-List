@@ -21,7 +21,7 @@ interface FolderDao {
     fun getFoldersOfFolder(folderId: Long, searchQuery: String): Flow<List<Folder>>
 
     @Query("SELECT * FROM folder WHERE folderId = :folderId")
-    fun getFoldersOfFolder(folderId: Long): List<Folder>
+    suspend fun getFoldersOfFolder(folderId: Long): List<Folder>
 
     @Query("SELECT * FROM folder WHERE id = :id")
     suspend fun getFolder(id: Long): Folder

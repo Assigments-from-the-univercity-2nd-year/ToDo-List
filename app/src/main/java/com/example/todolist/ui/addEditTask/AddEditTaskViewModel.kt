@@ -5,6 +5,8 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.todolist.data.Folder
+import com.example.todolist.data.FolderDao
 import com.example.todolist.data.Task
 import com.example.todolist.data.TaskDao
 import com.example.todolist.ui.ADD_TASK_RESULT_OK
@@ -15,6 +17,7 @@ import kotlinx.coroutines.launch
 
 class AddEditTaskViewModel @ViewModelInject constructor(
     private val taskDao: TaskDao,
+    private val folderDao: FolderDao,
     @Assisted private val state: SavedStateHandle
 ) : ViewModel() {
 
@@ -49,10 +52,11 @@ class AddEditTaskViewModel @ViewModelInject constructor(
                 modifiedDate = System.currentTimeMillis()
             )
             updateTask(updatedTask)
-            // TODO: update folder modifiedDate
+            updateFolder()
         } else {
             val newTask = Task(taskName, folderId, taskImportance)
             insertTask(newTask)
+            updateFolder()
         }
     }
 
@@ -68,6 +72,11 @@ class AddEditTaskViewModel @ViewModelInject constructor(
     private fun insertTask(task: Task) = viewModelScope.launch {
         taskDao.insertTask(task)
         addEditTaskEventChannel.send(AddEditTaskEvent.NavigateBackWithResult(ADD_TASK_RESULT_OK))
+    }
+
+    private fun updateFolder() = viewModelScope.launch {
+        val folder = folderDao.getFolder(folderId)
+        folderDao.updateFolder(folder.copy(modifiedDate = System.currentTimeMillis()))
     }
 
     sealed class AddEditTaskEvent {

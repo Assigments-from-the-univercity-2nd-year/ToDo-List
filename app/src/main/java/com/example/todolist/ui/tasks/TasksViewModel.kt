@@ -1,8 +1,5 @@
 package com.example.todolist.ui.tasks
 
-import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.activity.OnBackPressedDispatcher
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
@@ -10,15 +7,12 @@ import com.example.todolist.data.*
 import com.example.todolist.ui.ADD_TASK_RESULT_OK
 import com.example.todolist.ui.EDIT_TASK_RESULT_OK
 import com.example.todolist.util.exhaustive
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import java.io.InvalidObjectException
-import kotlin.math.log
 
 class TasksViewModel @ViewModelInject constructor(
     private val taskDao: TaskDao,
@@ -96,7 +90,9 @@ class TasksViewModel @ViewModelInject constructor(
 
     fun onTaskSwiped(task: Task) = viewModelScope.launch {
         taskDao.deleteTask(task)
-        tasksEventChannel.send(TasksEvent.MessageEvent.ShowUndoDeleteTaskMessage(task))
+        val parentFolder = folderDao.getFolder(task.folderId)
+        updateFolderTime(parentFolder)
+        tasksEventChannel.send(TasksEvent.MessageEvent.ShowUndoDeleteTaskMessage(task, parentFolder))
     }
 
     fun onFolderSwiped(folder: Folder, position: Int) = viewModelScope.launch {
@@ -111,8 +107,9 @@ class TasksViewModel @ViewModelInject constructor(
         }.exhaustive
     }
 
-    fun onUndoDeleteClicked(task: Task) = viewModelScope.launch {
+    fun onUndoDeleteClicked(task: Task, parentFolder: Folder) = viewModelScope.launch {
         taskDao.insertTask(task)
+        folderDao.updateFolder(parentFolder)
     }
 
     fun onAddNewTaskClicked() = viewModelScope.launch {
@@ -142,6 +139,7 @@ class TasksViewModel @ViewModelInject constructor(
                         folderId = folder.id,
                         modifiedDate = System.currentTimeMillis()
                     ))
+                    updateFolderTime(folder)
                 }
                 is Folder -> {
                     folderDao.updateFolder(
@@ -150,13 +148,17 @@ class TasksViewModel @ViewModelInject constructor(
                             modifiedDate = System.currentTimeMillis()
                         )
                     )
+                    updateFolderTime(folder)
                 }
                 null -> {
                     // do nothing
                 }
             }.exhaustive
         }
+    }
 
+    private fun updateFolderTime(folder: Folder) = viewModelScope.launch {
+        folderDao.updateFolder(folder.copy(modifiedDate = System.currentTimeMillis()))
     }
 
     sealed class TasksEvent {
@@ -167,7 +169,7 @@ class TasksViewModel @ViewModelInject constructor(
             data class NavigateToDeleteFolderScreen(val folder: Folder) : TasksEvent()
         }
         sealed class MessageEvent {
-            data class ShowUndoDeleteTaskMessage(val task: Task) : TasksEvent()
+            data class ShowUndoDeleteTaskMessage(val task: Task, val parentFolder: Folder) : TasksEvent()
             data class ShowTaskSavedConfirmationMessage(val msg: String) : TasksEvent()
         }
         data class NotifyAdapterItemChanged(val position: Int) : TasksEvent()
