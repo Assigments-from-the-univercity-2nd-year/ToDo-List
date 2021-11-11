@@ -6,6 +6,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -125,12 +126,25 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
             }
         }
 
+        val onBackPressedCallback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                viewModel.onHomeButtonSelected()
+            }
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressedCallback
+        )
+
         // showing back button manually
         viewModel.currentFolder.observe(viewLifecycleOwner) {
             if (it.id != 1L) { // 1L is an id of the root folder
                 (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                onBackPressedCallback.isEnabled = true
             } else {
                 (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                onBackPressedCallback.isEnabled = false
             }
         }
 
