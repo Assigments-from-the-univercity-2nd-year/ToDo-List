@@ -1,5 +1,6 @@
 package com.example.todolist.ui.tasks
 
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedDispatcher
 import androidx.hilt.Assisted
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlin.math.log
 
 class TasksViewModel @ViewModelInject constructor(
     private val taskDao: TaskDao,
@@ -129,6 +131,10 @@ class TasksViewModel @ViewModelInject constructor(
 
     fun onDeleteAllCompletedClicked() = viewModelScope.launch {
         tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToDeleteAllCompletedScreen)
+    }
+
+    fun taskMovedToFolder(task: Task?, folder: Folder?) = viewModelScope.launch {
+        Log.i("TAG", "taskMovedToFolder: \n${task} \n${folder}")
     }
 
     sealed class TasksEvent {

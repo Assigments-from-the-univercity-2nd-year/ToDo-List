@@ -5,7 +5,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -16,7 +15,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.R
 import com.example.todolist.data.Folder
 import com.example.todolist.data.SortOrder
@@ -50,23 +48,13 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
                 setHasFixedSize(true)
             }
 
-            ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
-                0,
-                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-            ) {
-                override fun onMove(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
-                ): Boolean {
-                    return false
-                }
+            ItemTouchHelper(SwipingSimpleCallback(
+                taskAdapter, viewModel
+            )).attachToRecyclerView(recyclerviewFragmenttasksTasks)
 
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    val component = taskAdapter.currentList[viewHolder.adapterPosition]
-                    viewModel.onComponentSwiped(component, viewHolder.adapterPosition)
-                }
-            }).attachToRecyclerView(recyclerviewFragmenttasksTasks)
+            ItemTouchHelper(MovingSimpleCallback(
+                taskAdapter, viewModel
+            )).attachToRecyclerView(recyclerviewFragmenttasksTasks)
 
             fabFragmenttasksAddtask.setOnClickListener {
                 viewModel.onAddNewTaskClicked()
