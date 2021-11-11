@@ -133,8 +133,8 @@ class TasksViewModel @ViewModelInject constructor(
         tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToDeleteAllCompletedScreen)
     }
 
-    fun taskMovedToFolder(task: Task?, folder: Folder?) = viewModelScope.launch {
-        Log.i("TAG", "taskMovedToFolder: \n${task} \n${folder}")
+    fun taskMovedToFolder(component: Component?, folder: Folder?) = viewModelScope.launch {
+        Log.i("TAG", "taskMovedToFolder: \n${component} \n${folder}")
     }
 
     sealed class TasksEvent {
