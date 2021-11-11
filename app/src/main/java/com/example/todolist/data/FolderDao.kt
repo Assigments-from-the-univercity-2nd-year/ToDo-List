@@ -20,6 +20,9 @@ interface FolderDao {
     @Query("SELECT * FROM folder WHERE folderId = :folderId AND title LIKE '%' || :searchQuery || '%'")
     fun getFoldersOfFolder(folderId: Long, searchQuery: String): Flow<List<Folder>>
 
+    @Query("SELECT * FROM folder WHERE folderId = :folderId")
+    fun getFoldersOfFolder(folderId: Long): List<Folder>
+
     @Query("SELECT * FROM folder WHERE id = :id")
     suspend fun getFolder(id: Long): Folder
 }

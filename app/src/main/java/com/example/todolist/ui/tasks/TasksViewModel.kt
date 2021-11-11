@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.io.InvalidObjectException
 import kotlin.math.log
 
 class TasksViewModel @ViewModelInject constructor(
@@ -134,7 +135,28 @@ class TasksViewModel @ViewModelInject constructor(
     }
 
     fun taskMovedToFolder(component: Component?, folder: Folder?) = viewModelScope.launch {
-        Log.i("TAG", "taskMovedToFolder: \n${component} \n${folder}")
+        if (folder != null) {
+            when(component) {
+                is Task -> {
+                    taskDao.updateTask(component.copy(
+                        folderId = folder.id,
+                        modifiedDate = System.currentTimeMillis()
+                    ))
+                }
+                is Folder -> {
+                    folderDao.updateFolder(
+                        component.copy(
+                            folderId = folder.id,
+                            modifiedDate = System.currentTimeMillis()
+                        )
+                    )
+                }
+                null -> {
+                    // do nothing
+                }
+            }.exhaustive
+        }
+
     }
 
     sealed class TasksEvent {
