@@ -134,6 +134,8 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
                 (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 onBackPressedCallback.isEnabled = false
             }
+
+            (activity as? AppCompatActivity)?.supportActionBar?.title = it.title
         }
 
         setHasOptionsMenu(true)
