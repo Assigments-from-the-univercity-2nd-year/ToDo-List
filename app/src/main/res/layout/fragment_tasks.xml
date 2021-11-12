@@ -11,7 +11,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_fragmenttasks_tasks"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:paddingBottom="72dp"
+        android:paddingTop="4dp"
+        android:clipToPadding="false"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_fragmenttasks_addtask"
