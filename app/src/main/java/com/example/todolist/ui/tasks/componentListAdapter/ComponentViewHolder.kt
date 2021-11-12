@@ -36,6 +36,9 @@ sealed class ComponentViewHolder(binding: ViewBinding) :
                         checkboxItemtaskCompleted.isChecked
                     )
                 }
+
+                cardviewItemtaskCardview.elevation = 0F
+                cardviewItemtaskCardview.radius = 48F
             }
         }
 
@@ -56,6 +59,9 @@ sealed class ComponentViewHolder(binding: ViewBinding) :
                 root.setOnClickListener {
                     onComponentClickListener.onFolderClicked(currentFolder)
                 }
+
+                cardviewItemfolderCardview.elevation = 0F
+                cardviewItemfolderCardview.radius = 48F
             }
         }
 
