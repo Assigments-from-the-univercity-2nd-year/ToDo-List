@@ -43,4 +43,13 @@
             android:name="folder"
             app:argType="com.example.todolist.data.Folder" />
     </dialog><action android:id="@+id/action_global_deleteFolderDialogFragment" app:destination="@id/deleteFolderDialogFragment"/>
+    <dialog
+        android:id="@+id/addEditFolderDialogFragment"
+        android:name="com.example.todolist.ui.addEditFolder.AddEditFolderDialogFragment"
+        android:label="AddEditFolderDialogFragment" >
+        <argument
+            android:name="parentFolder"
+            app:argType="com.example.todolist.data.Folder" />
+    </dialog>
+    <action android:id="@+id/action_global_addEditFolderDialogFragment" app:destination="@id/addEditFolderDialogFragment" />
 </navigation>

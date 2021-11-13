@@ -135,6 +135,14 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
                         val action = TasksFragmentDirections.actionGlobalDeleteFolderDialogFragment(event.folder)
                         findNavController().navigate(action)
                     }
+                    TasksViewModel.TasksEvent.NavigationEvent.NavigateToAddFolderScreen -> {
+                        val action = TasksFragmentDirections.actionGlobalAddEditFolderDialogFragment(
+                            viewModel.currentFolder.value!!
+                        )
+                        //val action = TasksFragmentDirections.actionGlobalAddEditFolderDialogFragment()
+                        //val action = TasksFragmentDirections.actionGlobalDeleteAllCompletedDialogFragment()
+                        findNavController().navigate(action)
+                    }
                 }.exhaustive
             }
         }

@@ -118,7 +118,7 @@ class TasksViewModel @ViewModelInject constructor(
     }
 
     fun onAddNewFolderClicked() = viewModelScope.launch {
-        // TODO: 13.11.2021
+        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToAddFolderScreen)
     }
 
     fun onAddButtonClicked() = viewModelScope.launch {
@@ -174,6 +174,7 @@ class TasksViewModel @ViewModelInject constructor(
         sealed class NavigationEvent {
             object NavigateToAddTaskScreen : TasksEvent()
             data class NavigateToEditTaskScreen(val task: Task) : TasksEvent()
+            object NavigateToAddFolderScreen : TasksEvent()
             object NavigateToDeleteAllCompletedScreen : TasksEvent()
             data class NavigateToDeleteFolderScreen(val folder: Folder) : TasksEvent()
         }

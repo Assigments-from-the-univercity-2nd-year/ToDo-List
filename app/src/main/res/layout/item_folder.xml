@@ -39,6 +39,7 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/imageview_itemfolder_foldericon"
+                app:layout_constraintEnd_toStartOf="@+id/textview_itemfolder_numberofitemsinfolder"
                 app:layout_constraintStart_toEndOf="@+id/imageview_itemfolder_foldericon"
                 app:layout_constraintTop_toTopOf="@+id/imageview_itemfolder_foldericon" />
 

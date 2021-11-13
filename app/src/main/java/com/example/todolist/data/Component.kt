@@ -53,6 +53,10 @@ data class Folder(
         }
     }
 
+    suspend fun updateDate(folderDao: FolderDao) {
+        folderDao.updateFolder(this.copy(modifiedDate = System.currentTimeMillis()))
+    }
+
 }
 
 @Parcelize
