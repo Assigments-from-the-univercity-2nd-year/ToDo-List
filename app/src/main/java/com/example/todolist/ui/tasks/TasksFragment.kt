@@ -5,6 +5,8 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -27,6 +29,7 @@ import com.example.todolist.util.exhaustive
 import com.example.todolist.util.onQueryTextChanged
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_tasks.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -36,6 +39,11 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
 
     private val viewModel: TasksViewModel by viewModels()
     private lateinit var searchView: SearchView
+
+    private val rotateOpenAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open_anim) }
+    private val rotateCloseAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close_anim) }
+    private val fromBottomAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.from_bottom_anim) }
+    private val toBottomAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.to_bottom_anim) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,9 +65,25 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
                 taskAdapter, viewModel
             )).attachToRecyclerView(recyclerviewFragmenttasksTasks)
 
+            fabFragmenttasksAddbutton.setOnClickListener {
+                viewModel.onAddButtonClicked()
+            }
+            // TODO: 13.11.2021 clear animation from the previous time (add FAB rotation)
+
             fabFragmenttasksAddtask.setOnClickListener {
                 viewModel.onAddNewTaskClicked()
+                viewModel.onAddButtonClicked.value = false
             }
+
+            fabFragmenttasksAddfolder.setOnClickListener {
+                viewModel.onAddNewFolderClicked()
+                viewModel.onAddButtonClicked.value = false
+            }
+        }
+
+        viewModel.onAddButtonClicked.observe(viewLifecycleOwner) {
+            setVisibility(it)
+            setAnimation(it)
         }
 
         setFragmentResultListener("add_edit_request") { s: String, bundle: Bundle ->
@@ -140,6 +164,28 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
         }
 
         setHasOptionsMenu(true)
+    }
+
+    private fun setVisibility(clicked: Boolean) {
+        if (clicked) {
+            fab_fragmenttasks_addtask.visibility = View.VISIBLE
+            fab_fragmenttasks_addfolder.visibility = View.VISIBLE
+        } else {
+            fab_fragmenttasks_addtask.visibility = View.INVISIBLE
+            fab_fragmenttasks_addfolder.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun setAnimation(clicked: Boolean) {
+        if (clicked) {
+            fab_fragmenttasks_addbutton.startAnimation(rotateOpenAnim)
+            fab_fragmenttasks_addtask.startAnimation(fromBottomAnim)
+            fab_fragmenttasks_addfolder.startAnimation(fromBottomAnim)
+        } else {
+            fab_fragmenttasks_addbutton.startAnimation(rotateCloseAnim)
+            fab_fragmenttasks_addtask.startAnimation(toBottomAnim)
+            fab_fragmenttasks_addfolder.startAnimation(toBottomAnim)
+        }
     }
 
     override fun onCheckBoxClicked(task: Task, isChecked: Boolean) {

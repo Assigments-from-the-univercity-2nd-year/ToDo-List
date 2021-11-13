@@ -23,6 +23,7 @@ class TasksViewModel @ViewModelInject constructor(
 
     val searchQuery = state.getLiveData("searchQuery", "")
     val currentFolder = state.getLiveData<Folder>("currentFolder")
+    var onAddButtonClicked = state.getLiveData("onAddButtonClicked", false)
     val preferencesFlow = preferencesManager.preferencesFlow
     private val tasksEventChannel = Channel<TasksEvent>()
     val tasksEvent = tasksEventChannel.receiveAsFlow()
@@ -114,6 +115,14 @@ class TasksViewModel @ViewModelInject constructor(
 
     fun onAddNewTaskClicked() = viewModelScope.launch {
         tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToAddTaskScreen)
+    }
+
+    fun onAddNewFolderClicked() = viewModelScope.launch {
+        // TODO: 13.11.2021
+    }
+
+    fun onAddButtonClicked() = viewModelScope.launch {
+        onAddButtonClicked.value = !(onAddButtonClicked.value ?: false)
     }
 
     fun onAddEditResult(result: Int) {
