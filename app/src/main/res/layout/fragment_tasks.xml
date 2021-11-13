@@ -30,10 +30,10 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/ic_baseline_folder_24"
-        android:tint="@android:color/white"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/fab_fragmenttasks_addtask"
-        app:layout_constraintEnd_toEndOf="@+id/fab_fragmenttasks_addbutton" />
+        app:layout_constraintEnd_toEndOf="@+id/fab_fragmenttasks_addbutton"
+        app:tint="@android:color/white" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_fragmenttasks_addtask"
@@ -43,10 +43,10 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/ic_baseline_task_alt_24"
-        android:tint="@android:color/white"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/fab_fragmenttasks_addbutton"
-        app:layout_constraintEnd_toEndOf="@+id/fab_fragmenttasks_addbutton" />
+        app:layout_constraintEnd_toEndOf="@+id/fab_fragmenttasks_addbutton"
+        app:tint="@android:color/white" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_fragmenttasks_addbutton"
@@ -56,9 +56,10 @@
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:focusable="true"
+        android:backgroundTint="@color/design_default_color_primary"
         android:src="@drawable/ic_baseline_add_24"
-        android:tint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@android:color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
