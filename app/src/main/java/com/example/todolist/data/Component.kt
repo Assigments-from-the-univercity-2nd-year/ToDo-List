@@ -4,9 +4,10 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 sealed class Component {
     abstract val uniqueStringId: String
@@ -74,7 +75,17 @@ data class Task(
     val createdDateFormatted: String
         get() = DateFormat.getDateTimeInstance().format(createdDate)
     val modifiedDateFormatted: String
-        get() = DateFormat.getDateTimeInstance().format(modifiedDate)
+        get() = when (System.currentTimeMillis() - modifiedDate) {
+            // less than 1 day
+            in 0L..86_400_000L -> {
+                SimpleDateFormat("h:mm a", Locale.getDefault()).format(modifiedDate)
+            }
+            // less than one year
+            in 86_401L..31_556_926_000L -> {
+                SimpleDateFormat("MMM d", Locale.getDefault()).format(modifiedDate)
+            }
+            else -> DateFormat.getDateInstance(DateFormat.MEDIUM).format(modifiedDate)
+        }
     override val uniqueStringId: String
         get() = "0${id}"
 

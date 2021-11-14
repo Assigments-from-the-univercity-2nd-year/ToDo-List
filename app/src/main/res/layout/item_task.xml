@@ -47,18 +47,31 @@
                 android:text="Example item"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/framelayout_itemtask_completedwrapper"
+                app:layout_constraintBottom_toTopOf="@+id/textview_itemtask_modifieddate"
                 app:layout_constraintEnd_toStartOf="@+id/appCompatImageView_itemTask_priority"
                 app:layout_constraintStart_toEndOf="@+id/framelayout_itemtask_completedwrapper"
-                app:layout_constraintTop_toTopOf="@+id/framelayout_itemtask_completedwrapper" />
+                app:layout_constraintTop_toTopOf="@+id/framelayout_itemtask_completedwrapper"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textview_itemtask_modifieddate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="October 21"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/framelayout_itemtask_completedwrapper"
+                app:layout_constraintStart_toEndOf="@+id/framelayout_itemtask_completedwrapper"
+                app:layout_constraintTop_toBottomOf="@+id/textview_itemtask_taskname" />
+
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/appCompatImageView_itemTask_priority"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingEnd="16dp"
-                android:tint="@color/design_default_color_secondary"
                 android:src="@drawable/ic_baseline_priority_high_24"
+                android:tint="@color/design_default_color_secondary"
                 app:layout_constraintBottom_toBottomOf="@+id/framelayout_itemtask_completedwrapper"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/framelayout_itemtask_completedwrapper" />
