@@ -3,9 +3,7 @@ package com.example.todolist.ui.tasks.componentListAdapter
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.example.todolist.data.Component
-import com.example.todolist.data.Folder
-import com.example.todolist.data.Task
+import com.example.todolist.data.*
 import com.example.todolist.databinding.ItemFolderBinding
 import com.example.todolist.databinding.ItemTaskBinding
 
@@ -54,7 +52,7 @@ sealed class ComponentViewHolder(binding: ViewBinding) :
             val currentFolder = component as Folder
             binding.apply {
                 textviewItemfolderFoldername.text = currentFolder.title
-                //TODO: set the number of tasks in folder
+                textviewItemfolderNumberofitemsinfolder.text = "(${currentFolder.numberOfSubComponents?.toString()})"
                 imageviewItemfolderPinning.isVisible = currentFolder.isPinned
 
                 root.setOnClickListener {

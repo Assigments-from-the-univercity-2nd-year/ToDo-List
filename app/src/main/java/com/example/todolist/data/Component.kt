@@ -30,6 +30,7 @@ data class Folder(
 ) : Component(), Parcelable {
     override val uniqueStringId: String
         get() = "1${id}"
+    var numberOfSubComponents: Int? = null
 
     override suspend fun delete(folderDao: FolderDao, taskDao: TaskDao) {
         for (task in taskDao.getTasksOfFolder(id).first()) {
@@ -57,6 +58,11 @@ data class Folder(
     suspend fun updateDate(folderDao: FolderDao) {
         folderDao.updateFolder(this.copy(modifiedDate = System.currentTimeMillis()))
     }
+
+    suspend fun setNumberOfSubComponents(folderDao: FolderDao, taskDao: TaskDao) {
+        numberOfSubComponents = taskDao.getTasksOfFolder(id).first().size + folderDao.getFoldersOfFolder(id, "").first().size
+    }
+
 
 }
 

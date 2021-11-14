@@ -8,10 +8,7 @@ import com.example.todolist.ui.ADD_TASK_RESULT_OK
 import com.example.todolist.ui.EDIT_TASK_RESULT_OK
 import com.example.todolist.util.exhaustive
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class TasksViewModel @ViewModelInject constructor(
@@ -44,7 +41,11 @@ class TasksViewModel @ViewModelInject constructor(
     }.flatMapLatest { (searchQuery, preferences, currentFolder) ->
         combine(
             taskDao.getTasksOfFolder(searchQuery, preferences.hideCompleted, currentFolder.id),
-            folderDao.getFoldersOfFolder(currentFolder.id, searchQuery)
+            folderDao.getFoldersOfFolder(currentFolder.id, searchQuery).onEach {
+                for (folder in it) {
+                    folder.setNumberOfSubComponents(folderDao, taskDao)
+                }
+            }
         ) { tasks, folders ->
             Pair(tasks, folders)
         }.flatMapLatest { (tasks, folders) ->
