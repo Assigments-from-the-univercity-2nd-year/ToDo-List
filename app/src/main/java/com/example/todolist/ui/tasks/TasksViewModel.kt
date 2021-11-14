@@ -92,7 +92,7 @@ class TasksViewModel @ViewModelInject constructor(
     fun onTaskSwiped(task: Task) = viewModelScope.launch {
         taskDao.deleteTask(task)
         val parentFolder = folderDao.getFolder(task.folderId)
-        updateFolderTime(parentFolder)
+        parentFolder.updateDate(folderDao)
         tasksEventChannel.send(TasksEvent.MessageEvent.ShowUndoDeleteTaskMessage(task, parentFolder))
     }
 
@@ -148,7 +148,7 @@ class TasksViewModel @ViewModelInject constructor(
                         folderId = folder.id,
                         modifiedDate = System.currentTimeMillis()
                     ))
-                    updateFolderTime(folder)
+                    folder.updateDate(folderDao)
                 }
                 is Folder -> {
                     folderDao.updateFolder(
@@ -157,17 +157,13 @@ class TasksViewModel @ViewModelInject constructor(
                             modifiedDate = System.currentTimeMillis()
                         )
                     )
-                    updateFolderTime(folder)
+                    folder.updateDate(folderDao)
                 }
                 null -> {
                     // do nothing
                 }
             }.exhaustive
         }
-    }
-
-    private fun updateFolderTime(folder: Folder) = viewModelScope.launch {
-        folderDao.updateFolder(folder.copy(modifiedDate = System.currentTimeMillis()))
     }
 
     sealed class TasksEvent {

@@ -54,7 +54,7 @@ sealed class ComponentViewHolder(binding: ViewBinding) :
             binding.apply {
                 textviewItemfolderFoldername.text = currentFolder.title
                 //TODO: set the number of tasks in folder
-                //TODO: show an icon if this folder is pinned
+                imageviewItemfolderPinning.isVisible = currentFolder.isPinned
 
                 root.setOnClickListener {
                     onComponentClickListener.onFolderClicked(currentFolder)
