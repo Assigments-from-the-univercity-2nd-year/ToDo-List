@@ -1,6 +1,7 @@
 package com.example.todolist.ui.tasks
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -10,11 +11,12 @@ import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +27,8 @@ import com.example.todolist.data.Task
 import com.example.todolist.databinding.FragmentTasksBinding
 import com.example.todolist.ui.tasks.componentListAdapter.ComponentAdapter
 import com.example.todolist.ui.tasks.componentListAdapter.OnComponentClickListener
+import com.example.todolist.ui.tasks.simpleCallbacks.MovingSimpleCallback
+import com.example.todolist.ui.tasks.simpleCallbacks.SwipingSimpleCallback
 import com.example.todolist.util.exhaustive
 import com.example.todolist.util.onQueryTextChanged
 import com.google.android.material.snackbar.Snackbar
@@ -39,6 +43,25 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
 
     private val viewModel: TasksViewModel by viewModels()
     private lateinit var searchView: SearchView
+    private val onBackPressedCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            viewModel.onHomeButtonSelected()
+        }
+    }
+    private val onDestinationChangedListener =
+        NavController.OnDestinationChangedListener { controller, destination, arguments ->
+            if (destination.id == controller.graph.startDestination) {
+                if (viewModel.currentFolder.value?.id ?: 1L != 1L) { // 1L is an id of the root folder
+                    (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    onBackPressedCallback.isEnabled = true
+                } else {
+                    (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    onBackPressedCallback.isEnabled = false
+                }
+
+                (activity as? AppCompatActivity)?.supportActionBar?.title = viewModel.currentFolder.value?.title
+            }
+        }
 
     private val rotateOpenAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open_anim) }
     private val rotateCloseAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close_anim) }
@@ -166,12 +189,6 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
             }
         }
 
-        val onBackPressedCallback = object : OnBackPressedCallback(false) {
-            override fun handleOnBackPressed() {
-                viewModel.onHomeButtonSelected()
-            }
-        }
-
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             onBackPressedCallback
@@ -189,6 +206,8 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
 
             (activity as? AppCompatActivity)?.supportActionBar?.title = it.title
         }
+
+        findNavController().addOnDestinationChangedListener(onDestinationChangedListener)
 
         setHasOptionsMenu(true)
     }
@@ -283,5 +302,6 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
     override fun onDestroyView() {
         super.onDestroyView()
         searchView.setOnQueryTextListener(null)
+        findNavController().removeOnDestinationChangedListener(onDestinationChangedListener)
     }
 }

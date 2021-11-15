@@ -1,9 +1,10 @@
-package com.example.todolist.ui.tasks
+package com.example.todolist.ui.tasks.simpleCallbacks
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.data.Component
+import com.example.todolist.ui.tasks.TasksViewModel
 import com.example.todolist.ui.tasks.componentListAdapter.ComponentViewHolder
 
 class SwipingSimpleCallback(
