@@ -4,6 +4,9 @@ import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -37,5 +40,18 @@ class AddEditFolderDialogFragment : DialogFragment() {
 
         binding = DialogFragmentAddEditFolderBinding
             .inflate(LayoutInflater.from(requireContext()), null, false)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding.edittextModalbottomsheetaddeditfolderFoldername.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+            }
+        }
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 }
