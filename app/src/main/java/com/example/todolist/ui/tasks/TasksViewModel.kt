@@ -133,6 +133,12 @@ class TasksViewModel @ViewModelInject constructor(
         }
     }
 
+    fun onQuickFolderChangeResult(result: Folder?) {
+        if (result != null) {
+            currentFolder.value = result
+        }
+    }
+
     private fun showTaskSavedConfirmationMessage(msg: String) = viewModelScope.launch {
         tasksEventChannel.send(TasksEvent.MessageEvent.ShowTaskSavedConfirmationMessage(msg))
     }

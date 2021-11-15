@@ -91,6 +91,11 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
             viewModel.onAddEditResult(result)
         }
 
+        setFragmentResultListener("folder_to_change_request") { s: String, bundle: Bundle ->
+            val result = bundle.getParcelable<Folder>("folder_to_change_result")
+            viewModel.onQuickFolderChangeResult(result)
+        }
+
         viewModel.tasks.observe(viewLifecycleOwner) {
             taskAdapter.submitList(it)
         }

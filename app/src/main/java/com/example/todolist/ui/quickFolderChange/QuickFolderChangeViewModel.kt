@@ -4,20 +4,18 @@ import android.R.layout.select_dialog_item
 import android.content.Context
 import android.os.Bundle
 import android.widget.ArrayAdapter
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
-import com.example.todolist.data.FolderDao
-import com.example.todolist.di.ApplicationScope
-import kotlinx.coroutines.CoroutineScope
+import com.example.todolist.data.Folder
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 
-class QuickFolderChangeViewModel @ViewModelInject constructor(
-    private val folderDao: FolderDao,
-    @ApplicationScope private val applicationScope: CoroutineScope
-) : ViewModel() {
+class QuickFolderChangeViewModel : ViewModel() {
+
+    private lateinit var pinnedFolders: Array<Folder>
 
     fun getStringOfPinnedFolders(context: Context, arguments: Bundle?): ArrayAdapter<String> {
         val adapter = ArrayAdapter<String>(context, select_dialog_item)
-        val pinnedFolders = QuickFolderChangeDialogFragmentArgs.fromBundle(arguments ?: Bundle.EMPTY).pinnedFolders
+        pinnedFolders = QuickFolderChangeDialogFragmentArgs.fromBundle(arguments ?: Bundle.EMPTY).pinnedFolders
         val list = List(pinnedFolders.size) {
             pinnedFolders[it].title + " (${pinnedFolders[it].numberOfSubComponents})"
         }
@@ -25,8 +23,6 @@ class QuickFolderChangeViewModel @ViewModelInject constructor(
         return adapter
     }
 
-    fun goToFolder(position: Int) {
-        // TODO: 15.11.2021
-    }
+    fun getListElement(position: Int) = pinnedFolders[position]
 
 }
