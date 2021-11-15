@@ -4,7 +4,9 @@ import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.todolist.data.*
+import com.example.todolist.ui.ADD_FOLDER_RESULT_OK
 import com.example.todolist.ui.ADD_TASK_RESULT_OK
+import com.example.todolist.ui.EDIT_FOLDER_RESULT_OK
 import com.example.todolist.ui.EDIT_TASK_RESULT_OK
 import com.example.todolist.util.exhaustive
 import kotlinx.coroutines.channels.Channel
@@ -133,6 +135,13 @@ class TasksViewModel @ViewModelInject constructor(
         }
     }
 
+    fun onAddEditFolderResult(result: Int) {
+        when (result) {
+            ADD_FOLDER_RESULT_OK -> showTaskSavedConfirmationMessage("Folder added")
+            EDIT_FOLDER_RESULT_OK ->showTaskSavedConfirmationMessage("Folder updated")
+        }
+    }
+
     fun onQuickFolderChangeResult(result: Folder?) {
         if (result != null) {
             currentFolder.value = result
@@ -193,6 +202,7 @@ class TasksViewModel @ViewModelInject constructor(
         sealed class MessageEvent {
             data class ShowUndoDeleteTaskMessage(val task: Task, val parentFolder: Folder) : TasksEvent()
             data class ShowTaskSavedConfirmationMessage(val msg: String) : TasksEvent()
+            data class ShowFolderSavedConfirmationMessage(val msg: String) : TasksEvent()
         }
         data class NotifyAdapterItemChanged(val position: Int) : TasksEvent()
     }

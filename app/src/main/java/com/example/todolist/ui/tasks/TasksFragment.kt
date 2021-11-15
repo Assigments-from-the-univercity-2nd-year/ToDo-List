@@ -91,6 +91,11 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
             viewModel.onAddEditResult(result)
         }
 
+        setFragmentResultListener("add_edit_folder_request") { s: String, bundle: Bundle ->
+            val result = bundle.getInt("add_edit_folder_result")
+            viewModel.onAddEditFolderResult(result)
+        }
+
         setFragmentResultListener("folder_to_change_request") { s: String, bundle: Bundle ->
             val result = bundle.getParcelable<Folder>("folder_to_change_result")
             viewModel.onQuickFolderChangeResult(result)
@@ -153,6 +158,9 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
                             event.pinnedFolders.toTypedArray()
                         )
                         findNavController().navigate(action)
+                    }
+                    is TasksViewModel.TasksEvent.MessageEvent.ShowFolderSavedConfirmationMessage -> {
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
                     }
                 }.exhaustive
             }
