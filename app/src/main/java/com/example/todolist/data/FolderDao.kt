@@ -25,4 +25,7 @@ interface FolderDao {
 
     @Query("SELECT * FROM folder WHERE id = :id")
     suspend fun getFolder(id: Long): Folder
+
+    @Query("SELECT * FROM folder WHERE isPinned = 1")
+    suspend fun getPinnedFolders(): List<Folder>
 }
