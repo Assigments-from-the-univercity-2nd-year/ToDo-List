@@ -1,33 +1,32 @@
 package com.example.todolist.ui.quickFolderChange
 
-import android.util.Log
+import android.R.layout.select_dialog_item
+import android.content.Context
+import android.os.Bundle
+import android.widget.ArrayAdapter
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
-import com.example.todolist.data.Folder
 import com.example.todolist.data.FolderDao
 import com.example.todolist.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 class QuickFolderChangeViewModel @ViewModelInject constructor(
     private val folderDao: FolderDao,
     @ApplicationScope private val applicationScope: CoroutineScope
 ) : ViewModel() {
 
-    private lateinit var pinnedFolders: List<Folder>
-
-    init {
-        applicationScope.launch {
-            pinnedFolders = folderDao.getPinnedFolders()
+    fun getStringOfPinnedFolders(context: Context, arguments: Bundle?): ArrayAdapter<String> {
+        val adapter = ArrayAdapter<String>(context, select_dialog_item)
+        val pinnedFolders = QuickFolderChangeDialogFragmentArgs.fromBundle(arguments ?: Bundle.EMPTY).pinnedFolders
+        val list = List(pinnedFolders.size) {
+            pinnedFolders[it].title + " (${pinnedFolders[it].numberOfSubComponents})"
         }
-    }
-
-    fun getStringOfPinnedFolders() = List(pinnedFolders.size) {
-        pinnedFolders[it].title + " (${pinnedFolders[it].numberOfSubComponents})"
+        adapter.addAll(list)
+        return adapter
     }
 
     fun goToFolder(position: Int) {
-        Log.i("TAG", "goToFolder: ${pinnedFolders[position]}")
+        // TODO: 15.11.2021
     }
 
 }

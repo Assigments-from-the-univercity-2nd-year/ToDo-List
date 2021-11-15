@@ -47,6 +47,7 @@
                 android:id="@+id/imageview_itemfolder_pinning"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:src="@drawable/ic_baseline_star_24"
                 app:layout_constraintBottom_toBottomOf="@+id/imageview_itemfolder_foldericon"
                 app:layout_constraintEnd_toStartOf="@+id/textview_itemfolder_numberofitemsinfolder"
@@ -58,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingEnd="16dp"
-                android:text="(-3-)"
+                android:text="(3)"
                 app:layout_constraintBottom_toBottomOf="@+id/imageview_itemfolder_foldericon"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/imageview_itemfolder_foldericon" />

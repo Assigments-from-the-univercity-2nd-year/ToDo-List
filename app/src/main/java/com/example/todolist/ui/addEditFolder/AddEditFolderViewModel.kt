@@ -13,9 +13,10 @@ class AddEditFolderViewModel @ViewModelInject constructor(
     @ApplicationScope private val applicationScope: CoroutineScope
 ) : ViewModel() {
 
-    fun applyFolder(folderName: String, parentFolder: Folder) = applicationScope.launch {
-        folderDao.insertFolder(Folder(folderName, parentFolder.id))
-        parentFolder.updateDate(folderDao)
-    }
+    fun applyFolder(folderName: String, isPinned: Boolean, parentFolder: Folder) =
+        applicationScope.launch {
+            folderDao.insertFolder(Folder(folderName, parentFolder.id, isPinned = isPinned))
+            parentFolder.updateDate(folderDao)
+        }
 
 }

@@ -55,5 +55,10 @@
     <dialog
         android:id="@+id/quickFolderChangeDialogFragment"
         android:name="com.example.todolist.ui.quickFolderChange.QuickFolderChangeDialogFragment"
-        android:label="QuickFolderChangeDialogFragment" /><action android:id="@+id/action_global_quickFolderChangeDialogFragment" app:destination="@id/quickFolderChangeDialogFragment"/>
+        android:label="QuickFolderChangeDialogFragment" >
+        <argument
+            android:name="pinnedFolders"
+            app:argType="com.example.todolist.data.Folder[]" />
+    </dialog>
+    <action android:id="@+id/action_global_quickFolderChangeDialogFragment" app:destination="@id/quickFolderChangeDialogFragment" />
 </navigation>

@@ -15,7 +15,7 @@ class QuickFolderChangeDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
         AlertDialog.Builder(requireContext())
             .setTitle("Select the folder")
-            .setItems(viewModel.getStringOfPinnedFolders().toTypedArray()) { dialog, which ->
+            .setAdapter(viewModel.getStringOfPinnedFolders(requireContext(), arguments)) { _, which ->
                 viewModel.goToFolder(which)
             }.create()
 }

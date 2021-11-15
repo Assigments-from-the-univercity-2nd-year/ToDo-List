@@ -144,7 +144,9 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
                         findNavController().navigate(action)
                     }
                     is TasksViewModel.TasksEvent.NavigationEvent.NavigateToQuickFolderChange -> {
-                        val action = TasksFragmentDirections.actionGlobalQuickFolderChangeDialogFragment()
+                        val action = TasksFragmentDirections.actionGlobalQuickFolderChangeDialogFragment(
+                            event.pinnedFolders.toTypedArray()
+                        )
                         findNavController().navigate(action)
                     }
                 }.exhaustive

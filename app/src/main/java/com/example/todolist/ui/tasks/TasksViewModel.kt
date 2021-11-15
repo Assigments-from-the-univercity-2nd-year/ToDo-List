@@ -1,6 +1,5 @@
 package com.example.todolist.ui.tasks
 
-import androidx.arch.core.executor.TaskExecutor
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
@@ -143,7 +142,11 @@ class TasksViewModel @ViewModelInject constructor(
     }
 
     fun onQuickFolderChangeClicked() = viewModelScope.launch {
-        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToQuickFolderChange)
+        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToQuickFolderChange(
+            folderDao.getPinnedFolders().onEach {
+                it.setNumberOfSubComponents(folderDao, taskDao)
+            }
+        ))
     }
 
     fun taskMovedToFolder(component: Component?, folder: Folder?) = viewModelScope.launch {
@@ -179,7 +182,7 @@ class TasksViewModel @ViewModelInject constructor(
             object NavigateToAddFolderScreen : TasksEvent()
             object NavigateToDeleteAllCompletedScreen : TasksEvent()
             data class NavigateToDeleteFolderScreen(val folder: Folder) : TasksEvent()
-            object NavigateToQuickFolderChange : TasksEvent()
+            data class NavigateToQuickFolderChange(val pinnedFolders: List<Folder>) : TasksEvent()
         }
         sealed class MessageEvent {
             data class ShowUndoDeleteTaskMessage(val task: Task, val parentFolder: Folder) : TasksEvent()

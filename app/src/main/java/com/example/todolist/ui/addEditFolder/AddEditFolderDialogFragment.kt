@@ -24,6 +24,7 @@ class AddEditFolderDialogFragment : DialogFragment() {
             .setPositiveButton("Apply") { _, _ ->
                 viewModel.applyFolder(
                     binding.edittextModalbottomsheetaddeditfolderFoldername.text.toString(),
+                    binding.checkboxModalbottomsheetaddeditfolderPinning.isChecked,
                     AddEditFolderDialogFragmentArgs.fromBundle(
                         arguments ?: Bundle.EMPTY
                     ).parentFolder
