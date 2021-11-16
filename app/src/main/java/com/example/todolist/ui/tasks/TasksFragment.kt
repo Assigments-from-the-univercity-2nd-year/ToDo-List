@@ -172,8 +172,6 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
                         val action = TasksFragmentDirections.actionGlobalAddEditFolderDialogFragment(
                             viewModel.currentFolder.value!!
                         )
-                        //val action = TasksFragmentDirections.actionGlobalAddEditFolderDialogFragment()
-                        //val action = TasksFragmentDirections.actionGlobalDeleteAllCompletedDialogFragment()
                         findNavController().navigate(action)
                     }
                     is TasksViewModel.TasksEvent.NavigationEvent.NavigateToQuickFolderChange -> {
@@ -184,6 +182,12 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
                     }
                     is TasksViewModel.TasksEvent.MessageEvent.ShowFolderSavedConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
+                    }
+                    is TasksViewModel.TasksEvent.NavigationEvent.NavigateToEditFolderScreen -> {
+                        val action = TasksFragmentDirections.actionGlobalAddEditFolderDialogFragment(
+                            event.parentFolder, viewModel.currentFolder.value!!
+                        )
+                        findNavController().navigate(action)
                     }
                 }.exhaustive
             }
@@ -268,6 +272,15 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
         }
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+
+        val editFolderItem = menu.findItem(R.id.action_menuFragmentTasks_editFolder)
+        viewModel.currentFolder.observe(viewLifecycleOwner) {
+            editFolderItem.isVisible = it.id != 1L
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_menuFragmentTasks_sortByName -> {
@@ -289,6 +302,10 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
             }
             R.id.action_menuFragmentTasks_quickFolderChange -> {
                 viewModel.onQuickFolderChangeClicked()
+                true
+            }
+            R.id.action_menuFragmentTasks_editFolder -> {
+                viewModel.onEditFolderClicked()
                 true
             }
             android.R.id.home -> {

@@ -135,10 +135,13 @@ class TasksViewModel @ViewModelInject constructor(
         }
     }
 
-    fun onAddEditFolderResult(result: Int) {
+    fun onAddEditFolderResult(result: Int) = viewModelScope.launch {
         when (result) {
             ADD_FOLDER_RESULT_OK -> showTaskSavedConfirmationMessage("Folder added")
-            EDIT_FOLDER_RESULT_OK ->showTaskSavedConfirmationMessage("Folder updated")
+            EDIT_FOLDER_RESULT_OK -> {
+                showTaskSavedConfirmationMessage("Folder updated")
+                currentFolder.postValue(folderDao.getFolder(currentFolder.value!!.id))
+            }
         }
     }
 
@@ -161,6 +164,12 @@ class TasksViewModel @ViewModelInject constructor(
             folderDao.getPinnedFolders().onEach {
                 it.setNumberOfSubComponents(folderDao, taskDao)
             }
+        ))
+    }
+
+    fun onEditFolderClicked() = viewModelScope.launch {
+        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToEditFolderScreen(
+            folderDao.getFolder(currentFolder.value!!.folderId ?: 1L)
         ))
     }
 
@@ -195,6 +204,7 @@ class TasksViewModel @ViewModelInject constructor(
             object NavigateToAddTaskScreen : TasksEvent()
             data class NavigateToEditTaskScreen(val task: Task) : TasksEvent()
             object NavigateToAddFolderScreen : TasksEvent()
+            data class NavigateToEditFolderScreen(val parentFolder: Folder) : TasksEvent()
             object NavigateToDeleteAllCompletedScreen : TasksEvent()
             data class NavigateToDeleteFolderScreen(val folder: Folder) : TasksEvent()
             data class NavigateToQuickFolderChange(val pinnedFolders: List<Folder>) : TasksEvent()

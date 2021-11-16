@@ -3,7 +3,6 @@ package com.example.todolist.ui.addEditFolder
 import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.todolist.databinding.DialogFragmentAddEditFolderBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
@@ -32,12 +30,15 @@ class AddEditFolderDialogFragment : DialogFragment() {
             .setView(binding.root)
             .setNegativeButton("Cancel", null)
             .setPositiveButton("Apply") { _, _ ->
-                viewModel.applyFolder(
+                viewModel.onApplyClicked(
                     binding.edittextModalbottomsheetaddeditfolderFoldername.text.toString(),
                     binding.checkboxModalbottomsheetaddeditfolderPinning.isChecked,
                     AddEditFolderDialogFragmentArgs.fromBundle(
                         arguments ?: Bundle.EMPTY
-                    ).parentFolder
+                    ).parentFolder,
+                    AddEditFolderDialogFragmentArgs.fromBundle(
+                        arguments ?: Bundle.EMPTY
+                    ).currentFolder
                 )
             }.create()
 
