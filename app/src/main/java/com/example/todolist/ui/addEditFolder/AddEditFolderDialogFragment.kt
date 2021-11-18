@@ -2,6 +2,7 @@ package com.example.todolist.ui.addEditFolder
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
@@ -36,15 +37,20 @@ class AddEditFolderDialogFragment : DialogFragment() {
             .setTitle("Select folder name")
             .setView(binding.root)
             .setNegativeButton("Cancel", null)
-            .setPositiveButton("Apply") { _, _ ->
-                viewModel.onApplyClicked(binding, args)
-            }
+            .setPositiveButton("Apply", null)
             .setOnDismissListener {
                 viewModel.hideKeyboard(binding.edittextModalbottomsheetaddeditfolderFoldername)
             }
             .create()
 
-        dialog.setOnShowListener(viewModel.getOnShowListener(binding))
+        dialog.setOnShowListener {
+            binding.edittextModalbottomsheetaddeditfolderFoldername.requestFocus()
+            dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+                viewModel.onApplyClicked(binding, args)
+            }
+        }
 
         return dialog
     }

@@ -53,12 +53,6 @@ class AddEditFolderViewModel @ViewModelInject constructor(
         }
     }
 
-    fun getOnShowListener(binding: DialogFragmentAddEditFolderBinding) =
-        DialogInterface.OnShowListener {
-            binding.edittextModalbottomsheetaddeditfolderFoldername.requestFocus()
-            showKeyboard(binding.edittextModalbottomsheetaddeditfolderFoldername)
-        }
-
     fun hideKeyboard(view: View) {
         getInputMethodManager(view).hideSoftInputFromWindow(view.windowToken, 0)
     }
@@ -80,12 +74,6 @@ class AddEditFolderViewModel @ViewModelInject constructor(
     private fun getInputMethodManager(view: View): InputMethodManager {
         val context = view.context
         return context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    }
-
-    private fun showKeyboard(view: View) {
-        view.post {
-            getInputMethodManager(view).showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
-        }
     }
 
     sealed class AddEditFolderEvent {
