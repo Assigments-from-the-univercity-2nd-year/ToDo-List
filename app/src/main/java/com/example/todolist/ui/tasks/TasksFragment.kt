@@ -94,20 +94,20 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
 
             fabFragmenttasksAddtask.setOnClickListener {
                 viewModel.onAddNewTaskClicked()
-                viewModel.onAddButtonClicked.value = 0
+                viewModel.onAddButtonClicked.value = TasksViewModel.FABAnimation.DO_NOTHING
             }
 
             fabFragmenttasksAddfolder.setOnClickListener {
                 viewModel.onAddNewFolderClicked()
-                viewModel.onAddButtonClicked.value = -1
+                viewModel.onAddButtonClicked.value = TasksViewModel.FABAnimation.HIDE_FABS
             }
         }
 
         viewModel.onAddButtonClicked.observe(viewLifecycleOwner) {
-            if (it == 1) {
+            if (it == TasksViewModel.FABAnimation.SHOW_FABS) {
                 setVisibility(true)
                 setAnimation(true)
-            } else if (it == -1) {
+            } else if (it == TasksViewModel.FABAnimation.HIDE_FABS) {
                 setVisibility(false)
                 setAnimation(false)
             }
