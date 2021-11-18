@@ -3,6 +3,7 @@ package com.example.todolist.ui.addEditFolder
 import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.todolist.databinding.DialogFragmentAddEditFolderBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -22,32 +24,29 @@ import kotlinx.coroutines.flow.collect
 class AddEditFolderDialogFragment : DialogFragment() {
 
     private val viewModel: AddEditFolderViewModel by viewModels()
-    private lateinit var binding: DialogFragmentAddEditFolderBinding
+    private val args: AddEditFolderDialogFragmentArgs by navArgs()
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
-        AlertDialog.Builder(requireContext())
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val binding = DialogFragmentAddEditFolderBinding.inflate(layoutInflater)
+        binding.edittextModalbottomsheetaddeditfolderFoldername
+            .setText(args.currentFolder?.title)
+        binding.checkboxModalbottomsheetaddeditfolderPinning.isChecked = args.currentFolder?.isPinned ?: false
+
+        val dialog = AlertDialog.Builder(requireContext())
             .setTitle("Select folder name")
             .setView(binding.root)
             .setNegativeButton("Cancel", null)
             .setPositiveButton("Apply") { _, _ ->
-                viewModel.onApplyClicked(
-                    binding.edittextModalbottomsheetaddeditfolderFoldername.text.toString(),
-                    binding.checkboxModalbottomsheetaddeditfolderPinning.isChecked,
-                    AddEditFolderDialogFragmentArgs.fromBundle(
-                        arguments ?: Bundle.EMPTY
-                    ).parentFolder,
-                    AddEditFolderDialogFragmentArgs.fromBundle(
-                        arguments ?: Bundle.EMPTY
-                    ).currentFolder
-                )
-            }.create()
+                viewModel.onApplyClicked(binding, args)
+            }
+            .setOnDismissListener {
+                viewModel.hideKeyboard(binding.edittextModalbottomsheetaddeditfolderFoldername)
+            }
+            .create()
 
+        dialog.setOnShowListener(viewModel.getOnShowListener(binding))
 
-    override fun onAttach(activity: Activity) {
-        super.onAttach(activity)
-
-        binding = DialogFragmentAddEditFolderBinding
-            .inflate(LayoutInflater.from(requireContext()), null, false)
+        return dialog
     }
 
     override fun onCreateView(
@@ -56,17 +55,10 @@ class AddEditFolderDialogFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding.edittextModalbottomsheetaddeditfolderFoldername.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus) {
-                dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
-            }
-        }
-
         this.lifecycleScope.launchWhenStarted {
             viewModel.addEditFolderEvent.collect { event ->
                 when(event) {
                     is AddEditFolderViewModel.AddEditFolderEvent.NavigateBackWithResult -> {
-                        binding.edittextModalbottomsheetaddeditfolderFoldername.clearFocus()
                         setFragmentResult(
                             "add_edit_folder_request",
                             bundleOf("add_edit_folder_result" to event.result)
