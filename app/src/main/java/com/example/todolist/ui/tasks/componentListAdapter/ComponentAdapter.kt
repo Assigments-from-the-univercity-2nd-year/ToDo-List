@@ -24,7 +24,7 @@ class ComponentAdapter(
                     ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 ComponentViewHolder.TaskViewHolder(binding, onComponentClickListener)
             }
-            else -> throw Exception() //TODO("handling exception that it is not a folder or a task")
+            else -> throw IllegalArgumentException()
         }
     }
 

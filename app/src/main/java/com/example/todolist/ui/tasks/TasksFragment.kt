@@ -91,22 +91,26 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
             fabFragmenttasksAddbutton.setOnClickListener {
                 viewModel.onAddButtonClicked()
             }
-            // TODO: 13.11.2021 clear animation from the previous time (add FAB rotation)
 
             fabFragmenttasksAddtask.setOnClickListener {
                 viewModel.onAddNewTaskClicked()
-                viewModel.onAddButtonClicked.value = false
+                viewModel.onAddButtonClicked.value = 0
             }
 
             fabFragmenttasksAddfolder.setOnClickListener {
                 viewModel.onAddNewFolderClicked()
-                viewModel.onAddButtonClicked.value = false
+                viewModel.onAddButtonClicked.value = -1
             }
         }
 
         viewModel.onAddButtonClicked.observe(viewLifecycleOwner) {
-            setVisibility(it)
-            setAnimation(it)
+            if (it == 1) {
+                setVisibility(true)
+                setAnimation(true)
+            } else if (it == -1) {
+                setVisibility(false)
+                setAnimation(false)
+            }
         }
 
         setFragmentResultListener("add_edit_request") { s: String, bundle: Bundle ->
