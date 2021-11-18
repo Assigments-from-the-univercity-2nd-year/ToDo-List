@@ -20,18 +20,15 @@ class DeleteFolderViewModel @ViewModelInject constructor(
 
     fun onDeleteFolderClicked(folder: Folder) = applicationScope.launch {
         folder.delete(folderDao, taskDao)
-        if (folder.folderId != null) {
+        if (folder.folderId != null) { // if it is not a root folder
             val parentFolder = folderDao.getFolder(folder.folderId)
-            updateFolderTime(parentFolder)
+            parentFolder.updateDate(folderDao)
         }
     }
 
     fun onDeleteCompletedInFolderClicked(folder: Folder) = applicationScope.launch {
         folder.deleteCompleted(folderDao, taskDao)
-        updateFolderTime(folder)
+        folder.updateDate(folderDao)
     }
 
-    private fun updateFolderTime(folder: Folder) = viewModelScope.launch {
-        folderDao.updateFolder(folder.copy(modifiedDate = System.currentTimeMillis()))
-    }
 }
