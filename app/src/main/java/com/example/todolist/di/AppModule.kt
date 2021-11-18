@@ -27,6 +27,9 @@ object AppModule {
     @Provides
     fun provideTaskDao(db: TaskDatabase) = db.taskDao()
 
+    @Provides
+    fun provideFolderDao(db: TaskDatabase) = db.folderDao()
+
     @ApplicationScope
     @Provides
     @Singleton

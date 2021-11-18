@@ -37,5 +37,13 @@
         android:id="@+id/action_menuFragmentTasks_deleteAllCompletedTasks"
         android:title="Delete all completed"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_menuFragmentTasks_quickFolderChange"
+        android:title="Change folder"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_menuFragmentTasks_editFolder"
+        android:title="Edit folder"
+        app:showAsAction="never" />
 
 </menu>

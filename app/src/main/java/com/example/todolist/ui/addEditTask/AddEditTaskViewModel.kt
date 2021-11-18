@@ -5,6 +5,8 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.todolist.data.Folder
+import com.example.todolist.data.FolderDao
 import com.example.todolist.data.Task
 import com.example.todolist.data.TaskDao
 import com.example.todolist.ui.ADD_TASK_RESULT_OK
@@ -15,12 +17,14 @@ import kotlinx.coroutines.launch
 
 class AddEditTaskViewModel @ViewModelInject constructor(
     private val taskDao: TaskDao,
+    private val folderDao: FolderDao,
     @Assisted private val state: SavedStateHandle
 ) : ViewModel() {
 
     val task = state.get<Task>("task")
+    private val folderId = state.get<Long>("folderId") ?: 1L
 
-    var taskName = state.get<String>("taskName") ?: task?.name ?: ""
+    var taskName = state.get<String>("taskName") ?: task?.title ?: ""
         set(value) {
             field = value
             state.set("taskName", value)
@@ -42,11 +46,17 @@ class AddEditTaskViewModel @ViewModelInject constructor(
         }
 
         if (task != null) {
-            val updatedTask = task.copy(name = taskName, isImportant = taskImportance)
+            val updatedTask = task.copy(
+                title = taskName,
+                isImportant = taskImportance,
+                modifiedDate = System.currentTimeMillis()
+            )
             updateTask(updatedTask)
+            updateFolder()
         } else {
-            val newTask = Task(taskName, taskImportance)
+            val newTask = Task(taskName, folderId, taskImportance)
             insertTask(newTask)
+            updateFolder()
         }
     }
 
@@ -62,6 +72,11 @@ class AddEditTaskViewModel @ViewModelInject constructor(
     private fun insertTask(task: Task) = viewModelScope.launch {
         taskDao.insertTask(task)
         addEditTaskEventChannel.send(AddEditTaskEvent.NavigateBackWithResult(ADD_TASK_RESULT_OK))
+    }
+
+    private fun updateFolder() = viewModelScope.launch {
+        val folder = folderDao.getFolder(folderId)
+        folderDao.updateFolder(folder.copy(modifiedDate = System.currentTimeMillis()))
     }
 
     sealed class AddEditTaskEvent {
