@@ -58,8 +58,8 @@
                 android:id="@+id/textview_itemfolder_numberofitemsinfolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingEnd="16dp"
-                android:text="(3)"
+                android:paddingEnd="24dp"
+                android:text="3"
                 app:layout_constraintBottom_toBottomOf="@+id/imageview_itemfolder_foldericon"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/imageview_itemfolder_foldericon" />
