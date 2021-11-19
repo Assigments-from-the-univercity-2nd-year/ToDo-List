@@ -117,10 +117,12 @@ class TasksViewModel @ViewModelInject constructor(
     }
 
     fun onAddNewTaskClicked() = viewModelScope.launch {
+        onAddButtonClicked.value = FABAnimation.DO_NOTHING
         tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToAddTaskScreen)
     }
 
     fun onAddNewFolderClicked() = viewModelScope.launch {
+        onAddButtonClicked.value = FABAnimation.HIDE_FABS
         tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToAddFolderScreen)
     }
 

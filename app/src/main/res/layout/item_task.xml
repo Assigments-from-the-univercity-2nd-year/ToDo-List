@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:paddingEnd="16dp"
                 android:src="@drawable/ic_baseline_priority_high_24"
-                android:tint="@color/secondary_main_1"
+                android:tint="?attr/colorSecondary"
                 app:layout_constraintBottom_toBottomOf="@+id/framelayout_itemtask_completedwrapper"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/framelayout_itemtask_completedwrapper" />
