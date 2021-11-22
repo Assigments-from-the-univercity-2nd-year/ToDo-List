@@ -5,10 +5,9 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.todolist.data.Folder
-import com.example.todolist.data.FolderDao
-import com.example.todolist.data.Task
-import com.example.todolist.data.TaskDao
+import com.example.todolist.data.componentsDB.FolderDao
+import com.example.todolist.data.componentsDB.Task
+import com.example.todolist.data.componentsDB.TaskDao
 import com.example.todolist.ui.ADD_TASK_RESULT_OK
 import com.example.todolist.ui.EDIT_TASK_RESULT_OK
 import kotlinx.coroutines.channels.Channel

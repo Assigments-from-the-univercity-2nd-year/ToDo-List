@@ -2,7 +2,9 @@ package com.example.todolist.di
 
 import android.app.Application
 import androidx.room.Room
-import com.example.todolist.data.TaskDatabase
+import androidx.room.RoomDatabase
+import com.example.todolist.data.componentsDB.TaskDatabase
+import com.example.todolist.data.partsDB.PartDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,6 +31,13 @@ object AppModule {
 
     @Provides
     fun provideFolderDao(db: TaskDatabase) = db.folderDao()
+
+    @Provides
+    @Singleton
+    fun providePartDatabase(app: Application) =
+        Room.databaseBuilder(app, PartDatabase::class.java, "part_database")
+            .fallbackToDestructiveMigration()
+            .build()
 
     @ApplicationScope
     @Provides

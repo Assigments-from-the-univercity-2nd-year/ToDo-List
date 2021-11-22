@@ -1,4 +1,4 @@
-package com.example.todolist.data
+package com.example.todolist.data.componentsDB
 
 import android.os.Parcelable
 import androidx.room.Entity

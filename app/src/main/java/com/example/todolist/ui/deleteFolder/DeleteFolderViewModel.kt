@@ -1,14 +1,11 @@
 package com.example.todolist.ui.deleteFolder
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.todolist.data.Folder
-import com.example.todolist.data.FolderDao
-import com.example.todolist.data.TaskDao
+import com.example.todolist.data.componentsDB.Folder
+import com.example.todolist.data.componentsDB.FolderDao
+import com.example.todolist.data.componentsDB.TaskDao
 import com.example.todolist.di.ApplicationScope
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
