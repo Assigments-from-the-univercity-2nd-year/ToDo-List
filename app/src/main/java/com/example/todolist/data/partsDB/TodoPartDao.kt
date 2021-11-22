@@ -15,5 +15,5 @@ interface TodoPartDao {
     suspend fun deleteTodoPart(textPart: TextPart)
 
     @Query("SELECT * FROM todopart WHERE parentId = :taskId")
-    suspend fun getTodoPartsOfTask(taskId: Long): Flow<List<TextPart>>
+    fun getTodoPartsOfTask(taskId: Long): Flow<List<TextPart>>
 }

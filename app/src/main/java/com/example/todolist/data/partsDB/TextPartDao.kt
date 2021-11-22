@@ -15,5 +15,5 @@ interface TextPartDao {
     suspend fun deleteTextPart(textPart: TextPart)
 
     @Query("SELECT * FROM textpart WHERE parentId = :taskId")
-    suspend fun getTextPartsOfTask(taskId: Long): Flow<List<TextPart>>
+    fun getTextPartsOfTask(taskId: Long): Flow<List<TextPart>>
 }
