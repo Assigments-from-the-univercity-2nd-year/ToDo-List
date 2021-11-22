@@ -52,7 +52,7 @@ sealed class ComponentViewHolder(binding: ViewBinding) :
             val currentFolder = component as Folder
             binding.apply {
                 textviewItemfolderFoldername.text = currentFolder.title
-                textviewItemfolderNumberofitemsinfolder.text = "(${currentFolder.numberOfSubComponents?.toString()})"
+                textviewItemfolderNumberofitemsinfolder.text = currentFolder.numberOfSubComponents?.toString()
                 imageviewItemfolderPinning.isVisible = currentFolder.isPinned
 
                 root.setOnClickListener {

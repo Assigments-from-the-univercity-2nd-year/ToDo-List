@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:padding="24dp"
                 android:src="@drawable/ic_baseline_folder_24"
-                android:tint="@color/secondary_main_1"
+                android:tint="?attr/colorSecondary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,14 +52,14 @@
                 app:layout_constraintBottom_toBottomOf="@+id/imageview_itemfolder_foldericon"
                 app:layout_constraintEnd_toStartOf="@+id/textview_itemfolder_numberofitemsinfolder"
                 app:layout_constraintTop_toTopOf="@+id/imageview_itemfolder_foldericon"
-                app:tint="@color/secondary_main_1" />
+                app:tint="?attr/colorSecondary" />
 
             <TextView
                 android:id="@+id/textview_itemfolder_numberofitemsinfolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingEnd="16dp"
-                android:text="(3)"
+                android:paddingEnd="24dp"
+                android:text="3"
                 app:layout_constraintBottom_toBottomOf="@+id/imageview_itemfolder_foldericon"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/imageview_itemfolder_foldericon" />

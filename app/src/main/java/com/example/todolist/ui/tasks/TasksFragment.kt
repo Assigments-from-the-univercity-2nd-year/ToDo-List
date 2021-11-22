@@ -94,12 +94,10 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
 
             fabFragmenttasksAddtask.setOnClickListener {
                 viewModel.onAddNewTaskClicked()
-                viewModel.onAddButtonClicked.value = TasksViewModel.FABAnimation.DO_NOTHING
             }
 
             fabFragmenttasksAddfolder.setOnClickListener {
                 viewModel.onAddNewFolderClicked()
-                viewModel.onAddButtonClicked.value = TasksViewModel.FABAnimation.HIDE_FABS
             }
         }
 
@@ -324,5 +322,8 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
         super.onDestroyView()
         searchView.setOnQueryTextListener(null)
         findNavController().removeOnDestinationChangedListener(onDestinationChangedListener)
+        if (viewModel.onAddButtonClicked.value == TasksViewModel.FABAnimation.HIDE_FABS) {
+            viewModel.onAddButtonClicked.value = TasksViewModel.FABAnimation.DO_NOTHING
+        }
     }
 }
