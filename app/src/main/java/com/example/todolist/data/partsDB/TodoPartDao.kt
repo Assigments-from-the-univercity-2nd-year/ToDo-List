@@ -2,6 +2,9 @@ package com.example.todolist.data.partsDB
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.transform
 
 @Dao
 interface TodoPartDao {
@@ -14,6 +17,11 @@ interface TodoPartDao {
     @Delete
     suspend fun deleteTodoPart(textPart: TextPart)
 
-    @Query("SELECT * FROM todopart WHERE parentId = :taskId")
-    fun getTodoPartsOfTask(taskId: Long): Flow<List<TextPart>>
+    fun getTodoPartsOfTask(taskId: Long): Flow<List<TodoPart>> =
+        getTodoDataPartsOfTask(taskId).transform { list ->
+            emit(list.map { TodoPart(it) })
+        }
+
+    @Query("SELECT * FROM tododatapart WHERE parentId = :taskId")
+    fun getTodoDataPartsOfTask(taskId: Long): Flow<List<TodoDataPart>>
 }

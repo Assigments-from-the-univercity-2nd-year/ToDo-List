@@ -3,6 +3,7 @@ package com.example.todolist.data.partsDB
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.sql.Blob
+import java.util.*
 
 sealed class TaskPart {
     abstract val content: Any
@@ -20,13 +21,18 @@ data class TextPart(
 ) : TaskPart()
 
 @Entity
-data class TodoPart(
+data class TodoDataPart(
     override val content: String,
     override val position: Int,
     val parentId: Long,
     @PrimaryKey(autoGenerate = true)
     override val id: Long = 0
 ) : TaskPart()
+
+class TodoPart(private val todoDataPart: TodoDataPart) {
+    val content: List<String>
+        get() = todoDataPart.content.split("\n")
+}
 
 /*@Entity
 data class ImagePart(
