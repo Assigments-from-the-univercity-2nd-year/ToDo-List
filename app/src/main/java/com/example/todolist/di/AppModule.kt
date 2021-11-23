@@ -33,10 +33,17 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providePartDatabase(app: Application) =
+    fun providePartDatabase(app: Application, callback: PartDatabase.CallBack) =
         Room.databaseBuilder(app, PartDatabase::class.java, "part_database")
             .fallbackToDestructiveMigration()
+            .addCallback(callback)
             .build()
+
+    @Provides
+    fun provideTextPartDao(db: PartDatabase) = db.textPartDao()
+
+    @Provides
+    fun provideTodoPartDao(db: PartDatabase) = db.todoPartDao()
 
     @ApplicationScope
     @Provides

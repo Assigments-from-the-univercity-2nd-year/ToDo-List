@@ -16,7 +16,7 @@ data class TextPart(
     override val position: Int,
     val parentId: Long,
     @PrimaryKey(autoGenerate = true)
-    override val id: Long
+    override val id: Long = 0
 ) : TaskPart()
 
 @Entity
@@ -25,7 +25,7 @@ data class TodoPart(
     override val position: Int,
     val parentId: Long,
     @PrimaryKey(autoGenerate = true)
-    override val id: Long
+    override val id: Long = 0
 ) : TaskPart()
 
 /*@Entity
