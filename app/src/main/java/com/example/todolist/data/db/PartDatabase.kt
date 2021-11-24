@@ -1,0 +1,37 @@
+package com.example.todolist.data.db
+
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.todolist.data.daos.TextPartDataDao
+import com.example.todolist.data.daos.TodoPartDataDao
+import com.example.todolist.data.entities.TextPartData
+import com.example.todolist.data.entities.TodoPartData
+import com.example.todolist.di.ApplicationScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Provider
+
+@Database(entities = [TextPartData::class, TodoPartData::class], version = 1)
+abstract class PartDatabase : RoomDatabase() {
+    abstract fun textPartDataDao(): TextPartDataDao
+    abstract fun todoPartDataDao(): TodoPartDataDao
+
+    class CallBack @Inject constructor(
+        private val database: Provider<PartDatabase>,
+        @ApplicationScope private val applicationScope: CoroutineScope
+    ) : RoomDatabase.Callback() {
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+
+            val textPartDao = database.get().textPartDataDao()
+
+            applicationScope.launch {
+                textPartDao.insertTextPartData(TextPartData("You need to to your homework!!", 1, 1))
+                textPartDao.insertTextPartData(TextPartData("You need to to your homework!! - 2", 2, 1))
+                textPartDao.insertTextPartData(TextPartData("You need to to your homework!! - 3", 3, 1))
+            }
+        }
+    }
+}

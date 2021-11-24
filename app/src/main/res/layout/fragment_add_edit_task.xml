@@ -7,6 +7,7 @@
     tools:context=".ui.addEditTask.AddEditTaskFragment">
 
     <LinearLayout
+        android:id="@+id/linearlayout_addedittask_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -31,6 +32,12 @@
             android:text="Created: "/>
 
     </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearlayout_addedittask_header" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_fragmenttasks"

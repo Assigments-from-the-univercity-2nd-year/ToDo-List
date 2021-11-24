@@ -3,7 +3,7 @@ package com.example.todolist.di
 import android.app.Application
 import androidx.room.Room
 import com.example.todolist.data.componentsDB.TaskDatabase
-import com.example.todolist.data.partsDB.PartDatabase
+import com.example.todolist.data.db.PartDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,12 +38,6 @@ object AppModule {
             .fallbackToDestructiveMigration()
             .addCallback(callback)
             .build()
-
-    @Provides
-    fun provideTextPartDao(db: PartDatabase) = db.textPartDao()
-
-    @Provides
-    fun provideTodoPartDao(db: PartDatabase) = db.todoPartDao()
 
     @ApplicationScope
     @Provides
