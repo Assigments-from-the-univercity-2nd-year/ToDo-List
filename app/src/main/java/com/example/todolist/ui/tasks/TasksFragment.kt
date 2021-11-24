@@ -75,7 +75,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
             recyclerviewFragmenttasksTasks.apply {
                 adapter = taskAdapter
                 layoutManager = LinearLayoutManager(requireContext())
-                setHasFixedSize(true)
+                //setHasFixedSize(true)
             }
 
             ItemTouchHelper(SwipingSimpleCallback(

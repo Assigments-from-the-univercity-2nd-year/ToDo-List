@@ -5,4 +5,4 @@ data class TextPart(
     val position: Int,
     val parentId: Long,
     val id: Long = 0
-)
+) : BasePart()

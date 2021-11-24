@@ -6,6 +6,7 @@ import com.example.todolist.ui.mappers.TextPartMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.transformLatest
 import javax.inject.Inject
 
 class AppRepository @Inject constructor(
@@ -18,7 +19,10 @@ class AppRepository @Inject constructor(
         )
 
     fun getTextPartsOfTask(taskId: Long): Flow<List<TextPart>> =
-        partDatabase.textPartDataDao().getTextPartDatasOfTask(taskId).flatMapLatest { list ->
+        partDatabase.textPartDataDao().getTextPartDatasOfTask(taskId)/*.flatMapLatest { list ->
             flow { list.map { TextPartMapper.mapToDomainModel(it) } }
-        }
+        }*/
+            .transformLatest { list ->
+                emit(list.map { TextPartMapper.mapToDomainModel(it) })
+            }
 }
