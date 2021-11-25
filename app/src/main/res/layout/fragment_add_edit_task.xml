@@ -43,6 +43,7 @@
         app:layout_anchorGravity="bottom" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_fragmentaddedittask_eddtodopart"
         style="@style/Widget.Material3.FloatingActionButton.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -65,12 +66,12 @@
         android:focusable="true"
         android:translationY="-24dp"
         app:fabSize="mini"
-        app:layout_anchor="@+id/fab_fragmenttasks"
+        app:layout_anchor="@+id/fab_fragmentaddedittask_addbutton"
         app:layout_anchorGravity="top|center"
         app:srcCompat="@drawable/ic_baseline_text_fields_24" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_fragmenttasks"
+        android:id="@+id/fab_fragmentaddedittask_addbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

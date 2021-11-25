@@ -11,9 +11,9 @@ import com.example.todolist.data.componentsDB.Task
 import com.example.todolist.data.componentsDB.TaskDao
 import com.example.todolist.data.repository.AppRepository
 import com.example.todolist.ui.ADD_TASK_RESULT_OK
+import com.example.todolist.ui.EDIT_TASK_RESULT_NOTHING_CHANGED
 import com.example.todolist.ui.EDIT_TASK_RESULT_OK
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -26,8 +26,8 @@ class AddEditTaskViewModel @ViewModelInject constructor(
 
     private val folderId = state.get<Long>("folderId")
     val task = state.get<Task>("task") ?: Task("", folderId!!)
-    val isCreatingTask: Boolean
-        get() = state.get<Task>("task") == null
+    val isModifyingTask: Boolean
+        get() = state.get<Task>("task") != null
 
     var taskName = state.get<String>("taskName") ?: task.title ?: ""
         set(value) {
@@ -47,21 +47,28 @@ class AddEditTaskViewModel @ViewModelInject constructor(
     private val addEditTaskEventChannel = Channel<AddEditTaskEvent>()
     val addEditTaskEvent = addEditTaskEventChannel.receiveAsFlow()
 
-    fun onSaveClicked() {
+    fun onSaveClicked(showNothingChangeMessage: Boolean = true) {
         if (taskName.isBlank()) {
             showInvalidInputMessage("Name can not be empty.")
             return
         }
 
-        if (isCreatingTask) {
-            val updatedTask = task.copy(
-                title = taskName,
-                isImportant = taskImportance,
-                modifiedDate = System.currentTimeMillis()
-            )
-            updateTask(updatedTask)
-            updateFolder()
-        } else {
+        if (isModifyingTask) { // if the task exists
+            if (state.get<Task>("task") != task) { // if some data of the task have changed
+                val updatedTask = task.copy(
+                    title = taskName,
+                    isImportant = taskImportance,
+                    modifiedDate = System.currentTimeMillis()
+                )
+                updateTask(updatedTask)
+                updateFolder()
+            } else if(showNothingChangeMessage) { // if nothing have changed
+                viewModelScope.launch {
+                    addEditTaskEventChannel.send(AddEditTaskEvent.NavigateBackWithResult(
+                        EDIT_TASK_RESULT_NOTHING_CHANGED))
+                }
+            }
+        } else { // if it is a new task
             val newTask = Task(taskName, folderId!!, taskImportance)
             insertTask(newTask)
             updateFolder()
