@@ -38,43 +38,45 @@
         android:id="@+id/recyclerview_addedittask_parts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         app:layout_anchor="@id/linearlayout_addedittask_header"
-        app:layout_anchorGravity="bottom"
-        android:layout_gravity="bottom"/>
+        app:layout_anchorGravity="bottom" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        style="@style/Widget.Material3.FloatingActionButton.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="152dp"
-        android:layout_gravity="bottom|end"
+        android:layout_gravity="top|center"
         android:clickable="true"
         android:focusable="true"
-        app:tint="?attr/colorOnSecondary"
-        android:src="@drawable/ic_baseline_task_alt_24" />
+        android:translationY="-24dp"
+        app:fabSize="mini"
+        app:layout_anchor="@+id/fab_fragmentaddedittask_addtextpart"
+        app:layout_anchorGravity="top|center"
+        app:srcCompat="@drawable/ic_baseline_task_alt_24" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_fragmentaddedittask_addtextpart"
+        style="@style/Widget.Material3.FloatingActionButton.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="84dp"
-        android:layout_gravity="bottom|end"
+        android:layout_gravity="top|center"
         android:clickable="true"
         android:focusable="true"
-        app:tint="?attr/colorOnSecondary"
-        android:src="@drawable/ic_baseline_text_fields_24" />
+        android:translationY="-24dp"
+        app:fabSize="mini"
+        app:layout_anchor="@+id/fab_fragmenttasks"
+        app:layout_anchorGravity="top|center"
+        app:srcCompat="@drawable/ic_baseline_text_fields_24" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_fragmenttasks"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
         android:layout_gravity="bottom|end"
-        android:backgroundTint="?attr/colorPrimary"
+        android:layout_margin="16dp"
         android:clickable="true"
         android:focusable="true"
-        app:tint="?attr/colorOnPrimary"
-        android:src="@drawable/ic_baseline_done_24" />
+        app:srcCompat="@drawable/ic_baseline_done_24" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
