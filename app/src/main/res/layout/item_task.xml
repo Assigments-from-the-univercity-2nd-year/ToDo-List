@@ -45,7 +45,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="Example item"
-                android:textColor="@color/black"
+
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/textview_itemtask_modifieddate"
                 app:layout_constraintEnd_toStartOf="@+id/appCompatImageView_itemTask_priority"

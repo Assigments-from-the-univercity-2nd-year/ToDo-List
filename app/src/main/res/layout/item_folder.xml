@@ -36,7 +36,6 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="Example folder name"
-                android:textColor="@color/black"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/imageview_itemfolder_foldericon"
                 app:layout_constraintEnd_toStartOf="@+id/imageview_itemfolder_pinning"
