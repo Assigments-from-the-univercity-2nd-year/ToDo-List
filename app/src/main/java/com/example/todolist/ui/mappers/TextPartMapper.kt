@@ -15,7 +15,7 @@ class TextPartMapper {
                 textPartData.id
             )
 
-        fun matToDataModel(textPart: TextPart): TextPartData =
+        fun mapToDataModel(textPart: TextPart): TextPartData =
             TextPartData(
                 textPart.content,
                 textPart.position,

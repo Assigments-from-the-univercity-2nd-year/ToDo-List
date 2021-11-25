@@ -13,6 +13,10 @@ import com.example.todolist.data.repository.AppRepository
 import com.example.todolist.ui.ADD_TASK_RESULT_OK
 import com.example.todolist.ui.EDIT_TASK_RESULT_NOTHING_CHANGED
 import com.example.todolist.ui.EDIT_TASK_RESULT_OK
+import com.example.todolist.ui.entities.BasePart
+import com.example.todolist.ui.entities.TextPart
+import com.example.todolist.ui.entities.TodoPart
+import com.example.todolist.util.exhaustive
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -73,6 +77,25 @@ class AddEditTaskViewModel @ViewModelInject constructor(
             insertTask(newTask)
             updateFolder()
         }
+    }
+
+    fun onAddTextPartClicked() = viewModelScope.launch {
+        appRepository.insertTextPart(TextPart("", parts.value?.size ?: 1, task.id))
+        updateFolder()
+    }
+
+    fun onAddTodoPartClicked() = viewModelScope.launch {
+        appRepository.insertTodoPart(TodoPart("", parts.value?.size ?: 1, task.id))
+        updateFolder()
+    }
+
+    fun onPartContentChanged(part: BasePart) = viewModelScope.launch {
+        when(part) {
+            is TextPart -> appRepository.updateTextPart(part)
+            is TodoPart -> appRepository.updateTodoPart(part)
+            else -> throw IllegalArgumentException()
+        }.exhaustive
+        updateFolder()
     }
 
     private fun showInvalidInputMessage(text: String) = viewModelScope.launch {

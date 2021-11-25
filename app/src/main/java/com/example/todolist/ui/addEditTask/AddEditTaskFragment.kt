@@ -13,14 +13,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentAddEditTaskBinding
+import com.example.todolist.ui.addEditTask.partsListAdapter.OnPartClickListener
 import com.example.todolist.ui.addEditTask.partsListAdapter.PartAdapter
+import com.example.todolist.ui.entities.BasePart
 import com.example.todolist.util.exhaustive
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task) {
+class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task), OnPartClickListener {
 
     private val viewModel: AddEditTaskViewModel by viewModels()
 
@@ -28,7 +30,7 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task) {
         super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentAddEditTaskBinding.bind(view)
-        val partAdapter = PartAdapter()
+        val partAdapter = PartAdapter(this)
         binding.apply {
             edittextAddedittaskTaskname.setText(viewModel.taskName)
 
@@ -51,11 +53,11 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task) {
             }
 
             fabFragmentaddedittaskAddtextpart.setOnClickListener {
-
+                viewModel.onAddTextPartClicked()
             }
 
             fabFragmentaddedittaskEddtodopart.setOnClickListener {
-
+                viewModel.onAddTodoPartClicked()
             }
 
             recyclerviewAddedittaskParts.apply {
@@ -91,5 +93,9 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task) {
         super.onStop()
 
         viewModel.onSaveClicked(false)
+    }
+
+    override fun onPartContentChanged(part: BasePart) {
+        viewModel.onPartContentChanged(part)
     }
 }

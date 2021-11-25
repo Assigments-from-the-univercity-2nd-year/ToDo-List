@@ -9,18 +9,20 @@ import com.example.todolist.ui.entities.BasePart
 import com.example.todolist.ui.entities.TextPart
 import com.example.todolist.ui.entities.TodoPart
 
-class PartAdapter : ListAdapter<BasePart, PartViewHolder>(PartDiffCallback()) {
+class PartAdapter(
+    private val onPartClickListener: OnPartClickListener
+) : ListAdapter<BasePart, PartViewHolder>(PartDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PartViewHolder =
         when(viewType) {
             TYPE_TEXT_PART -> {
                 val binding =
                     ItemTextPartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                PartViewHolder.TextViewHolder(binding)
+                PartViewHolder.TextViewHolder(binding, onPartClickListener)
             }
             TYPE_TODO_PART -> {
                 val binding =
                     ItemTodoPartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                PartViewHolder.TodoViewHolder(binding)
+                PartViewHolder.TodoViewHolder(binding, onPartClickListener)
             }
             TYPE_IMAGE_PART -> {
                 TODO("Not yet implemented")

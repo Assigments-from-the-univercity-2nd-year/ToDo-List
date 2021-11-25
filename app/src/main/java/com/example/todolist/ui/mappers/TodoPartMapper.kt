@@ -7,10 +7,20 @@ class TodoPartMapper {
     companion object {
         fun mapToDomainModel(todoPartData: TodoPartData): TodoPart =
             TodoPart(
-                todoPartData.content.split("\n"),
+                todoPartData.content,
                 todoPartData.position,
                 todoPartData.parentId,
+                todoPartData.isCompleted,
                 todoPartData.id
+            )
+
+        fun mapToDataModel(todoPart: TodoPart): TodoPartData =
+            TodoPartData(
+                todoPart.content,
+                todoPart.position,
+                todoPart.parentId,
+                todoPart.isCompleted,
+                todoPart.id
             )
     }
 }

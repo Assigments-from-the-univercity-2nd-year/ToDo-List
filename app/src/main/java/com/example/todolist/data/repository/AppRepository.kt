@@ -13,11 +13,6 @@ class AppRepository @Inject constructor(
     private val partDatabase: PartDatabase
 ) {
 
-    suspend fun insertTextPart(textPart: TextPart): Long =
-        partDatabase.textPartDataDao().insertTextPartData(
-            TextPartMapper.matToDataModel(textPart)
-        )
-
     fun getPartsOfTaks(taskId: Long): Flow<List<BasePart>> =
         combine(
             getTextPartsOfTask(taskId),
@@ -40,4 +35,24 @@ class AppRepository @Inject constructor(
         partDatabase.todoPartDataDao().getTodoPartDatasOfTask(taskId).transformLatest { list ->
             emit(list.map { TodoPartMapper.mapToDomainModel(it) })
         }
+
+    suspend fun insertTextPart(textPart: TextPart): Long =
+        partDatabase.textPartDataDao().insertTextPartData(
+            TextPartMapper.mapToDataModel(textPart)
+        )
+
+    suspend fun insertTodoPart(todoPart: TodoPart): Long =
+        partDatabase.todoPartDataDao().insertTodoPartData(
+            TodoPartMapper.mapToDataModel(todoPart)
+        )
+
+    suspend fun updateTextPart(textPart: TextPart) =
+        partDatabase.textPartDataDao().updateTextPartData(
+            TextPartMapper.mapToDataModel(textPart)
+        )
+
+    suspend fun updateTodoPart(todoPart: TodoPart) =
+        partDatabase.todoPartDataDao().updateTodoPartData(
+            TodoPartMapper.mapToDataModel(todoPart)
+        )
 }
