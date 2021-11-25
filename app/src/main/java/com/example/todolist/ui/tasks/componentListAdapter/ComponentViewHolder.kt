@@ -38,8 +38,8 @@ sealed class ComponentViewHolder(binding: ViewBinding) :
                     )
                 }
 
-                cardviewItemtaskCardview.elevation = 0F
-                cardviewItemtaskCardview.radius = 48F
+                //cardviewItemtaskCardview.elevation = 0F
+                //cardviewItemtaskCardview.radius = 48F
             }
         }
 
@@ -61,8 +61,8 @@ sealed class ComponentViewHolder(binding: ViewBinding) :
                     onComponentClickListener.onFolderClicked(currentFolder)
                 }
 
-                cardviewItemfolderCardview.elevation = 0F
-                cardviewItemfolderCardview.radius = 48F
+                //cardviewItemfolderCardview.elevation = 0F
+                //cardviewItemfolderCardview.radius = 48F
             }
         }
 

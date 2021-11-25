@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="16dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -51,7 +52,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/imageview_itemfolder_foldericon"
                 app:layout_constraintEnd_toStartOf="@+id/textview_itemfolder_numberofitemsinfolder"
                 app:layout_constraintTop_toTopOf="@+id/imageview_itemfolder_foldericon"
-                app:tint="?attr/colorSecondary" />
+                app:tint="?attr/colorPrimary" />
 
             <TextView
                 android:id="@+id/textview_itemfolder_numberofitemsinfolder"

@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="16dp" >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -71,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:paddingEnd="16dp"
                 android:src="@drawable/ic_baseline_priority_high_24"
-                android:tint="?attr/colorSecondary"
+                android:tint="?attr/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="@+id/framelayout_itemtask_completedwrapper"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/framelayout_itemtask_completedwrapper" />

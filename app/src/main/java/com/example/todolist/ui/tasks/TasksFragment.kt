@@ -228,11 +228,9 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
 
     private fun setAnimation(clicked: Boolean) {
         if (clicked) {
-            fab_fragmenttasks_addbutton.startAnimation(rotateOpenAnim)
             fab_fragmenttasks_addtask.startAnimation(fromBottomAnim)
             fab_fragmenttasks_addfolder.startAnimation(fromBottomAnim)
         } else {
-            fab_fragmenttasks_addbutton.startAnimation(rotateCloseAnim)
             fab_fragmenttasks_addtask.startAnimation(toBottomAnim)
             fab_fragmenttasks_addfolder.startAnimation(toBottomAnim)
         }
