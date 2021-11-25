@@ -41,7 +41,7 @@ class AddEditTaskViewModel @ViewModelInject constructor(
             state.set("taskImportance", value)
         }
 
-    private val partsFlow = appRepository.getTextPartsOfTask(task.id)
+    private val partsFlow = appRepository.getPartsOfTaks(task.id)
     val parts = partsFlow.asLiveData()
 
     private val addEditTaskEventChannel = Channel<AddEditTaskEvent>()

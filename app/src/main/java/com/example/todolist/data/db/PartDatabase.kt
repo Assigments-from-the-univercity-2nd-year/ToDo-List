@@ -26,11 +26,15 @@ abstract class PartDatabase : RoomDatabase() {
             super.onCreate(db)
 
             val textPartDao = database.get().textPartDataDao()
+            val todoPartDao = database.get().todoPartDataDao()
 
             applicationScope.launch {
                 textPartDao.insertTextPartData(TextPartData("You need to to your homework!!", 1, 1))
                 textPartDao.insertTextPartData(TextPartData("You need to to your homework!! - 2", 2, 1))
-                textPartDao.insertTextPartData(TextPartData("You need to to your homework!! - 3", 3, 1))
+                textPartDao.insertTextPartData(TextPartData("You need to to your homework!! - 3", 4, 1))
+
+                todoPartDao.insertTodoPartData(TodoPartData("Do 1\nDo 2\nDo sth else", 3, 1))
+                todoPartDao.insertTodoPartData(TodoPartData("Do 1\nDo 2\nDo sth else", 5, 1))
             }
         }
     }

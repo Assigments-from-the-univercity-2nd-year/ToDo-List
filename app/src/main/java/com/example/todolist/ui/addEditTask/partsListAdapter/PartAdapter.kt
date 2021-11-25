@@ -4,8 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.example.todolist.databinding.ItemTextPartBinding
+import com.example.todolist.databinding.ItemTodoPartBinding
 import com.example.todolist.ui.entities.BasePart
 import com.example.todolist.ui.entities.TextPart
+import com.example.todolist.ui.entities.TodoPart
 
 class PartAdapter : ListAdapter<BasePart, PartViewHolder>(PartDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PartViewHolder =
@@ -16,7 +18,9 @@ class PartAdapter : ListAdapter<BasePart, PartViewHolder>(PartDiffCallback()) {
                 PartViewHolder.TextViewHolder(binding)
             }
             TYPE_TODO_PART -> {
-                TODO("Not yet implemented")
+                val binding =
+                    ItemTodoPartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                PartViewHolder.TodoViewHolder(binding)
             }
             TYPE_IMAGE_PART -> {
                 TODO("Not yet implemented")
@@ -31,6 +35,7 @@ class PartAdapter : ListAdapter<BasePart, PartViewHolder>(PartDiffCallback()) {
     override fun getItemViewType(position: Int): Int =
         when(getItem(position)) {
             is TextPart -> TYPE_TEXT_PART
+            is TodoPart -> TYPE_TODO_PART
             else ->  throw IllegalArgumentException() // TODO:
         }
 }

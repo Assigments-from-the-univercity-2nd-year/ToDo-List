@@ -1,7 +1,7 @@
 package com.example.todolist.ui.entities
 
-data class TextPart(
-    val content: String,
+data class TodoPart(
+    val content: List<String>,
     override val position: Int,
     val parentId: Long,
     val id: Long = 0
