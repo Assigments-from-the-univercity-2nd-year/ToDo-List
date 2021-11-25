@@ -1,6 +1,5 @@
 package com.example.todolist.ui.addEditTask.partsListAdapter
 
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.example.todolist.databinding.ItemTextPartBinding
@@ -22,13 +21,12 @@ sealed class PartViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(bind
 
             binding.apply {
                 edittextItemtextpartContent.setText(currentTextPart.content)
-                /*edittextItemtextpartContent.addTextChangedListener {
-                    onPartClickListener.onPartContentChanged(currentTextPart.copy(content = it.toString()))
-                }*/
                 edittextItemtextpartContent.setOnFocusChangeListener { view, hasFocus ->
                     if (!hasFocus) {
-                        onPartClickListener.onPartContentChanged(currentTextPart
-                            .copy(content = edittextItemtextpartContent.text.toString()))
+                        onPartClickListener.onPartContentChanged(
+                            currentTextPart,
+                            edittextItemtextpartContent.text.toString()
+                        )
                     }
                 }
             }
@@ -47,11 +45,17 @@ sealed class PartViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(bind
                 checkboxItemtodopartCompleted.isChecked = currentTodoPart.isCompleted
                 edittextItemtodopartContent.setOnFocusChangeListener { view, hasFocus ->
                     if (!hasFocus) {
-                        onPartClickListener.onPartContentChanged(currentTodoPart.copy(
-                            content = edittextItemtodopartContent.text.toString(),
-                            isCompleted = checkboxItemtodopartCompleted.isChecked
-                        ))
+                        onPartClickListener.onPartContentChanged(
+                            currentTodoPart,
+                            edittextItemtodopartContent.text.toString()
+                        )
                     }
+                }
+                checkboxItemtodopartCompleted.setOnClickListener {
+                    onPartClickListener.onTodoPartCheckBoxClicked(
+                        currentTodoPart,
+                        checkboxItemtodopartCompleted.isChecked
+                    )
                 }
             }
         }

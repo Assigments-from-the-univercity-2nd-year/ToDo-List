@@ -16,6 +16,7 @@ import com.example.todolist.databinding.FragmentAddEditTaskBinding
 import com.example.todolist.ui.addEditTask.partsListAdapter.OnPartClickListener
 import com.example.todolist.ui.addEditTask.partsListAdapter.PartAdapter
 import com.example.todolist.ui.entities.BasePart
+import com.example.todolist.ui.entities.TodoPart
 import com.example.todolist.util.exhaustive
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,7 +96,11 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task), OnPartCli
         viewModel.onSaveClicked(false)
     }
 
-    override fun onPartContentChanged(part: BasePart) {
-        viewModel.onPartContentChanged(part)
+    override fun onPartContentChanged(part: BasePart, newContent: String) {
+        viewModel.onPartContentChanged(part, newContent)
+    }
+
+    override fun onTodoPartCheckBoxClicked(todoPart: TodoPart, isChecked: Boolean) {
+        viewModel.onTodoPartCheckBoxClicked(todoPart, isChecked)
     }
 }

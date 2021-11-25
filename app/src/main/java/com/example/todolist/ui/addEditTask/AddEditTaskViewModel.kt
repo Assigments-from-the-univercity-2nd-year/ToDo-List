@@ -89,12 +89,18 @@ class AddEditTaskViewModel @ViewModelInject constructor(
         updateFolder()
     }
 
-    fun onPartContentChanged(part: BasePart) = viewModelScope.launch {
+    fun onPartContentChanged(part: BasePart, newContent: String) = viewModelScope.launch {
         when(part) {
-            is TextPart -> appRepository.updateTextPart(part)
-            is TodoPart -> appRepository.updateTodoPart(part)
+            is TextPart -> appRepository.updateTextPart(part.copy(content = newContent))
+            is TodoPart -> appRepository.updateTodoPart(part.copy(content = newContent))
             else -> throw IllegalArgumentException()
         }.exhaustive
+        updateFolder()
+    }
+
+    fun onTodoPartCheckBoxClicked(todoPart: TodoPart, isChecked: Boolean) = viewModelScope.launch {
+        val newTodoPart = todoPart.copy(isCompleted = isChecked)
+        appRepository.updateTodoPart(newTodoPart)
         updateFolder()
     }
 
