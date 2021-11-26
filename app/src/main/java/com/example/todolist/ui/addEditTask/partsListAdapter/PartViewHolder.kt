@@ -2,9 +2,11 @@ package com.example.todolist.ui.addEditTask.partsListAdapter
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.example.todolist.databinding.ItemImagePartBinding
 import com.example.todolist.databinding.ItemTextPartBinding
 import com.example.todolist.databinding.ItemTodoPartBinding
 import com.example.todolist.ui.entities.BasePart
+import com.example.todolist.ui.entities.ImagePart
 import com.example.todolist.ui.entities.TextPart
 import com.example.todolist.ui.entities.TodoPart
 
@@ -58,6 +60,19 @@ sealed class PartViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(bind
                         checkboxItemtodopartCompleted.isChecked
                     )
                 }
+            }
+        }
+    }
+
+    class ImageViewHolder(
+        private val binding: ItemImagePartBinding,
+        private val onPartClickListener: OnPartClickListener
+    ) : PartViewHolder(binding) {
+        override fun onBindViewHolder(basePart: BasePart) {
+            val currentImagePart = basePart as ImagePart
+
+            binding.apply {
+
             }
         }
     }

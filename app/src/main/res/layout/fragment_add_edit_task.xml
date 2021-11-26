@@ -62,7 +62,21 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_fragmentaddedittask_eddtodopart"
+        android:id="@+id/fab_fragmentaddedittask_addimagepart"
+        style="@style/Widget.Material3.FloatingActionButton.Surface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:clickable="true"
+        android:focusable="true"
+        android:translationY="-24dp"
+        app:fabSize="mini"
+        app:layout_anchor="@+id/fab_fragmentaddedittask_addtodopart"
+        app:layout_anchorGravity="top|center"
+        app:srcCompat="@drawable/ic_baseline_image_24" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_fragmentaddedittask_addtodopart"
         style="@style/Widget.Material3.FloatingActionButton.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

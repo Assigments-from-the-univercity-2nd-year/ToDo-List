@@ -1,6 +1,8 @@
 package com.example.todolist.ui.addEditTask
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.os.bundleOf
@@ -49,6 +51,10 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task), OnPartCli
                 viewModel.taskImportance = isChecked
             }
 
+            fabFragmentaddedittaskAddimagepart.setOnClickListener {
+                viewModel.onAddImagePartClicked()
+            }
+
             fabFragmentaddedittaskAddbutton.setOnClickListener {
                 viewModel.onSaveClicked()
             }
@@ -57,7 +63,7 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task), OnPartCli
                 viewModel.onAddTextPartClicked()
             }
 
-            fabFragmentaddedittaskEddtodopart.setOnClickListener {
+            fabFragmentaddedittaskAddtodopart.setOnClickListener {
                 viewModel.onAddTodoPartClicked()
             }
 
@@ -85,6 +91,9 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task), OnPartCli
                     is AddEditTaskViewModel.AddEditTaskEvent.ShowInvalidInputMessage -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
                     }
+                    is AddEditTaskViewModel.AddEditTaskEvent.StartActivityForResult -> {
+                        startActivityForResult(event.intent, SELECT_PHOTO)
+                    }
                 }.exhaustive
             }
         }
@@ -103,4 +112,11 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task), OnPartCli
     override fun onTodoPartCheckBoxClicked(todoPart: TodoPart, isChecked: Boolean) {
         viewModel.onTodoPartCheckBoxClicked(todoPart, isChecked)
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        viewModel.onActivityResult(requestCode, resultCode, data, requireContext().contentResolver)
+    }
 }
+
+const val SELECT_PHOTO = 1
