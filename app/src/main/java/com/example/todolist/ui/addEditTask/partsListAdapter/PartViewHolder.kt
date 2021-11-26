@@ -42,6 +42,7 @@ sealed class PartViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(bind
 
             binding.apply {
                 edittextItemtodopartContent.setText(currentTodoPart.content)
+                edittextItemtodopartContent.paint.isStrikeThruText = currentTodoPart.isCompleted
                 checkboxItemtodopartCompleted.isChecked = currentTodoPart.isCompleted
                 edittextItemtodopartContent.setOnFocusChangeListener { view, hasFocus ->
                     if (!hasFocus) {
