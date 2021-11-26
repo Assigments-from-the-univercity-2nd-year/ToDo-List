@@ -43,7 +43,6 @@ class PartAdapter(
             is TextPart -> TYPE_TEXT_PART
             is TodoPart -> TYPE_TODO_PART
             is ImagePart -> TYPE_IMAGE_PART
-            else ->  throw IllegalArgumentException() // TODO:
         }
 }
 

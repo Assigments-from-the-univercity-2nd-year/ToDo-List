@@ -8,19 +8,5 @@ class PartDiffCallback : DiffUtil.ItemCallback<BasePart>() {
         oldItem.position == newItem.position
 
     override fun areContentsTheSame(oldItem: BasePart, newItem: BasePart): Boolean =
-        if (oldItem::class != newItem::class) {
-            false
-        } else {
-            true // TODO: make the proper comparison
-        }
-        /*when(oldItem) {
-            is TextPart -> {
-                if (newItem is TextPart) {
-                    (oldItem) == newItem
-                } else {
-                    false
-                }
-            }
-            else -> false
-        }*/
+        oldItem == newItem
 }

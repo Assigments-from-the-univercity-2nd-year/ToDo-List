@@ -1,7 +1,6 @@
 package com.example.todolist.data.repository
 
 import com.example.todolist.data.db.PartDatabase
-import com.example.todolist.data.entities.ImagePartData
 import com.example.todolist.ui.entities.BasePart
 import com.example.todolist.ui.entities.ImagePart
 import com.example.todolist.ui.entities.TextPart
