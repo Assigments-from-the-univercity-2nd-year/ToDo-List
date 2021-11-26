@@ -124,8 +124,9 @@ class AddEditTaskViewModel @ViewModelInject constructor(
         ) {
             try {
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, data.data)
-                ImagePart(bitmap, parts.value?.size ?: 1, task.id)
-                // todo insert part in db
+                appRepository.insertImagePart(
+                    ImagePart(bitmap, parts.value?.size ?: 1, task.id)
+                )
             } catch (e: FileNotFoundException) {
                 e.printStackTrace() // Todo: proper handling
             }

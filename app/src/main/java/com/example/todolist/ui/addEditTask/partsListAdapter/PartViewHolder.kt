@@ -72,7 +72,7 @@ sealed class PartViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(bind
             val currentImagePart = basePart as ImagePart
 
             binding.apply {
-
+                imageviewItemimagepartContentimage.setImageBitmap(currentImagePart.content)
             }
         }
     }
