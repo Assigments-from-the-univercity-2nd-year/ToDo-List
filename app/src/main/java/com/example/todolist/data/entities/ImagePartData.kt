@@ -7,7 +7,6 @@ import java.sql.Blob
 
 @Entity
 data class ImagePartData(
-    val content: Bitmap,
     val position: Int,
     val parentId: Long,
     @PrimaryKey(autoGenerate = true)
