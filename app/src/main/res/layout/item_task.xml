@@ -8,11 +8,12 @@
     android:layout_marginLeft="12dp"
     android:layout_marginTop="8dp"
     android:layout_marginRight="12dp"
-    app:cardCornerRadius="16dp" >
+    app:cardCornerRadius="16dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginEnd="16dp">
 
         <FrameLayout
             android:id="@+id/framelayout_itemtask_completedwrapper"
@@ -40,7 +41,6 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Example item"
-
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/textview_itemtask_modifieddate"
             app:layout_constraintEnd_toStartOf="@+id/appCompatImageView_itemTask_priority"
@@ -64,7 +64,6 @@
             android:id="@+id/appCompatImageView_itemTask_priority"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="16dp"
             android:src="@drawable/ic_baseline_priority_high_24"
             android:tint="?attr/colorPrimary"
             app:layout_constraintBottom_toBottomOf="@+id/framelayout_itemtask_completedwrapper"
