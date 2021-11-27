@@ -3,9 +3,11 @@ package com.example.todolist.ui.addEditTask.partsListAdapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
+import com.example.todolist.databinding.ItemImagePartBinding
 import com.example.todolist.databinding.ItemTextPartBinding
 import com.example.todolist.databinding.ItemTodoPartBinding
 import com.example.todolist.ui.entities.BasePart
+import com.example.todolist.ui.entities.ImagePart
 import com.example.todolist.ui.entities.TextPart
 import com.example.todolist.ui.entities.TodoPart
 
@@ -25,7 +27,9 @@ class PartAdapter(
                 PartViewHolder.TodoViewHolder(binding, onPartClickListener)
             }
             TYPE_IMAGE_PART -> {
-                TODO("Not yet implemented")
+                val binding =
+                    ItemImagePartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                PartViewHolder.ImageViewHolder(binding, onPartClickListener)
             }
             else -> throw IllegalArgumentException()
         }
@@ -38,7 +42,7 @@ class PartAdapter(
         when(getItem(position)) {
             is TextPart -> TYPE_TEXT_PART
             is TodoPart -> TYPE_TODO_PART
-            else ->  throw IllegalArgumentException() // TODO:
+            is ImagePart -> TYPE_IMAGE_PART
         }
 }
 

@@ -1,26 +1,35 @@
 package com.example.todolist.data.repository
 
+import android.app.Activity
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.example.todolist.data.db.PartDatabase
 import com.example.todolist.ui.entities.BasePart
+import com.example.todolist.ui.entities.ImagePart
 import com.example.todolist.ui.entities.TextPart
 import com.example.todolist.ui.entities.TodoPart
+import com.example.todolist.ui.mappers.ImagePartMapper
 import com.example.todolist.ui.mappers.TextPartMapper
 import com.example.todolist.ui.mappers.TodoPartMapper
 import kotlinx.coroutines.flow.*
+import java.io.IOException
 import javax.inject.Inject
 
 class AppRepository @Inject constructor(
-    private val partDatabase: PartDatabase
+    private val partDatabase: PartDatabase,
+    private val appContext: Context
 ) {
 
     fun getPartsOfTaks(taskId: Long): Flow<List<BasePart>> =
         combine(
             getTextPartsOfTask(taskId),
-            getTodoPartsOfTask(taskId)
-        ) { textParts, todoParts ->
-            Pair(textParts, todoParts)
-        }.flatMapLatest { (textParts, todoParts) ->
-            flowOf(textParts.plus(todoParts).sortedBy { it.position })
+            getTodoPartsOfTask(taskId),
+            getImagePartsOfTask(taskId)
+        ) { textParts, todoParts, imageParts ->
+            Triple(textParts, todoParts, imageParts)
+        }.flatMapLatest { (textParts, todoParts, imageParts) ->
+            flowOf(textParts.plus(todoParts).plus(imageParts).sortedBy { it.position })
         }
 
     fun getTextPartsOfTask(taskId: Long): Flow<List<TextPart>> =
@@ -36,6 +45,11 @@ class AppRepository @Inject constructor(
             emit(list.map { TodoPartMapper.mapToDomainModel(it) })
         }
 
+    fun getImagePartsOfTask(taskId: Long): Flow<List<ImagePart>> =
+        partDatabase.imagePartDataDao().getImagePartDatasOfTask(taskId).transformLatest { list ->
+            emit(list.map { ImagePartMapper.mapToDomainModel(it, loadPhotoFromInternalStorage(it.id.toString()).first()) })
+        }
+
     suspend fun insertTextPart(textPart: TextPart): Long =
         partDatabase.textPartDataDao().insertTextPartData(
             TextPartMapper.mapToDataModel(textPart)
@@ -46,6 +60,23 @@ class AppRepository @Inject constructor(
             TodoPartMapper.mapToDataModel(todoPart)
         )
 
+    suspend fun insertImagePart(imagePart: ImagePart): Long {
+        val newId = partDatabase.imagePartDataDao().insertImagePartData(
+            ImagePartMapper.mapToDataModel(imagePart)
+        )
+        if (savePhotoToInternalStorage(newId.toString(), imagePart.content)) {
+            return newId
+        }
+        return -1 // TODO: throw exception
+    }
+        /*if (savePhotoToInternalStorage(imagePart.id.toString(), imagePart.content)) { // if saving was successful
+            partDatabase.imagePartDataDao().insertImagePartData(
+                ImagePartMapper.mapToDataModel(imagePart)
+            )
+        } else {
+            -1 // TODO: throw exception
+        }*/
+
     suspend fun updateTextPart(textPart: TextPart) =
         partDatabase.textPartDataDao().updateTextPartData(
             TextPartMapper.mapToDataModel(textPart)
@@ -55,4 +86,56 @@ class AppRepository @Inject constructor(
         partDatabase.todoPartDataDao().updateTodoPartData(
             TodoPartMapper.mapToDataModel(todoPart)
         )
+
+    private fun savePhotoToInternalStorage(filename: String, bitmap: Bitmap): Boolean =
+        try {
+            appContext.openFileOutput("$filename.jpg", Activity.MODE_PRIVATE).use { stream ->
+                if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)) {
+                    throw IOException("Couldn't save bitmap.")
+                }
+            }
+            true
+        } catch (e: IOException) {
+            e.printStackTrace() // TODO: proper handling
+            false
+        }
+
+    private fun loadPhotoFromInternalStorage(filename: String): List<Bitmap> =
+        appContext.filesDir.listFiles()?.filter {
+            it.canRead() && it.isFile && it.name.equals("$filename.jpg")
+        }?.map {
+            val bytes = it.readBytes()
+            BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        } ?: listOf()
+
+    /*
+    suspend fun savePhotoToInternalStorage(filename: String, bitmap: Bitmap, appContext: Context): Boolean =
+        try {
+            appContext.openFileOutput("$filename.jpg", Activity.MODE_PRIVATE).use { stream ->
+                if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)) {
+                    throw IOException("Couldn't save bitmap.")
+                }
+            }
+            true
+        } catch (e: IOException) {
+            e.printStackTrace() // TODO: proper handling
+            false
+        }
+
+    suspend fun loadPhotoFromInternalStorage(filename: String, @ApplicationContext  appContext: Context): List<Bitmap> =
+        appContext.filesDir.listFiles()?.filter {
+            it.canRead() && it.isFile && it.name.equals("$filename.jpg")
+        }?.map {
+            val bytes = it.readBytes()
+            BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        } ?: listOf()
+
+    suspend fun deletePhotoFromInternalStorage(filename: String,  @ApplicationContext  appContext: Context): Boolean =
+        try {
+            appContext.deleteFile(filename)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+     */
 }

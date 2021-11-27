@@ -1,5 +1,9 @@
 package com.example.todolist.ui.addEditTask
 
+import android.app.Activity
+import android.content.ContentResolver
+import android.content.Intent
+import android.provider.MediaStore
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
@@ -14,12 +18,14 @@ import com.example.todolist.ui.ADD_TASK_RESULT_OK
 import com.example.todolist.ui.EDIT_TASK_RESULT_NOTHING_CHANGED
 import com.example.todolist.ui.EDIT_TASK_RESULT_OK
 import com.example.todolist.ui.entities.BasePart
+import com.example.todolist.ui.entities.ImagePart
 import com.example.todolist.ui.entities.TextPart
 import com.example.todolist.ui.entities.TodoPart
 import com.example.todolist.util.exhaustive
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.io.FileNotFoundException
 
 class AddEditTaskViewModel @ViewModelInject constructor(
     private val taskDao: TaskDao,
@@ -89,6 +95,12 @@ class AddEditTaskViewModel @ViewModelInject constructor(
         updateFolder()
     }
 
+    fun onAddImagePartClicked() = viewModelScope.launch {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.setType("image/*")
+        addEditTaskEventChannel.send(AddEditTaskEvent.StartActivityForResult(intent))
+    }
+
     fun onPartContentChanged(part: BasePart, newContent: String) = viewModelScope.launch {
         when(part) {
             is TextPart -> appRepository.updateTextPart(part.copy(content = newContent))
@@ -102,6 +114,23 @@ class AddEditTaskViewModel @ViewModelInject constructor(
         val newTodoPart = todoPart.copy(isCompleted = isChecked)
         appRepository.updateTodoPart(newTodoPart)
         updateFolder()
+    }
+
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?, contentResolver: ContentResolver) = viewModelScope.launch {
+        if (requestCode == SELECT_PHOTO
+            && resultCode == Activity.RESULT_OK
+            && data != null
+            && data.data != null
+        ) {
+            try {
+                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, data.data)
+                appRepository.insertImagePart(
+                    ImagePart(bitmap, parts.value?.size ?: 1, task.id)
+                )
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace() // Todo: proper handling
+            }
+        }
     }
 
     private fun showInvalidInputMessage(text: String) = viewModelScope.launch {
@@ -126,5 +155,6 @@ class AddEditTaskViewModel @ViewModelInject constructor(
     sealed class AddEditTaskEvent {
         data class ShowInvalidInputMessage(val msg: String) : AddEditTaskEvent()
         data class NavigateBackWithResult(val result: Int) : AddEditTaskEvent()
+        data class StartActivityForResult(val intent: Intent): AddEditTaskEvent()
     }
 }

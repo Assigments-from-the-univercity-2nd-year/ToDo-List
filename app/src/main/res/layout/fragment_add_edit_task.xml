@@ -6,44 +6,77 @@
     android:layout_height="match_parent"
     tools:context=".ui.addEditTask.AddEditTaskFragment">
 
-    <LinearLayout
-        android:id="@+id/linearlayout_addedittask_header"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/edittext_addedittask_taskname"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textinputlayout_addedittask_tasknamelayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Task name"
-            android:inputType="text" />
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edittext_addedittask_taskname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Task name"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/checkbox_addedittask_importance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="important task" />
+            android:layout_marginStart="8dp"
+            android:text="important task"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textinputlayout_addedittask_tasknamelayout" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textview_addedittask_datecreated"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Created: " />
+            android:layout_marginEnd="8dp"
+            android:text="Created: "
+            app:layout_constraintBottom_toBottomOf="@+id/checkbox_addedittask_importance"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/checkbox_addedittask_importance" />
 
-    </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_addedittask_parts"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:clipToPadding="false"
+            android:paddingTop="4dp"
+            android:paddingBottom="72dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkbox_addedittask_importance" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_addedittask_parts"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:layout_anchor="@id/linearlayout_addedittask_header"
-        app:layout_anchorGravity="bottom" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_fragmentaddedittask_eddtodopart"
+        android:id="@+id/fab_fragmentaddedittask_addimagepart"
+        style="@style/Widget.Material3.FloatingActionButton.Surface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:clickable="true"
+        android:focusable="true"
+        android:translationY="-24dp"
+        app:fabSize="mini"
+        app:layout_anchor="@+id/fab_fragmentaddedittask_addtodopart"
+        app:layout_anchorGravity="top|center"
+        app:srcCompat="@drawable/ic_baseline_image_24" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_fragmentaddedittask_addtodopart"
         style="@style/Widget.Material3.FloatingActionButton.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
