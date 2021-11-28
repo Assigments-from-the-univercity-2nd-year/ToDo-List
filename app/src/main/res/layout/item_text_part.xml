@@ -18,6 +18,6 @@
         android:gravity="start|top"
         android:inputType="textMultiLine"
         android:padding="16dp"
-        android:text="Simple text" />
+        android:text="@string/short_text" />
 
 </com.google.android.material.card.MaterialCardView>

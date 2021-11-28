@@ -33,7 +33,7 @@
             android:gravity="start|top"
             android:inputType="textMultiLine"
             android:paddingStart="8dp"
-            android:text="Simple text" />
+            android:text="@string/short_text" />
 
     </LinearLayout>
 

@@ -3,11 +3,9 @@ package com.example.todolist.ui.quickFolderChange
 import android.app.Dialog
 import android.os.Bundle
 import android.widget.ArrayAdapter
-import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.todolist.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -26,7 +24,7 @@ class QuickFolderChangeDialogFragment : DialogFragment() {
         adapter.addAll(list)
 
         return MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Select the folder")
+            .setTitle(R.string.quickfolderchangedialogfragment_selectthefolder)
             .setAdapter(adapter) { _, which ->
                 setFragmentResult(
                     "folder_to_change_request",

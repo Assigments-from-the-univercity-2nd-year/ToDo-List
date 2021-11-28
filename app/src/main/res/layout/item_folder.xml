@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Example folder name"
+            android:text="@string/itemfolder_examplefoldername"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/imageview_itemfolder_foldericon"
             app:layout_constraintEnd_toStartOf="@+id/imageview_itemfolder_pinning"
@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="24dp"
-            android:text="3"
+            android:text="@string/itemfolder_examplefoldercount"
             app:layout_constraintBottom_toBottomOf="@+id/imageview_itemfolder_foldericon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imageview_itemfolder_foldericon" />

@@ -26,7 +26,7 @@
                 android:id="@+id/edittext_addedittask_taskname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Task name"
+                android:hint="@string/addedittask_taskname"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="important task"
+            android:text="@string/addedittask_importanttask"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textinputlayout_addedittask_tasknamelayout" />
 
@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="Created: "
+            android:text="@string/addedittask_modified"
             app:layout_constraintBottom_toBottomOf="@+id/checkbox_addedittask_importance"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/checkbox_addedittask_importance" />
