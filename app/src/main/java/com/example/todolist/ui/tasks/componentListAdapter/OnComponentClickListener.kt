@@ -1,7 +1,7 @@
 package com.example.todolist.ui.tasks.componentListAdapter
 
-import com.example.todolist.data.Folder
-import com.example.todolist.data.Task
+import com.example.todolist.data.componentsDB.Folder
+import com.example.todolist.data.componentsDB.Task
 
 interface OnComponentClickListener {
     fun onFolderClicked(folder: Folder)

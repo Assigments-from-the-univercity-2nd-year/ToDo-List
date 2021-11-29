@@ -1,7 +1,7 @@
 package com.example.todolist.ui.tasks
 
-import com.example.todolist.data.Component
-import com.example.todolist.data.Task
+import com.example.todolist.data.componentsDB.Component
+import com.example.todolist.data.componentsDB.Task
 
 class CompareComponents {
     companion object : Comparator<Component> {

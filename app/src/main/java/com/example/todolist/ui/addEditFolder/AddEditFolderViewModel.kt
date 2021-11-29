@@ -1,14 +1,12 @@
 package com.example.todolist.ui.addEditFolder
 
 import android.content.Context
-import android.content.DialogInterface
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.fragment.app.setFragmentResult
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
-import com.example.todolist.data.Folder
-import com.example.todolist.data.FolderDao
+import com.example.todolist.data.componentsDB.Folder
+import com.example.todolist.data.componentsDB.FolderDao
 import com.example.todolist.databinding.DialogFragmentAddEditFolderBinding
 import com.example.todolist.di.ApplicationScope
 import com.example.todolist.ui.ADD_FOLDER_RESULT_OK

@@ -1,7 +1,6 @@
 package com.example.todolist.ui.tasks
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -16,14 +15,13 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
-import com.example.todolist.data.Folder
+import com.example.todolist.data.componentsDB.Folder
 import com.example.todolist.data.SortOrder
-import com.example.todolist.data.Task
+import com.example.todolist.data.componentsDB.Task
 import com.example.todolist.databinding.FragmentTasksBinding
 import com.example.todolist.ui.tasks.componentListAdapter.ComponentAdapter
 import com.example.todolist.ui.tasks.componentListAdapter.OnComponentClickListener
@@ -77,7 +75,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
             recyclerviewFragmenttasksTasks.apply {
                 adapter = taskAdapter
                 layoutManager = LinearLayoutManager(requireContext())
-                setHasFixedSize(true)
+                //setHasFixedSize(true)
             }
 
             ItemTouchHelper(SwipingSimpleCallback(
@@ -230,11 +228,9 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
 
     private fun setAnimation(clicked: Boolean) {
         if (clicked) {
-            fab_fragmenttasks_addbutton.startAnimation(rotateOpenAnim)
             fab_fragmenttasks_addtask.startAnimation(fromBottomAnim)
             fab_fragmenttasks_addfolder.startAnimation(fromBottomAnim)
         } else {
-            fab_fragmenttasks_addbutton.startAnimation(rotateCloseAnim)
             fab_fragmenttasks_addtask.startAnimation(toBottomAnim)
             fab_fragmenttasks_addfolder.startAnimation(toBottomAnim)
         }

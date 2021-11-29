@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.todolist.databinding.DialogFragmentAddEditFolderBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -33,7 +34,7 @@ class AddEditFolderDialogFragment : DialogFragment() {
             .setText(args.currentFolder?.title)
         binding.checkboxModalbottomsheetaddeditfolderPinning.isChecked = args.currentFolder?.isPinned ?: false
 
-        val dialog = AlertDialog.Builder(requireContext())
+        val dialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle("Select folder name")
             .setView(binding.root)
             .setNegativeButton("Cancel", null)

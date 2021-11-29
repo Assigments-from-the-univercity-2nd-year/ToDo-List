@@ -1,12 +1,15 @@
 package com.example.todolist.di
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
-import com.example.todolist.data.TaskDatabase
+import com.example.todolist.data.componentsDB.TaskDatabase
+import com.example.todolist.data.db.PartDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import javax.inject.Qualifier
@@ -30,10 +33,22 @@ object AppModule {
     @Provides
     fun provideFolderDao(db: TaskDatabase) = db.folderDao()
 
+    @Provides
+    @Singleton
+    fun providePartDatabase(app: Application, callback: PartDatabase.CallBack) =
+        Room.databaseBuilder(app, PartDatabase::class.java, "part_database")
+            .fallbackToDestructiveMigration()
+            .addCallback(callback)
+            .build()
+
     @ApplicationScope
     @Provides
     @Singleton
     fun provideApplicationScope() = CoroutineScope(SupervisorJob())
+
+    @Provides
+    @Singleton
+    fun provideApplicationContext(@ApplicationContext appContext: Context) = appContext
 
 }
 

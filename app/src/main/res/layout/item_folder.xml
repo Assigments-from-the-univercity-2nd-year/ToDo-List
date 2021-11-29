@@ -1,72 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardview_itemfolder_cardview"
+    style="@style/Widget.Material3.CardView.Filled"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="12dp"
     android:layout_marginTop="8dp"
-    android:layout_marginRight="12dp">
+    android:layout_marginRight="12dp"
+    app:cardCornerRadius="16dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardview_itemfolder_cardview"
-        style="@style/Widget.MaterialComponents.CardView"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageview_itemfolder_foldericon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="24dp"
+            android:src="@drawable/ic_baseline_folder_24"
+            android:tint="?attr/colorSecondary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageview_itemfolder_foldericon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="24dp"
-                android:src="@drawable/ic_baseline_folder_24"
-                android:tint="?attr/colorSecondary"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textview_itemfolder_foldername"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/itemfolder_examplefoldername"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/imageview_itemfolder_foldericon"
+            app:layout_constraintEnd_toStartOf="@+id/imageview_itemfolder_pinning"
+            app:layout_constraintStart_toEndOf="@+id/imageview_itemfolder_foldericon"
+            app:layout_constraintTop_toTopOf="@+id/imageview_itemfolder_foldericon" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/textview_itemfolder_foldername"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="Example folder name"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/imageview_itemfolder_foldericon"
-                app:layout_constraintEnd_toStartOf="@+id/imageview_itemfolder_pinning"
-                app:layout_constraintStart_toEndOf="@+id/imageview_itemfolder_foldericon"
-                app:layout_constraintTop_toTopOf="@+id/imageview_itemfolder_foldericon" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageview_itemfolder_pinning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_baseline_star_24"
+            app:layout_constraintBottom_toBottomOf="@+id/imageview_itemfolder_foldericon"
+            app:layout_constraintEnd_toStartOf="@+id/textview_itemfolder_numberofitemsinfolder"
+            app:layout_constraintTop_toTopOf="@+id/imageview_itemfolder_foldericon"
+            app:tint="?attr/colorPrimary" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageview_itemfolder_pinning"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_baseline_star_24"
-                app:layout_constraintBottom_toBottomOf="@+id/imageview_itemfolder_foldericon"
-                app:layout_constraintEnd_toStartOf="@+id/textview_itemfolder_numberofitemsinfolder"
-                app:layout_constraintTop_toTopOf="@+id/imageview_itemfolder_foldericon"
-                app:tint="?attr/colorSecondary" />
+        <TextView
+            android:id="@+id/textview_itemfolder_numberofitemsinfolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="24dp"
+            android:text="@string/itemfolder_examplefoldercount"
+            app:layout_constraintBottom_toBottomOf="@+id/imageview_itemfolder_foldericon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageview_itemfolder_foldericon" />
 
-            <TextView
-                android:id="@+id/textview_itemfolder_numberofitemsinfolder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingEnd="24dp"
-                android:text="3"
-                app:layout_constraintBottom_toBottomOf="@+id/imageview_itemfolder_foldericon"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/imageview_itemfolder_foldericon" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

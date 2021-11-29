@@ -3,9 +3,9 @@ package com.example.todolist.ui.tasks.componentListAdapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.example.todolist.data.Component
-import com.example.todolist.data.Folder
-import com.example.todolist.data.Task
+import com.example.todolist.data.componentsDB.Component
+import com.example.todolist.data.componentsDB.Folder
+import com.example.todolist.data.componentsDB.Task
 import com.example.todolist.databinding.ItemFolderBinding
 import com.example.todolist.databinding.ItemTaskBinding
 

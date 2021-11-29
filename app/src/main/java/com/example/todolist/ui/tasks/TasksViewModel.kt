@@ -4,10 +4,8 @@ import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.todolist.data.*
-import com.example.todolist.ui.ADD_FOLDER_RESULT_OK
-import com.example.todolist.ui.ADD_TASK_RESULT_OK
-import com.example.todolist.ui.EDIT_FOLDER_RESULT_OK
-import com.example.todolist.ui.EDIT_TASK_RESULT_OK
+import com.example.todolist.data.componentsDB.*
+import com.example.todolist.ui.*
 import com.example.todolist.util.exhaustive
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -136,7 +134,8 @@ class TasksViewModel @ViewModelInject constructor(
     fun onAddEditResult(result: Int) {
         when (result) {
             ADD_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task added")
-            EDIT_TASK_RESULT_OK ->showTaskSavedConfirmationMessage("Task updated")
+            EDIT_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task updated")
+            EDIT_TASK_RESULT_NOTHING_CHANGED -> showTaskSavedConfirmationMessage("Task data didn't change")
         }
     }
 

@@ -3,7 +3,9 @@ package com.example.todolist.ui.tasks.componentListAdapter
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.example.todolist.data.*
+import com.example.todolist.data.componentsDB.Component
+import com.example.todolist.data.componentsDB.Folder
+import com.example.todolist.data.componentsDB.Task
 import com.example.todolist.databinding.ItemFolderBinding
 import com.example.todolist.databinding.ItemTaskBinding
 
@@ -36,8 +38,6 @@ sealed class ComponentViewHolder(binding: ViewBinding) :
                     )
                 }
 
-                cardviewItemtaskCardview.elevation = 0F
-                cardviewItemtaskCardview.radius = 48F
             }
         }
 
@@ -59,8 +59,6 @@ sealed class ComponentViewHolder(binding: ViewBinding) :
                     onComponentClickListener.onFolderClicked(currentFolder)
                 }
 
-                cardviewItemfolderCardview.elevation = 0F
-                cardviewItemfolderCardview.radius = 48F
             }
         }
 
