@@ -1,9 +1,9 @@
 package com.example.todolist.ui.tasks.componentListAdapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.todolist.data.Component
-import com.example.todolist.data.Folder
-import com.example.todolist.data.Task
+import com.example.todolist.data.componentsDB.Component
+import com.example.todolist.data.componentsDB.Folder
+import com.example.todolist.data.componentsDB.Task
 
 class ItemDiffCallback : DiffUtil.ItemCallback<Component>() {
     override fun areItemsTheSame(oldItem: Component, newItem: Component): Boolean {

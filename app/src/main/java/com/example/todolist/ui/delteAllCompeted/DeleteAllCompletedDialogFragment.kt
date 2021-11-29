@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import com.example.todolist.R
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -13,11 +15,11 @@ class DeleteAllCompletedDialogFragment : DialogFragment() {
     private val viewModel: DeleteAllCompletedViewModel by viewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
-        AlertDialog.Builder(requireContext())
-            .setTitle("Confirm deletion")
-            .setMessage("Do you really want to delete all completed tasks?")
-            .setNegativeButton("Cancel", null)
-            .setPositiveButton("Yes") { _, _ ->
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.deleteallcompleteddialogfragment_confirmdeletion)
+            .setMessage(R.string.deleteallcompleteddialogfragment_dialoginfo)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.confirm) { _, _ ->
                 viewModel.onConfirmClicked()
             }
             .create()

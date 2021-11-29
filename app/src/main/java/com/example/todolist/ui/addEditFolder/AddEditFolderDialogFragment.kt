@@ -17,7 +17,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.todolist.R
 import com.example.todolist.databinding.DialogFragmentAddEditFolderBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -33,11 +35,11 @@ class AddEditFolderDialogFragment : DialogFragment() {
             .setText(args.currentFolder?.title)
         binding.checkboxModalbottomsheetaddeditfolderPinning.isChecked = args.currentFolder?.isPinned ?: false
 
-        val dialog = AlertDialog.Builder(requireContext())
-            .setTitle("Select folder name")
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.addeditfolderdialogfragment_title)
             .setView(binding.root)
-            .setNegativeButton("Cancel", null)
-            .setPositiveButton("Apply", null)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.addeditfolderdialogfragment_addfolder, null)
             .setOnDismissListener {
                 viewModel.hideKeyboard(binding.edittextModalbottomsheetaddeditfolderFoldername)
             }

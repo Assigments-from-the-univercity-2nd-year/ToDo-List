@@ -1,5 +1,47 @@
 <resources>
     <string name="app_name">ToDo List</string>
+    
+    <!-- dialog_fragment_add_edit_folder.xml -->
+    <string name="addeditfolder_foldernamehint">Folder name</string>
+    <string name="addeditfolder_newfolderinittext">New folder</string>
+    <string name="addeditfolder_pinned">Pinned</string>
+
+    <!-- fragment_add_edit_task.xml -->
+    <string name="addedittask_taskname">Task name</string>
+    <string name="addedittask_importanttask">Important task</string>
+    <string name="addedittask_modified">Modified: </string>
+
+    <!-- item_folder.xml -->
+    <string name="itemfolder_examplefoldername">Example folder name</string>
+    <string name="itemfolder_examplefoldercount">3</string>
+
+    <!-- item_task.xml -->
+    <string name="itemtask_exampletaskname">Example item</string>
+    <string name="itemtask_exampletaskdate">October 21</string>
+
+    <!-- item_text_part.xml -->
+    <!-- item_todo_part.xml -->
+    <string name="short_text">Simple text</string>
+
+    <!-- QuickFolderChangeDialogFragment -->
+    <string name="quickfolderchangedialogfragment_selectthefolder">Select the folder</string>
+
+    <!-- DeleteAllCompletedDialogFragment -->
+    <string name="deleteallcompleteddialogfragment_confirmdeletion">Confirm deletion</string>
+    <string name="deleteallcompleteddialogfragment_dialoginfo">Do you really want to delete all completed tasks?</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+
+    <!-- AddEditFolderDialogFragment -->
+    <string name="addeditfolderdialogfragment_addfolder">Add folder</string>
+    <string name="addeditfolderdialogfragment_title">Select folder name</string>
+
+    <!-- DeleteFolderDialogFragment -->
+    <string name="deletefolderdialogfragment_title">Confirm deletion</string>
+    <string name="deletefolderdialogfragment_message">Do you really want to delete this folder?</string>
+    <string name="deletefolderdialogfragment_deletefolder">Delete this folder</string>
+    <string name="deletefolderdialogfragment_deleteallcomplitedtastks">Delete all completed tasks</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
