@@ -18,8 +18,8 @@ class DeleteAllCompletedDialogFragment : DialogFragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.deleteallcompleteddialogfragment_confirmdeletion)
             .setMessage(R.string.deleteallcompleteddialogfragment_dialoginfo)
-            .setNegativeButton(R.string.deleteallcompleteddialogfragment_cancel, null)
-            .setPositiveButton(R.string.deleteallcompleteddialogfragment_confirm) { _, _ ->
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.confirm) { _, _ ->
                 viewModel.onConfirmClicked()
             }
             .create()

@@ -2,9 +2,7 @@ package com.example.todolist.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.todolist.data.Converters
 import com.example.todolist.data.daos.ImagePartDataDao
 import com.example.todolist.data.daos.TextPartDataDao
 import com.example.todolist.data.daos.TodoPartDataDao
@@ -18,7 +16,6 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 @Database(entities = [TextPartData::class, TodoPartData::class, ImagePartData::class], version = 1)
-@TypeConverters(Converters::class)
 abstract class PartDatabase : RoomDatabase() {
     abstract fun textPartDataDao(): TextPartDataDao
     abstract fun todoPartDataDao(): TodoPartDataDao

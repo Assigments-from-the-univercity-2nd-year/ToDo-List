@@ -29,8 +29,18 @@
     <!-- DeleteAllCompletedDialogFragment -->
     <string name="deleteallcompleteddialogfragment_confirmdeletion">Confirm deletion</string>
     <string name="deleteallcompleteddialogfragment_dialoginfo">Do you really want to delete all completed tasks?</string>
-    <string name="deleteallcompleteddialogfragment_cancel">Cancel</string>
-    <string name="deleteallcompleteddialogfragment_confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+
+    <!-- AddEditFolderDialogFragment -->
+    <string name="addeditfolderdialogfragment_addfolder">Add folder</string>
+    <string name="addeditfolderdialogfragment_title">Select folder name</string>
+
+    <!-- DeleteFolderDialogFragment -->
+    <string name="deletefolderdialogfragment_title">Confirm deletion</string>
+    <string name="deletefolderdialogfragment_message">Do you really want to delete this folder?</string>
+    <string name="deletefolderdialogfragment_deletefolder">Delete this folder</string>
+    <string name="deletefolderdialogfragment_deleteallcomplitedtastks">Delete all completed tasks</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
