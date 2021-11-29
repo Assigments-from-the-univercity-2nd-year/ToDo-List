@@ -87,6 +87,42 @@ class AppRepository @Inject constructor(
             TodoPartMapper.mapToDataModel(todoPart)
         )
 
+    suspend fun updateImagePart(imagePart: ImagePart) {
+        partDatabase.imagePartDataDao().updateImagePartData(
+            ImagePartMapper.mapToDataModel(imagePart)
+        )
+        /*appContext.filesDir.listFiles()?.filter {
+            it.canRead() && it.isFile && it.name.equals("${imagePart.id}.jpg")
+        }?.map {
+            it.delete()
+            appContext.openFileOutput(it.name, Activity.MODE_PRIVATE).use { stream ->
+                if (!imagePart.content.compress(Bitmap.CompressFormat.JPEG, 100, stream)) {
+                    throw IOException("Couldn't save bitmap.")
+                }
+            }
+        }*/
+    }
+
+    suspend fun deleteTextPart(textPart: TextPart) =
+        partDatabase.textPartDataDao().deleteTextPartData(
+            TextPartMapper.mapToDataModel(textPart)
+        )
+
+    suspend fun deleteTodoPart(todoPart: TodoPart) =
+        partDatabase.todoPartDataDao().deleteTodoPartData(
+            TodoPartMapper.mapToDataModel(todoPart)
+        )
+
+    suspend fun deleteImagePart(imagePart: ImagePart) {
+        val imagePartData = ImagePartMapper.mapToDataModel(imagePart)
+        appContext.filesDir.listFiles()?.filter {
+            it.canRead() && it.isFile && it.name.equals("${imagePartData.id}.jpg")
+        }?.map {
+            it.delete()
+        }
+        partDatabase.imagePartDataDao().deleteImagePartData(imagePartData) // TODO: delete in safe way
+    }
+
     private fun savePhotoToInternalStorage(filename: String, bitmap: Bitmap): Boolean =
         try {
             appContext.openFileOutput("$filename.jpg", Activity.MODE_PRIVATE).use { stream ->

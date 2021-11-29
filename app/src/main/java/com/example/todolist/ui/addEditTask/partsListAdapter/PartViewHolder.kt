@@ -1,7 +1,11 @@
 package com.example.todolist.ui.addEditTask.partsListAdapter
 
+import android.view.MenuInflater
+import android.view.View
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.example.todolist.R
 import com.example.todolist.databinding.ItemImagePartBinding
 import com.example.todolist.databinding.ItemTextPartBinding
 import com.example.todolist.databinding.ItemTodoPartBinding
@@ -30,6 +34,9 @@ sealed class PartViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(bind
                             edittextItemtextpartContent.text.toString()
                         )
                     }
+                }
+                edittextItemtextpartContent.setOnLongClickListener {
+                    callMenu(it, onPartClickListener, currentTextPart)
                 }
             }
         }
@@ -60,6 +67,9 @@ sealed class PartViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(bind
                         checkboxItemtodopartCompleted.isChecked
                     )
                 }
+                edittextItemtodopartContent.setOnLongClickListener {
+                    callMenu(root, onPartClickListener, currentTodoPart)
+                }
             }
         }
     }
@@ -73,7 +83,32 @@ sealed class PartViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(bind
 
             binding.apply {
                 imageviewItemimagepartContentimage.setImageBitmap(currentImagePart.content)
+                root.setOnLongClickListener { callMenu(it, onPartClickListener, currentImagePart) }
             }
         }
+    }
+
+    protected fun callMenu(view: View, onPartClickListener: OnPartClickListener, basePart: BasePart): Boolean {
+        val popupMenu = PopupMenu(view.context, view)
+        popupMenu.inflate(R.menu.menu_part)
+        popupMenu.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.action_menupart_delete -> {
+                    onPartClickListener.onDeleteActionSelected(basePart)
+                    true
+                }
+                R.id.action_menupart_moveup -> {
+                    onPartClickListener.onMoveUpActionSelected(adapterPosition)
+                    true
+                }
+                R.id.action_menupart_movedown -> {
+                    onPartClickListener.onMoveDownActionSelected(adapterPosition)
+                    true
+                }
+                else -> false
+            }
+        }
+        popupMenu.show()
+        return false
     }
 }

@@ -112,6 +112,18 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task), OnPartCli
         viewModel.onTodoPartCheckBoxClicked(todoPart, isChecked)
     }
 
+    override fun onDeleteActionSelected(part: BasePart) {
+        viewModel.onDeleteActionSelected(part)
+    }
+
+    override fun onMoveUpActionSelected(positionOfMovingPart: Int) {
+        viewModel.onMoveUpActionSelected(positionOfMovingPart)
+    }
+
+    override fun onMoveDownActionSelected(positionOfMovingPart: Int) {
+        viewModel.onMoveDownActionSelected(positionOfMovingPart)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         viewModel.onActivityResult(requestCode, resultCode, data, requireContext().contentResolver)

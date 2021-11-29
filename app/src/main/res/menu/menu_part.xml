@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_menupart_delete"
+        android:title="Delete"/>
+    <item
+        android:id="@+id/action_menupart_moveup"
+        android:title="Move up"/>
+    <item
+        android:id="@+id/action_menupart_movedown"
+        android:title="Move down"/>
+</menu>

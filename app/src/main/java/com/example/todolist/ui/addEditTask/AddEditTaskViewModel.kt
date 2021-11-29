@@ -26,6 +26,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
+import java.util.*
 
 class AddEditTaskViewModel @ViewModelInject constructor(
     private val taskDao: TaskDao,
@@ -86,12 +87,12 @@ class AddEditTaskViewModel @ViewModelInject constructor(
     }
 
     fun onAddTextPartClicked() = viewModelScope.launch {
-        appRepository.insertTextPart(TextPart("", parts.value?.size ?: 1, task.id))
+        appRepository.insertTextPart(TextPart("", getPositionOfLatestPart() + 1, task.id))
         updateFolder()
     }
 
     fun onAddTodoPartClicked() = viewModelScope.launch {
-        appRepository.insertTodoPart(TodoPart("", parts.value?.size ?: 1, task.id))
+        appRepository.insertTodoPart(TodoPart("", getPositionOfLatestPart() + 1, task.id))
         updateFolder()
     }
 
@@ -125,11 +126,39 @@ class AddEditTaskViewModel @ViewModelInject constructor(
             try {
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, data.data)
                 appRepository.insertImagePart(
-                    ImagePart(bitmap, parts.value?.size ?: 1, task.id)
+                    ImagePart(bitmap, getPositionOfLatestPart() + 1, task.id)
                 )
             } catch (e: FileNotFoundException) {
                 e.printStackTrace() // Todo: proper handling
             }
+        }
+    }
+
+    fun onDeleteActionSelected(part: BasePart) = viewModelScope.launch {
+        when(part) {
+            is TextPart -> appRepository.deleteTextPart(part)
+            is TodoPart -> appRepository.deleteTodoPart(part)
+            is ImagePart -> appRepository.deleteImagePart(part)
+        }.exhaustive
+    }
+
+    fun onMoveUpActionSelected(positionOfMovingPart: Int) = viewModelScope.launch {
+        if (positionOfMovingPart > 0) {
+            val movingPart = parts.value?.get(positionOfMovingPart)!!
+            val upPart = parts.value?.get(positionOfMovingPart - 1)!!
+
+            movingPart.update(upPart.position, appRepository)
+            upPart.update(movingPart.position, appRepository)
+        }
+    }
+
+    fun onMoveDownActionSelected(positionOfMovingPart: Int) = viewModelScope.launch {
+        if (positionOfMovingPart < parts.value!!.size - 1) {
+            val movingPart = parts.value?.get(positionOfMovingPart)!!
+            val downPart = parts.value?.get(positionOfMovingPart + 1)!!
+
+            movingPart.update(downPart.position, appRepository)
+            downPart.update(movingPart.position, appRepository)
         }
     }
 
@@ -151,6 +180,9 @@ class AddEditTaskViewModel @ViewModelInject constructor(
         val folder = folderDao.getFolder(folderId!!)
         folderDao.updateFolder(folder.copy(modifiedDate = System.currentTimeMillis()))
     }
+
+    private fun getPositionOfLatestPart(): Int =
+        parts.value?.get(parts.value!!.size - 1)?.position ?: 1
 
     sealed class AddEditTaskEvent {
         data class ShowInvalidInputMessage(val msg: String) : AddEditTaskEvent()
