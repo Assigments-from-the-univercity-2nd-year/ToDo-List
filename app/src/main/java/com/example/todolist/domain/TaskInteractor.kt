@@ -1,7 +1,7 @@
 package com.example.todolist.domain
 
-import com.example.todolist.domain.models.Part
-import com.example.todolist.domain.models.Task
+import com.example.todolist.domain.models.parts.Part
+import com.example.todolist.domain.models.components.Task
 import kotlinx.coroutines.flow.Flow
 
 class TaskInteractor {

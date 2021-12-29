@@ -1,14 +1,10 @@
 package com.example.todolist.domain
 
-import com.example.todolist.domain.models.TextPart
+import com.example.todolist.domain.models.parts.TextPart
 
 class TextPartInteractor {
 
     fun addTextPartUseCase(textPart: TextPart) {
-        TODO()
-    }
-
-    fun updateTextPartUseCase(textPart: TextPart) {
         TODO()
     }
 

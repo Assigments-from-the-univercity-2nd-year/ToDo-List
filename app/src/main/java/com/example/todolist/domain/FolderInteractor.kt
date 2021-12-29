@@ -1,8 +1,8 @@
 package com.example.todolist.domain
 
-import com.example.todolist.domain.models.Component
-import com.example.todolist.domain.models.Folder
-import com.example.todolist.domain.models.Task
+import com.example.todolist.domain.models.components.Component
+import com.example.todolist.domain.models.components.Folder
+import com.example.todolist.domain.models.components.Task
 import kotlinx.coroutines.flow.Flow
 
 class FolderInteractor {

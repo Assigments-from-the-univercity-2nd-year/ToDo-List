@@ -1,14 +1,10 @@
 package com.example.todolist.domain
 
-import com.example.todolist.domain.models.ImagePart
+import com.example.todolist.domain.models.parts.ImagePart
 
 class ImagePartInteractor {
 
     fun addImagePartUseCase(imagePart: ImagePart) {
-        TODO()
-    }
-
-    fun updateImagePartUseCase(imagePart: ImagePart) {
         TODO()
     }
 
