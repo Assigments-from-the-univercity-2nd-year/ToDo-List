@@ -3,8 +3,8 @@ package com.example.todolist.di
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import com.example.todolist.data.componentsDB.TaskDatabase
-import com.example.todolist.data.db.PartDatabase
+import com.example.todolist.data.local.componentsDataSource.ComponentsDatabase
+import com.example.todolist.data.local.partsDataSource.PartsDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,22 +21,22 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(app: Application, callback: TaskDatabase.CallBack) =
-        Room.databaseBuilder(app, TaskDatabase::class.java, "task_database")
+    fun provideDatabase(app: Application, callback: ComponentsDatabase.CallBack) =
+        Room.databaseBuilder(app, ComponentsDatabase::class.java, "task_database")
             .fallbackToDestructiveMigration()
             .addCallback(callback)
             .build()
 
     @Provides
-    fun provideTaskDao(db: TaskDatabase) = db.taskDao()
+    fun provideTaskDao(db: ComponentsDatabase) = db.taskDao()
 
     @Provides
-    fun provideFolderDao(db: TaskDatabase) = db.folderDao()
+    fun provideFolderDao(db: ComponentsDatabase) = db.folderDao()
 
     @Provides
     @Singleton
-    fun providePartDatabase(app: Application, callback: PartDatabase.CallBack) =
-        Room.databaseBuilder(app, PartDatabase::class.java, "part_database")
+    fun providePartDatabase(app: Application, callback: PartsDatabase.CallBack) =
+        Room.databaseBuilder(app, PartsDatabase::class.java, "part_database")
             .fallbackToDestructiveMigration()
             .addCallback(callback)
             .build()

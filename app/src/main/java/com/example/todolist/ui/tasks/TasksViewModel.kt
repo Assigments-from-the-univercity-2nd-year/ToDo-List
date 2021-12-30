@@ -5,6 +5,8 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.todolist.data.*
 import com.example.todolist.data.componentsDB.*
+import com.example.todolist.data.local.componentsDataSource.daos.FolderDao
+import com.example.todolist.data.local.componentsDataSource.daos.TaskDao
 import com.example.todolist.ui.*
 import com.example.todolist.util.exhaustive
 import kotlinx.coroutines.channels.Channel
@@ -14,7 +16,7 @@ import kotlinx.coroutines.launch
 class TasksViewModel @ViewModelInject constructor(
     private val taskDao: TaskDao,
     private val folderDao: FolderDao,
-    private val preferencesManager: PreferencesManager,
+    private val preferencesManager: UserPreferencesDataStore,
     @Assisted private val state: SavedStateHandle
 ) : ViewModel() {
 

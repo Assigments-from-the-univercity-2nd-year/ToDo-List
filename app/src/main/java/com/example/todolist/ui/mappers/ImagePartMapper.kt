@@ -1,13 +1,11 @@
 package com.example.todolist.ui.mappers
 
 import android.graphics.Bitmap
-import com.example.todolist.data.entities.ImagePartData
-import com.example.todolist.ui.entities.ImagePart
 
 class ImagePartMapper {
 
     companion object {
-        fun mapToDomainModel(imagePartData: ImagePartData, content: Bitmap): ImagePart =
+        fun mapToDomainModel(imagePartData: com.example.todolist.data.local.partsDataSource.entities.ImagePart, content: Bitmap): ImagePart =
             ImagePart(
                 content,
                 imagePartData.position,
@@ -15,8 +13,8 @@ class ImagePartMapper {
                 imagePartData.id
             )
 
-        fun mapToDataModel(imagePart: ImagePart): ImagePartData =
-            ImagePartData(
+        fun mapToDataModel(imagePart: ImagePart): com.example.todolist.data.local.partsDataSource.entities.ImagePart =
+            com.example.todolist.data.local.partsDataSource.entities.ImagePart(
                 imagePart.position,
                 imagePart.parentId,
                 imagePart.id

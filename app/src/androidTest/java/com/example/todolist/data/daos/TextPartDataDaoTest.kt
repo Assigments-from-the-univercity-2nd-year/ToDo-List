@@ -6,8 +6,9 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
-import com.example.todolist.data.db.PartDatabase
-import com.example.todolist.data.entities.TextPartData
+import com.example.todolist.data.local.partsDataSource.PartsDatabase
+import com.example.todolist.data.local.partsDataSource.entities.TextPart
+import com.example.todolist.data.local.partsDataSource.daos.TextPartDataDao
 import com.example.todolist.getOrAwaitValue
 import com.google.common.truth.Truth
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,14 +27,14 @@ class TextPartDataDaoTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var database: PartDatabase
+    private lateinit var database: PartsDatabase
     private lateinit var dao: TextPartDataDao
 
     @Before
     fun setup() {
         database = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
-            PartDatabase::class.java
+            PartsDatabase::class.java
         ).allowMainThreadQueries().build()
         dao = database.textPartDataDao()
     }
@@ -44,13 +45,13 @@ class TextPartDataDaoTest {
     }
 
     private suspend fun addTextPartDatasToDatabase() {
-        dao.insertTextPartData(TextPartData("a name", 1, 1L))
-        dao.insertTextPartData(TextPartData("a name", 2, 1L))
-        dao.insertTextPartData(TextPartData("a name", 5, 1L))
-        dao.insertTextPartData(TextPartData("a name", 1, 2L))
-        dao.insertTextPartData(TextPartData("a name", 1, 3L))
-        dao.insertTextPartData(TextPartData("a name", 2, 2L))
-        dao.insertTextPartData(TextPartData("a name", 6, 1L))
+        dao.insertTextPartData(TextPart("a name", 1, 1L))
+        dao.insertTextPartData(TextPart("a name", 2, 1L))
+        dao.insertTextPartData(TextPart("a name", 5, 1L))
+        dao.insertTextPartData(TextPart("a name", 1, 2L))
+        dao.insertTextPartData(TextPart("a name", 1, 3L))
+        dao.insertTextPartData(TextPart("a name", 2, 2L))
+        dao.insertTextPartData(TextPart("a name", 6, 1L))
     }
 
     @Test
@@ -58,7 +59,7 @@ class TextPartDataDaoTest {
         addTextPartDatasToDatabase()
 
         val id = 1L
-        val img = dao.getTextPartDatasOfTask(id).asLiveData().getOrAwaitValue()
+        val img = dao.getTextPartsOfTask(id).asLiveData().getOrAwaitValue()
 
         Truth.assertThat(img.map { it.parentId == id }).doesNotContain(false)
     }

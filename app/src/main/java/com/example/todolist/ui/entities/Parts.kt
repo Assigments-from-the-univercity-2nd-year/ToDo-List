@@ -1,7 +1,7 @@
 package com.example.todolist.ui.entities
 
 import android.graphics.Bitmap
-import com.example.todolist.data.repository.AppRepository
+import com.example.todolist.data.repositories.AppRepository
 
 sealed class BasePart {
     abstract val position: Int

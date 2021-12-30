@@ -1,11 +1,8 @@
 package com.example.todolist.ui.mappers
 
-import com.example.todolist.data.entities.TodoPartData
-import com.example.todolist.ui.entities.TodoPart
-
 class TodoPartMapper {
     companion object {
-        fun mapToDomainModel(todoPartData: TodoPartData): TodoPart =
+        fun mapToDomainModel(todoPartData: com.example.todolist.data.local.partsDataSource.entities.TodoPart): TodoPart =
             TodoPart(
                 todoPartData.content,
                 todoPartData.position,
@@ -14,8 +11,8 @@ class TodoPartMapper {
                 todoPartData.id
             )
 
-        fun mapToDataModel(todoPart: TodoPart): TodoPartData =
-            TodoPartData(
+        fun mapToDataModel(todoPart: TodoPart): com.example.todolist.data.local.partsDataSource.entities.TodoPart =
+            com.example.todolist.data.local.partsDataSource.entities.TodoPart(
                 todoPart.content,
                 todoPart.position,
                 todoPart.parentId,

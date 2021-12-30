@@ -1,10 +1,10 @@
-package com.example.todolist.data.repository
+package com.example.todolist.data.repositories
 
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import com.example.todolist.data.db.PartDatabase
+import com.example.todolist.data.local.partsDataSource.PartsDatabase
 import com.example.todolist.ui.entities.BasePart
 import com.example.todolist.ui.entities.ImagePart
 import com.example.todolist.ui.entities.TextPart
@@ -17,7 +17,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 class AppRepository @Inject constructor(
-    private val partDatabase: PartDatabase,
+    private val partDatabase: PartsDatabase,
     private val appContext: Context
 ) {
 
@@ -33,18 +33,18 @@ class AppRepository @Inject constructor(
         }
 
     fun getTextPartsOfTask(taskId: Long): Flow<List<TextPart>> =
-        partDatabase.textPartDataDao().getTextPartDatasOfTask(taskId)
+        partDatabase.textPartDataDao().getTextPartsOfTask(taskId)
             .transformLatest { list ->
                 emit(list.map { TextPartMapper.mapToDomainModel(it) })
             }
 
     fun getTodoPartsOfTask(taskId: Long): Flow<List<TodoPart>> =
-        partDatabase.todoPartDataDao().getTodoPartDatasOfTask(taskId).transformLatest { list ->
+        partDatabase.todoPartDataDao().getTodoPartsOfTask(taskId).transformLatest { list ->
             emit(list.map { TodoPartMapper.mapToDomainModel(it) })
         }
 
     fun getImagePartsOfTask(taskId: Long): Flow<List<ImagePart>> =
-        partDatabase.imagePartDataDao().getImagePartDatasOfTask(taskId).transformLatest { list ->
+        partDatabase.imagePartDataDao().getImagePartsOfTask(taskId).transformLatest { list ->
             emit(list.map { ImagePartMapper.mapToDomainModel(it, loadPhotoFromInternalStorage(it.id.toString()).first()) })
         }
 

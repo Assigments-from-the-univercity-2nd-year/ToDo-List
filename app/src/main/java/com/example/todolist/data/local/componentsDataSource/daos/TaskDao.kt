@@ -1,6 +1,7 @@
-package com.example.todolist.data.componentsDB
+package com.example.todolist.data.local.componentsDataSource.daos
 
 import androidx.room.*
+import com.example.todolist.data.componentsDB.Task
 import kotlinx.coroutines.flow.Flow
 
 @Dao

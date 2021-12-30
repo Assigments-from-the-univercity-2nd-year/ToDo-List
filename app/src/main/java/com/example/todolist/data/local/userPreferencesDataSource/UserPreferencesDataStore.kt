@@ -15,7 +15,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class PreferencesManager @Inject constructor(@ApplicationContext context: Context) {
+class UserPreferencesDataStore @Inject constructor(@ApplicationContext context: Context) {
+
     private val dataStore = context.createDataStore("user_preferences")
 
     val preferencesFlow = dataStore.data

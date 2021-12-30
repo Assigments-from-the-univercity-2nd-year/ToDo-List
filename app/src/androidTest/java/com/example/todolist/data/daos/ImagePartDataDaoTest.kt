@@ -6,8 +6,9 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
-import com.example.todolist.data.db.PartDatabase
-import com.example.todolist.data.entities.ImagePartData
+import com.example.todolist.data.local.partsDataSource.PartsDatabase
+import com.example.todolist.data.local.partsDataSource.entities.ImagePart
+import com.example.todolist.data.local.partsDataSource.daos.ImagePartDataDao
 import com.example.todolist.getOrAwaitValue
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
@@ -24,14 +25,14 @@ class ImagePartDataDaoTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var database: PartDatabase
+    private lateinit var database: PartsDatabase
     private lateinit var dao: ImagePartDataDao
 
     @Before
     fun setup() {
         database = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
-            PartDatabase::class.java
+            PartsDatabase::class.java
         ).allowMainThreadQueries().build()
         dao = database.imagePartDataDao()
     }
@@ -42,11 +43,11 @@ class ImagePartDataDaoTest {
     }
 
     private suspend fun addImagePartDatasToDatabase() {
-        dao.insertImagePartData(ImagePartData(1, 1L, 0))
-        dao.insertImagePartData(ImagePartData(2, 1L, 0))
-        dao.insertImagePartData(ImagePartData(3, 1L, 0))
-        dao.insertImagePartData(ImagePartData(1, 2L, 0))
-        dao.insertImagePartData(ImagePartData(1, 3L, 0))
+        dao.insertImagePartData(ImagePart(1, 1L, 0))
+        dao.insertImagePartData(ImagePart(2, 1L, 0))
+        dao.insertImagePartData(ImagePart(3, 1L, 0))
+        dao.insertImagePartData(ImagePart(1, 2L, 0))
+        dao.insertImagePartData(ImagePart(1, 3L, 0))
     }
 
     @Test
@@ -54,7 +55,7 @@ class ImagePartDataDaoTest {
         addImagePartDatasToDatabase()
 
         val id = 1L
-        val img = dao.getImagePartDatasOfTask(id).asLiveData().getOrAwaitValue()
+        val img = dao.getImagePartsOfTask(id).asLiveData().getOrAwaitValue()
 
         assertThat(img.map { it.parentId == id }).doesNotContain(false)
     }

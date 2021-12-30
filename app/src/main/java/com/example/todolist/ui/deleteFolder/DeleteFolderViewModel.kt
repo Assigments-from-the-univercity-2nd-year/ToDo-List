@@ -3,8 +3,8 @@ package com.example.todolist.ui.deleteFolder
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import com.example.todolist.data.componentsDB.Folder
-import com.example.todolist.data.componentsDB.FolderDao
-import com.example.todolist.data.componentsDB.TaskDao
+import com.example.todolist.data.local.componentsDataSource.daos.FolderDao
+import com.example.todolist.data.local.componentsDataSource.daos.TaskDao
 import com.example.todolist.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

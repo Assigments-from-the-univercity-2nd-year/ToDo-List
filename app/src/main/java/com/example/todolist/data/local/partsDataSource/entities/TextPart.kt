@@ -1,14 +1,13 @@
-package com.example.todolist.data.entities
+package com.example.todolist.data.local.partsDataSource.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class TodoPartData(
+data class TextPart(
     val content: String,
     val position: Int,
     val parentId: Long,
-    val isCompleted: Boolean = false,
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0
 )

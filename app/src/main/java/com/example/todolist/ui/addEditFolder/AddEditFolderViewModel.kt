@@ -6,7 +6,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import com.example.todolist.data.componentsDB.Folder
-import com.example.todolist.data.componentsDB.FolderDao
+import com.example.todolist.data.local.componentsDataSource.daos.FolderDao
 import com.example.todolist.databinding.DialogFragmentAddEditFolderBinding
 import com.example.todolist.di.ApplicationScope
 import com.example.todolist.ui.ADD_FOLDER_RESULT_OK

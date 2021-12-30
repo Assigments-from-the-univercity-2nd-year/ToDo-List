@@ -3,6 +3,8 @@ package com.example.todolist.data.componentsDB
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.todolist.data.local.componentsDataSource.daos.FolderDao
+import com.example.todolist.data.local.componentsDataSource.daos.TaskDao
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.flow.first
 import java.text.DateFormat
