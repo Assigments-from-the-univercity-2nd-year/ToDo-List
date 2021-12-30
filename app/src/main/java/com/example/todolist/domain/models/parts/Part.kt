@@ -1,4 +1,7 @@
 package com.example.todolist.domain.models.parts
 
-open class Part {
-}
+abstract class Part(
+    val position: Int,
+    val parentId: Long,
+    val id: Long
+)

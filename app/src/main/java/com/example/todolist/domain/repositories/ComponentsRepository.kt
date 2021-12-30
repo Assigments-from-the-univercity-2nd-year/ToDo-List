@@ -13,9 +13,9 @@ interface ComponentsRepository {
 
     fun getPinnedFolders(): Flow<List<Folder>>
 
-    suspend fun insertTask(task: Task): Long
+    suspend fun addTask(task: Task): Long
 
-    suspend fun insertFolder(folder: Folder): Long
+    suspend fun addFolder(folder: Folder): Long
 
     suspend fun updateTask(task: Task)
 

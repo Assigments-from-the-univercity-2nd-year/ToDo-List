@@ -2,5 +2,9 @@ package com.example.todolist.domain.models.parts
 
 import com.example.todolist.domain.models.components.Component
 
-class TodoPart : Component() {
-}
+class TodoPart(
+    val content: String,
+    position: Int,
+    parentId: Long,
+    id: Long
+) : Part(position, parentId, id)

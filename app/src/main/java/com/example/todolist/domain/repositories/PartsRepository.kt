@@ -10,11 +10,11 @@ interface PartsRepository {
 
     fun getPartsOfTask(taskId: Long): Flow<List<Part>>
 
-    suspend fun insertTextPart(textPart: TextPart): Long
+    suspend fun addTextPart(textPart: TextPart): Long
 
-    suspend fun insertTodoPart(todoPart: TodoPart): Long
+    suspend fun addTodoPart(todoPart: TodoPart): Long
 
-    suspend fun insertImagePart(imagePart: ImagePart): Long
+    suspend fun addImagePart(imagePart: ImagePart): Long
 
     suspend fun deleteTextPart(textPart: TextPart)
 
