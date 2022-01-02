@@ -6,7 +6,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import com.example.todolist.data.componentsDB.Folder
-import com.example.todolist.data.componentsDB.FolderDao
+import com.example.todolist.data.components.componentsLocalDataSource.componentsLocalRoom.FolderDbModelDao
 import com.example.todolist.databinding.DialogFragmentAddEditFolderBinding
 import com.example.todolist.di.ApplicationScope
 import com.example.todolist.ui.ADD_FOLDER_RESULT_OK
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class AddEditFolderViewModel @ViewModelInject constructor(
-    private val folderDao: FolderDao,
+    private val folderDao: FolderDbModelDao,
     @ApplicationScope private val applicationScope: CoroutineScope
 ) : ViewModel() {
 

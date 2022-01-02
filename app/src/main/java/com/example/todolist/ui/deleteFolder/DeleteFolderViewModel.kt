@@ -3,15 +3,15 @@ package com.example.todolist.ui.deleteFolder
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import com.example.todolist.data.componentsDB.Folder
-import com.example.todolist.data.componentsDB.FolderDao
-import com.example.todolist.data.componentsDB.TaskDao
+import com.example.todolist.data.components.componentsLocalDataSource.componentsLocalRoom.FolderDbModelDao
+import com.example.todolist.data.components.componentsLocalDataSource.componentsLocalRoom.TaskDbModelDao
 import com.example.todolist.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class DeleteFolderViewModel @ViewModelInject constructor(
-    private val taskDao: TaskDao,
-    private val folderDao: FolderDao,
+    private val taskDao: TaskDbModelDao,
+    private val folderDao: FolderDbModelDao,
     @ApplicationScope private val applicationScope: CoroutineScope
 ) : ViewModel() {
 
