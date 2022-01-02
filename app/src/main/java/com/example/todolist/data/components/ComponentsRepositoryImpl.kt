@@ -19,10 +19,10 @@ class ComponentsRepositoryImpl(
         folderLocalDataSource.getRootFolder().mapToDomain()
 
     override fun getSubFoldersOfFolder(folder: Folder): Flow<List<Folder>> =
-        folderLocalDataSource.getFoldersOfFolder(folder.mapToData()).mapFolderFlowToDomain()
+        folderLocalDataSource.getFoldersOfFolder(folder.mapToData().id).mapFolderFlowToDomain()
 
     override fun getTasksOfFolder(folder: Folder): Flow<List<Task>> =
-        taskLocalDataSource.getTasksOfFolder(folder.mapToData()).mapTaskFlowToDomain()
+        taskLocalDataSource.getTasksOfFolder(folder.mapToData().id).mapTaskFlowToDomain()
 
     override fun getPinnedFolders(): Flow<List<Folder>> =
         folderLocalDataSource.getPinnedFolders().mapFolderFlowToDomain()

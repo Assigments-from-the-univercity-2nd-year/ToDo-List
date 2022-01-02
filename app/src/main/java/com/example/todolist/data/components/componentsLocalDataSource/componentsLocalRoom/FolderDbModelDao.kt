@@ -1,33 +1,29 @@
 package com.example.todolist.data.components.componentsLocalDataSource.componentsLocalRoom
 
 import androidx.room.*
-import com.example.todolist.data.componentsDB.Folder
+import com.example.todolist.data.components.componentsLocalDataSource.FolderLocalDataSource
+import com.example.todolist.data.components.componentsLocalDataSource.entities.FolderDbModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface FolderDbModelDao {
+interface FolderDbModelDao : FolderLocalDataSource {
+
+    @Query("SELECT * FROM folderdbmodel WHERE folderId IS NULL")
+    override suspend fun getRootFolder(): FolderDbModel
+
+    @Query("SELECT * FROM folderdbmodel WHERE isPinned = 1")
+    override fun getPinnedFolders(): Flow<List<FolderDbModel>>
+
+    @Query("SELECT * FROM folderdbmodel WHERE folderId = :folderId")
+    override fun getFoldersOfFolder(folderId: Long): Flow<List<FolderDbModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertFolder(folder: Folder): Long
+    override suspend fun addFolder(folder: FolderDbModel): Long
 
     @Update
-    suspend fun updateFolder(folder: Folder)
+    override suspend fun updateFolder(folder: FolderDbModel)
 
     @Delete
-    suspend fun deleteTask(folder: Folder)
+    override suspend fun deleteFolder(folder: FolderDbModel)
 
-    @Query("SELECT * FROM folder WHERE folderId IS NULL")
-    suspend fun getRootFolder(): Folder
-
-    @Query("SELECT * FROM folder WHERE folderId = :folderId AND title LIKE '%' || :searchQuery || '%'")
-    fun getFoldersOfFolder(folderId: Long, searchQuery: String): Flow<List<Folder>>
-
-    @Query("SELECT * FROM folder WHERE folderId = :folderId")
-    suspend fun getFoldersOfFolder(folderId: Long): List<Folder>
-
-    @Query("SELECT * FROM folder WHERE id = :id")
-    suspend fun getFolder(id: Long): Folder
-
-    @Query("SELECT * FROM folder WHERE isPinned = 1")
-    suspend fun getPinnedFolders(): List<Folder>
 }

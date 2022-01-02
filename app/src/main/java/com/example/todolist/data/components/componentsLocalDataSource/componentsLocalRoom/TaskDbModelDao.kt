@@ -1,30 +1,26 @@
 package com.example.todolist.data.components.componentsLocalDataSource.componentsLocalRoom
 
 import androidx.room.*
-import com.example.todolist.data.componentsDB.Task
+import com.example.todolist.data.components.componentsLocalDataSource.TaskLocalDataSource
+import com.example.todolist.data.components.componentsLocalDataSource.entities.TaskDbModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface TaskDbModelDao {
+interface TaskDbModelDao : TaskLocalDataSource {
 
-    @Query("SELECT * FROM task WHERE (isCompleted != :hideCompleted OR isCompleted = 0) AND title LIKE '%' || :searchQuery || '%' AND folderId = :folderId")
-    fun getTasksOfFolder(searchQuery: String, hideCompleted: Boolean, folderId: Long): Flow<List<Task>>
-
-    @Query("SELECT * FROM task WHERE isCompleted = 1  AND folderId = :folderId")
-    fun getCompletedTasksOfFolder(folderId: Long): Flow<List<Task>>
-
-    @Query("SELECT * FROM task WHERE folderId = :folderId")
-    fun getTasksOfFolder(folderId: Long): Flow<List<Task>>
+    @Query("SELECT * FROM taskdbmodel WHERE folderId = :folderId")
+    override fun getTasksOfFolder(folderId: Long): Flow<List<TaskDbModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTask(task: Task)
+    override suspend fun addTask(task: TaskDbModel): Long
 
     @Update
-    suspend fun updateTask(task: Task)
+    override suspend fun updateTask(task: TaskDbModel)
 
     @Delete
-    suspend fun deleteTask(task: Task)
+    override suspend fun deleteTask(task: TaskDbModel)
 
-    @Query("DELETE FROM task WHERE task.isCompleted = 1")
-    suspend fun deleteCompletedTasks()
+    @Query("DELETE FROM taskdbmodel WHERE taskdbmodel.isCompleted = 1")
+    override suspend fun deleteCompletedTasks()
+
 }

@@ -9,7 +9,7 @@ interface FolderLocalDataSource {
 
     fun getPinnedFolders(): Flow<List<FolderDbModel>>
 
-    fun getFoldersOfFolder(folder: FolderDbModel): Flow<List<FolderDbModel>>
+    fun getFoldersOfFolder(folderId: Long): Flow<List<FolderDbModel>>
 
     suspend fun addFolder(folder: FolderDbModel): Long
 
