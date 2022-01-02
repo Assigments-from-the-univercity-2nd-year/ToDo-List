@@ -4,8 +4,8 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
-import com.example.todolist.data.local.componentsDataSource.ComponentsDatabase
-import com.example.todolist.data.local.componentsDataSource.daos.FolderDao
+import com.example.todolist.data.components.componentsLocalDataSource.componentsLocalRoom.ComponentsDatabase
+import com.example.todolist.data.components.componentsLocalDataSource.componentsLocalRoom.FolderDbModelDao
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -18,7 +18,7 @@ import org.junit.runner.RunWith
 class FolderDaoTest {
 
     private lateinit var database: ComponentsDatabase
-    private lateinit var folderDao: FolderDao
+    private lateinit var folderDao: FolderDbModelDao
 
     @Before
     fun setup() {

@@ -10,10 +10,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.todolist.data.local.componentsDataSource.daos.FolderDao
+import com.example.todolist.data.components.componentsLocalDataSource.componentsLocalRoom.FolderDbModelDao
 import com.example.todolist.data.componentsDB.Task
-import com.example.todolist.data.local.componentsDataSource.daos.TaskDao
-import com.example.todolist.data.repositories.AppRepository
+import com.example.todolist.data.components.componentsLocalDataSource.componentsLocalRoom.TaskDbModelDao
+import com.example.todolist.data.AppRepository
 import com.example.todolist.ui.ADD_TASK_RESULT_OK
 import com.example.todolist.ui.EDIT_TASK_RESULT_NOTHING_CHANGED
 import com.example.todolist.ui.EDIT_TASK_RESULT_OK
@@ -28,8 +28,8 @@ import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
 
 class AddEditTaskViewModel @ViewModelInject constructor(
-    private val taskDao: TaskDao,
-    private val folderDao: FolderDao,
+    private val taskDao: TaskDbModelDao,
+    private val folderDao: FolderDbModelDao,
     private val appRepository: AppRepository,
     @Assisted private val state: SavedStateHandle
 ) : ViewModel() {

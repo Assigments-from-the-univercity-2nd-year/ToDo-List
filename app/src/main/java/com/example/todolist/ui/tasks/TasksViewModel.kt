@@ -5,8 +5,9 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.todolist.data.*
 import com.example.todolist.data.componentsDB.*
-import com.example.todolist.data.local.componentsDataSource.daos.FolderDao
-import com.example.todolist.data.local.componentsDataSource.daos.TaskDao
+import com.example.todolist.data.components.componentsLocalDataSource.componentsLocalRoom.FolderDbModelDao
+import com.example.todolist.data.components.componentsLocalDataSource.componentsLocalRoom.TaskDbModelDao
+import com.example.todolist.data.userPreferences.userPreferencesLocalDataSource.userPreferencesLocalDataStore.UserPreferencesDataStore
 import com.example.todolist.ui.*
 import com.example.todolist.util.exhaustive
 import kotlinx.coroutines.channels.Channel
@@ -14,8 +15,8 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class TasksViewModel @ViewModelInject constructor(
-    private val taskDao: TaskDao,
-    private val folderDao: FolderDao,
+    private val taskDao: TaskDbModelDao,
+    private val folderDao: FolderDbModelDao,
     private val preferencesManager: UserPreferencesDataStore,
     @Assisted private val state: SavedStateHandle
 ) : ViewModel() {
@@ -51,7 +52,7 @@ class TasksViewModel @ViewModelInject constructor(
         ) { tasks, folders ->
             Pair(tasks, folders)
         }.flatMapLatest { (tasks, folders) ->
-            when(preferences.sortOrder) {
+            when(preferences.sortOrderModel) {
                 SortOrder.BY_DATE -> {
                     flowOf(tasks.plus<Component>(folders)
                     .sortedByDescending { it.modifiedDate }
@@ -68,7 +69,7 @@ class TasksViewModel @ViewModelInject constructor(
     val tasks = taskFlow.asLiveData()
 
     fun onSortOrderSelected(sortOrder: SortOrder) = viewModelScope.launch {
-        preferencesManager.updateSortOrder(sortOrder)
+        preferencesManager.updateSortOrderDbModel(sortOrder)
     }
 
     fun onHideCompletedSelected(hideCompleted: Boolean) = viewModelScope.launch {

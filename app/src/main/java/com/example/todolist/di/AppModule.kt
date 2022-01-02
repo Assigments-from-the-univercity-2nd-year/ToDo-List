@@ -3,8 +3,8 @@ package com.example.todolist.di
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import com.example.todolist.data.local.componentsDataSource.ComponentsDatabase
-import com.example.todolist.data.local.partsDataSource.PartsDatabase
+import com.example.todolist.data.components.componentsLocalDataSource.componentsLocalRoom.ComponentsDatabase
+import com.example.todolist.data.parts.partsLocalDataSource.partsLocalRoom.PartsDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

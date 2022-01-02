@@ -6,9 +6,9 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
-import com.example.todolist.data.local.partsDataSource.PartsDatabase
-import com.example.todolist.data.local.partsDataSource.entities.ImagePart
-import com.example.todolist.data.local.partsDataSource.daos.ImagePartDataDao
+import com.example.todolist.data.parts.partsLocalDataSource.partsLocalRoom.PartsDatabase
+import com.example.todolist.data.parts.partsLocalDataSource.entities.ImagePartModel
+import com.example.todolist.data.parts.partsLocalDataSource.partsLocalRoom.ImagePartDataDao
 import com.example.todolist.getOrAwaitValue
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
@@ -43,11 +43,11 @@ class ImagePartDataDaoTest {
     }
 
     private suspend fun addImagePartDatasToDatabase() {
-        dao.insertImagePartData(ImagePart(1, 1L, 0))
-        dao.insertImagePartData(ImagePart(2, 1L, 0))
-        dao.insertImagePartData(ImagePart(3, 1L, 0))
-        dao.insertImagePartData(ImagePart(1, 2L, 0))
-        dao.insertImagePartData(ImagePart(1, 3L, 0))
+        dao.insertImagePartData(ImagePartModel(1, 1L, 0))
+        dao.insertImagePartData(ImagePartModel(2, 1L, 0))
+        dao.insertImagePartData(ImagePartModel(3, 1L, 0))
+        dao.insertImagePartData(ImagePartModel(1, 2L, 0))
+        dao.insertImagePartData(ImagePartModel(1, 3L, 0))
     }
 
     @Test

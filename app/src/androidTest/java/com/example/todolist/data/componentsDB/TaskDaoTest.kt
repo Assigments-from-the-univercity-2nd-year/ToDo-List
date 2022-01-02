@@ -4,8 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.asLiveData
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.example.todolist.data.local.componentsDataSource.ComponentsDatabase
-import com.example.todolist.data.local.componentsDataSource.daos.TaskDao
+import com.example.todolist.data.components.componentsLocalDataSource.componentsLocalRoom.ComponentsDatabase
+import com.example.todolist.data.components.componentsLocalDataSource.componentsLocalRoom.TaskDbModelDao
 import com.example.todolist.getOrAwaitValue
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
@@ -20,7 +20,7 @@ class TaskDaoTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var database: ComponentsDatabase
-    private lateinit var taskDao: TaskDao
+    private lateinit var taskDao: TaskDbModelDao
 
     @Before
     fun setup() {

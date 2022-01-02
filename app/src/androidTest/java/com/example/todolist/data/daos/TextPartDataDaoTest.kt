@@ -6,9 +6,9 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
-import com.example.todolist.data.local.partsDataSource.PartsDatabase
-import com.example.todolist.data.local.partsDataSource.entities.TextPart
-import com.example.todolist.data.local.partsDataSource.daos.TextPartDataDao
+import com.example.todolist.data.parts.partsLocalDataSource.partsLocalRoom.PartsDatabase
+import com.example.todolist.data.parts.partsLocalDataSource.entities.TextPartModel
+import com.example.todolist.data.parts.partsLocalDataSource.partsLocalRoom.TextPartDataDao
 import com.example.todolist.getOrAwaitValue
 import com.google.common.truth.Truth
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -45,13 +45,13 @@ class TextPartDataDaoTest {
     }
 
     private suspend fun addTextPartDatasToDatabase() {
-        dao.insertTextPartData(TextPart("a name", 1, 1L))
-        dao.insertTextPartData(TextPart("a name", 2, 1L))
-        dao.insertTextPartData(TextPart("a name", 5, 1L))
-        dao.insertTextPartData(TextPart("a name", 1, 2L))
-        dao.insertTextPartData(TextPart("a name", 1, 3L))
-        dao.insertTextPartData(TextPart("a name", 2, 2L))
-        dao.insertTextPartData(TextPart("a name", 6, 1L))
+        dao.insertTextPartData(TextPartModel("a name", 1, 1L))
+        dao.insertTextPartData(TextPartModel("a name", 2, 1L))
+        dao.insertTextPartData(TextPartModel("a name", 5, 1L))
+        dao.insertTextPartData(TextPartModel("a name", 1, 2L))
+        dao.insertTextPartData(TextPartModel("a name", 1, 3L))
+        dao.insertTextPartData(TextPartModel("a name", 2, 2L))
+        dao.insertTextPartData(TextPartModel("a name", 6, 1L))
     }
 
     @Test

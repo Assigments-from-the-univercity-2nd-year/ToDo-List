@@ -9,7 +9,9 @@ interface ComponentsRepository {
 
     suspend fun getRootFolder(): Folder
 
-    fun getComponentsOfFolder(folder: Folder): Flow<List<Component>>
+    fun getSubFoldersOfFolder(folder: Folder): Flow<List<Folder>>
+
+    fun getTasksOfFolder(folder: Folder): Flow<List<Task>>
 
     fun getPinnedFolders(): Flow<List<Folder>>
 
