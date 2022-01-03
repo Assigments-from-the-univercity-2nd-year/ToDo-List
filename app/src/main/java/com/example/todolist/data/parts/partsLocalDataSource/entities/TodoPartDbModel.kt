@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class TodoPartModel(
+data class TodoPartDbModel(
     val content: String,
     val position: Int,
     val parentId: Long,

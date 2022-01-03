@@ -1,4 +1,4 @@
-package com.example.todolist.domain.models
+package com.example.todolist.domain.models.userPreferences
 
 class FilterPreferences(
     val sortOrder: SortOrder,

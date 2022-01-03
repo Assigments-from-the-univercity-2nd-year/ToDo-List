@@ -1,25 +1,33 @@
 package com.example.todolist.domain.repositories
 
-import com.example.todolist.domain.models.parts.Part
-import com.example.todolist.ui.entities.ImagePart
-import com.example.todolist.ui.entities.TextPart
-import com.example.todolist.ui.entities.TodoPart
+import com.example.todolist.domain.models.parts.ImagePart
+import com.example.todolist.domain.models.parts.TextPart
+import com.example.todolist.domain.models.parts.TodoPart
+import com.example.todolist.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface PartsRepository {
 
-    fun getPartsOfTask(taskId: Long): Flow<List<Part>>
+    fun getTextPartsOfTask(taskId: Long): Resource<Flow<List<TextPart>>>
 
-    suspend fun addTextPart(textPart: TextPart): Long
+    fun getImagePartsOfTask(taskId: Long): Resource<Flow<List<ImagePart>>>
 
-    suspend fun addTodoPart(todoPart: TodoPart): Long
+    fun getTodoPartsOfTask(taskId: Long): Resource<Flow<List<TodoPart>>>
 
-    suspend fun addImagePart(imagePart: ImagePart): Long
+    suspend fun addTextPart(textPart: TextPart): Resource<Long>
 
-    suspend fun deleteTextPart(textPart: TextPart)
+    suspend fun addTodoPart(todoPart: TodoPart): Resource<Long>
 
-    suspend fun deleteTodoPart(todoPart: TodoPart)
+    suspend fun addImagePart(imagePart: ImagePart): Resource<Long>
 
-    suspend fun deleteImagePart(imagePart: ImagePart)
+    suspend fun updateTextPart(textPart: TextPart): Resource<Unit>
+
+    suspend fun updateTodoPart(todoPart: TodoPart): Resource<Unit>
+
+    suspend fun deleteTextPart(textPart: TextPart): Resource<Unit>
+
+    suspend fun deleteTodoPart(todoPart: TodoPart): Resource<Unit>
+
+    suspend fun deleteImagePart(imagePart: ImagePart): Resource<Unit>
 
 }

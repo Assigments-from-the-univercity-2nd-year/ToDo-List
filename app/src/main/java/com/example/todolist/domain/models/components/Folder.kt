@@ -1,48 +1,67 @@
 package com.example.todolist.domain.models.components
 
-import com.example.todolist.di.ApplicationScope
 import com.example.todolist.domain.repositories.ComponentsRepository
-import kotlinx.coroutines.CoroutineScope
+import com.example.todolist.domain.useCases.folderUseCases.GetComponentsOfFolderUseCase
+import com.example.todolist.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class Folder @Inject constructor(
-    title: String,
-    folderId: Long,
-    val isPinned: Boolean = false,
-    createdDate: Long = System.currentTimeMillis(),
-    modifiedDate: Long = System.currentTimeMillis(),
-    id: Long = 0,
+data class Folder @Inject constructor(
+    override var title: String,
+    override var folderId: Long,
+    val isPinned: Boolean,
+    override val createdDate: Long,
+    override var modifiedDate: Long,
+    override val id: Long,
     private val componentsRepository: ComponentsRepository,
-    @ApplicationScope private val applicationScope: CoroutineScope
+    private val getComponentsOfFolderUseCase: GetComponentsOfFolderUseCase,
 ) : Component(title, folderId, createdDate, modifiedDate, id) {
 
-    private val subComponents: Flow<List<Component>> =
-        componentsRepository.getComponentsOfFolder(this)
+    private val subComponents: Resource<Flow<List<Component>>>
+        by lazy { getComponentsOfFolderUseCase(this) }
 
-    override fun delete() {
-        applicationScope.launch {
-            subComponents.collectLatest {
-                for (component in it) {
-                    component.delete()
-                }
+    override suspend fun delete(): Resource<Unit> =
+        when (val _subComponents = subComponents) { // we need to make _subComponents object because we init subComponents by lazy
+            is Resource.Error -> {
+                Resource.Error(_subComponents.exception)
+                TODO("Logging")
             }
-            componentsRepository.deleteFolder(this@Folder)
-        }
-    }
-
-    fun deleteCompletedTasks() {
-        applicationScope.launch {
-            subComponents.collectLatest {
-                for (component in it) {
-                    if (component is Task && component.isCompleted) {
+            is Resource.Success -> {
+                _subComponents.data.collectLatest {
+                    for (component in it) {
                         component.delete()
                     }
                 }
+
+                componentsRepository.deleteFolder(this)
+                Resource.Success(Unit)
             }
         }
-    }
 
+    override suspend fun update(): Resource<Unit> =
+        componentsRepository.updateFolder(this)
+
+    suspend fun deleteCompletedTasks(): Resource<Unit> =
+        when(val _subComponents = subComponents) { // we need to make _subComponents object because we init subComponents by lazy
+            is Resource.Error -> {
+                Resource.Error(_subComponents.exception)
+                TODO("Logging")
+            }
+            is Resource.Success -> {
+                _subComponents.data.collectLatest {
+                    for (component in it) {
+                        if (component is Task && component.isCompleted) {
+                            component.delete()
+                        }
+                        if (component is Folder) {
+                            component.deleteCompletedTasks()
+                        }
+                    }
+                }
+
+                componentsRepository.deleteFolder(this)
+                Resource.Success(Unit)
+            }
+        }
 }

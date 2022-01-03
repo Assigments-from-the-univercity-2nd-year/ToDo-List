@@ -1,16 +1,17 @@
 package com.example.todolist.domain.models.components
 
+import com.example.todolist.util.Resource
+
 abstract class Component(
-    var title: String,
-    var folderId: Long,
-    var createdDate: Long,
-    var modifiedDate: Long,
-    var id: Long
-) : Cloneable {
+    open var title: String,
+    open var folderId: Long,
+    open val createdDate: Long,
+    open var modifiedDate: Long,
+    open val id: Long
+) {
 
-    abstract fun delete()
+    abstract suspend fun delete(): Resource<Unit>
 
-    public override fun clone(): Component {
-        return super.clone() as Component
-    }
+    abstract suspend fun update(): Resource<Unit>
+
 }

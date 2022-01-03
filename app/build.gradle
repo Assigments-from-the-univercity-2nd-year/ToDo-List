@@ -35,6 +35,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+
+        // enabling Result class as a return parameter
+        freeCompilerArgs = freeCompilerArgs + "-Xallow-result-return-type"
     }
 }
 

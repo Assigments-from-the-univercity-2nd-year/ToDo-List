@@ -1,21 +1,21 @@
 package com.example.todolist.ui.mappers
 
-import com.example.todolist.data.parts.partsLocalDataSource.entities.TextPartModel
+import com.example.todolist.data.parts.partsLocalDataSource.entities.TextPartDbModel
 
 class TextPartMapper {
 
     companion object {
 
-        fun mapToDomainModel(textPartData: TextPartModel): TextPartModel =
-            TextPartModel(
+        fun mapToDomainModel(textPartData: TextPartDbModel): TextPartDbModel =
+            TextPartDbModel(
                 textPartData.content,
                 textPartData.position,
                 textPartData.parentId,
                 textPartData.id
             )
 
-        fun mapToDataModel(textPart: TextPartModel): TextPartModel =
-            TextPartModel(
+        fun mapToDataModel(textPart: TextPartDbModel): TextPartDbModel =
+            TextPartDbModel(
                 textPart.content,
                 textPart.position,
                 textPart.parentId,

@@ -1,8 +1,8 @@
 package com.example.todolist.data.parts
 
-import com.example.todolist.data.parts.partsLocalDataSource.ImagePartLocalDataSource
-import com.example.todolist.data.parts.partsLocalDataSource.TextPartLocalDataSource
-import com.example.todolist.data.parts.partsLocalDataSource.TodoPartLocalDataSource
+import com.example.todolist.data.parts.partsLocalDataSource.ImagePartDbModelLocalDataSource
+import com.example.todolist.data.parts.partsLocalDataSource.TextPartDbModelLocalDataSource
+import com.example.todolist.data.parts.partsLocalDataSource.TodoPartDbModelLocalDataSource
 import com.example.todolist.domain.models.parts.Part
 import com.example.todolist.domain.repositories.PartsRepository
 import com.example.todolist.ui.entities.ImagePart
@@ -11,9 +11,9 @@ import com.example.todolist.ui.entities.TodoPart
 import kotlinx.coroutines.flow.Flow
 
 class PartsRepositoryImpl(
-    private val textPartLocalDataSource: TextPartLocalDataSource,
-    private val imagePartLocalDataSource: ImagePartLocalDataSource,
-    private val todoPartLocalDataSource: TodoPartLocalDataSource
+    private val textPartLocalDataSource: TextPartDbModelLocalDataSource,
+    private val imagePartLocalDataSource: ImagePartDbModelLocalDataSource,
+    private val todoPartLocalDataSource: TodoPartDbModelLocalDataSource
 ) : PartsRepository {
 
     override fun getPartsOfTask(taskId: Long): Flow<List<Part>> {

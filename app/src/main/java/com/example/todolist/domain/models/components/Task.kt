@@ -1,26 +1,23 @@
 package com.example.todolist.domain.models.components
 
-import com.example.todolist.di.ApplicationScope
 import com.example.todolist.domain.repositories.ComponentsRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import com.example.todolist.util.Resource
 
-class Task(
-    title: String,
-    folderId: Long,
-    var isImportant: Boolean = false,
-    var isCompleted: Boolean = false,
-    createdDate: Long = System.currentTimeMillis(),
-    modifiedDate: Long = System.currentTimeMillis(),
-    id: Long = 0,
+data class Task(
+    override var title: String,
+    override var folderId: Long,
+    var isImportant: Boolean,
+    var isCompleted: Boolean,
+    override val createdDate: Long,
+    override var modifiedDate: Long,
+    override val id: Long,
     private val componentsRepository: ComponentsRepository,
-    @ApplicationScope private val applicationScope: CoroutineScope
 ) : Component(title, folderId, createdDate, modifiedDate, id) {
 
-    override fun delete() {
-        applicationScope.launch {
-            componentsRepository.deleteTask(this@Task)
-        }
-    }
+    override suspend fun delete(): Resource<Unit> =
+        componentsRepository.deleteTask(this)
+
+    override suspend fun update(): Resource<Unit> =
+        componentsRepository.updateTask(this)
 
 }

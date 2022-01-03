@@ -1,11 +1,15 @@
 package com.example.todolist.domain.useCases.tasksUseCases
 
 import com.example.todolist.domain.models.components.Task
+import com.example.todolist.domain.repositories.ComponentsRepository
+import com.example.todolist.util.Resource
+import javax.inject.Inject
 
-class AddTaskUseCase {
+class AddTaskUseCase @Inject constructor(
+    private val componentsRepository: ComponentsRepository
+) {
 
-    operator fun invoke(task: Task): Long {
-        TODO()
-    }
+    suspend operator fun invoke(task: Task): Resource<Long> =
+        componentsRepository.addTask(task)
 
 }

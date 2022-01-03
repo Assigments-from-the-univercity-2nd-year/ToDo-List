@@ -7,7 +7,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.example.todolist.data.parts.partsLocalDataSource.partsLocalRoom.PartsDatabase
-import com.example.todolist.data.parts.partsLocalDataSource.entities.TodoPartModel
+import com.example.todolist.data.parts.partsLocalDataSource.entities.TodoPartDbModel
 import com.example.todolist.data.parts.partsLocalDataSource.partsLocalRoom.TodoPartDataDao
 import com.example.todolist.getOrAwaitValue
 import com.google.common.truth.Truth
@@ -43,12 +43,12 @@ class TodoPartDataDaoTest {
     }
 
     private suspend fun addTodoPartDatasToDatabase() {
-        dao.insertTodoPartData(TodoPartModel("a content", 1, 1L, false))
-        dao.insertTodoPartData(TodoPartModel("a content", 2, 1L, false))
-        dao.insertTodoPartData(TodoPartModel("a content", 1, 2L, false))
-        dao.insertTodoPartData(TodoPartModel("a content", 3, 1L, false))
-        dao.insertTodoPartData(TodoPartModel("a content", 1, 3L, false))
-        dao.insertTodoPartData(TodoPartModel("a content", 5, 1L, false))
+        dao.insertTodoPartData(TodoPartDbModel("a content", 1, 1L, false))
+        dao.insertTodoPartData(TodoPartDbModel("a content", 2, 1L, false))
+        dao.insertTodoPartData(TodoPartDbModel("a content", 1, 2L, false))
+        dao.insertTodoPartData(TodoPartDbModel("a content", 3, 1L, false))
+        dao.insertTodoPartData(TodoPartDbModel("a content", 1, 3L, false))
+        dao.insertTodoPartData(TodoPartDbModel("a content", 5, 1L, false))
     }
 
     @Test

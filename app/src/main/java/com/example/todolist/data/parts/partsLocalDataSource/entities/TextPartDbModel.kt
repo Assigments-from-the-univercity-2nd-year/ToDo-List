@@ -1,14 +1,13 @@
 package com.example.todolist.data.parts.partsLocalDataSource.entities
 
-import android.graphics.Bitmap
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.sql.Blob
 
 @Entity
-data class ImagePartModel(
+data class TextPartDbModel(
+    val content: String,
     val position: Int,
     val parentId: Long,
     @PrimaryKey(autoGenerate = true)
-    val id: Long
+    val id: Long = 0
 )

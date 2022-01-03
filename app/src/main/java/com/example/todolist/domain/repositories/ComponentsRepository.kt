@@ -1,32 +1,32 @@
 package com.example.todolist.domain.repositories
 
-import com.example.todolist.domain.models.components.Component
 import com.example.todolist.domain.models.components.Folder
 import com.example.todolist.domain.models.components.Task
+import com.example.todolist.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface ComponentsRepository {
 
-    suspend fun getRootFolder(): Folder
+    suspend fun getRootFolder(): Resource<Folder>
 
-    fun getSubFoldersOfFolder(folder: Folder): Flow<List<Folder>>
+    fun getSubFoldersOfFolder(folder: Folder): Resource<Flow<List<Folder>>>
 
-    fun getTasksOfFolder(folder: Folder): Flow<List<Task>>
+    fun getTasksOfFolder(folder: Folder): Resource<Flow<List<Task>>>
 
-    fun getPinnedFolders(): Flow<List<Folder>>
+    fun getPinnedFolders(): Resource<Flow<List<Folder>>>
 
-    suspend fun addTask(task: Task): Long
+    suspend fun addTask(task: Task): Resource<Long>
 
-    suspend fun addFolder(folder: Folder): Long
+    suspend fun addFolder(folder: Folder): Resource<Long>
 
-    suspend fun updateTask(task: Task)
+    suspend fun updateTask(task: Task): Resource<Unit>
 
-    suspend fun updateFolder(folder: Folder)
+    suspend fun updateFolder(folder: Folder): Resource<Unit>
 
-    suspend fun deleteTask(task: Task)
+    suspend fun deleteTask(task: Task): Resource<Unit>
 
-    suspend fun deleteCompletedTasks()
+    suspend fun deleteCompletedTasks(): Resource<Unit>
 
-    suspend fun deleteFolder(folder: Folder)
+    suspend fun deleteFolder(folder: Folder): Resource<Unit>
 
 }

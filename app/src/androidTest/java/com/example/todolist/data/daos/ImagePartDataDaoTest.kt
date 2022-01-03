@@ -7,8 +7,8 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.example.todolist.data.parts.partsLocalDataSource.partsLocalRoom.PartsDatabase
-import com.example.todolist.data.parts.partsLocalDataSource.entities.ImagePartModel
-import com.example.todolist.data.parts.partsLocalDataSource.partsLocalRoom.ImagePartDataDao
+import com.example.todolist.data.parts.partsLocalDataSource.entities.ImagePartDbModel
+import com.example.todolist.data.parts.partsLocalDataSource.partsLocalRoom.ImagePartDbModelDataDao
 import com.example.todolist.getOrAwaitValue
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
@@ -26,7 +26,7 @@ class ImagePartDataDaoTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var database: PartsDatabase
-    private lateinit var dao: ImagePartDataDao
+    private lateinit var dao: ImagePartDbModelDataDao
 
     @Before
     fun setup() {
@@ -43,11 +43,11 @@ class ImagePartDataDaoTest {
     }
 
     private suspend fun addImagePartDatasToDatabase() {
-        dao.insertImagePartData(ImagePartModel(1, 1L, 0))
-        dao.insertImagePartData(ImagePartModel(2, 1L, 0))
-        dao.insertImagePartData(ImagePartModel(3, 1L, 0))
-        dao.insertImagePartData(ImagePartModel(1, 2L, 0))
-        dao.insertImagePartData(ImagePartModel(1, 3L, 0))
+        dao.insertImagePartData(ImagePartDbModel(1, 1L, 0))
+        dao.insertImagePartData(ImagePartDbModel(2, 1L, 0))
+        dao.insertImagePartData(ImagePartDbModel(3, 1L, 0))
+        dao.insertImagePartData(ImagePartDbModel(1, 2L, 0))
+        dao.insertImagePartData(ImagePartDbModel(1, 3L, 0))
     }
 
     @Test

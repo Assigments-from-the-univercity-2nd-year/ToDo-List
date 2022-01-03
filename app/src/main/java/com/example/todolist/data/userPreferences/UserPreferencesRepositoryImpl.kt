@@ -3,7 +3,7 @@ package com.example.todolist.data.userPreferences
 
 import com.example.todolist.data.userPreferences.userPreferencesLocalDataSource.UserPreferencesLocalDataSource
 import com.example.todolist.data.userPreferences.userPreferencesLocalDataSource.entities.FilterPreferencesDbModel
-import com.example.todolist.domain.models.FilterPreferences
+import com.example.todolist.domain.models.userPreferences.FilterPreferences
 import com.example.todolist.domain.repositories.UserPreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

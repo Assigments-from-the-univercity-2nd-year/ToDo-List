@@ -5,11 +5,11 @@ import com.example.todolist.domain.repositories.PartsRepository
 import com.example.todolist.util.Resource
 import javax.inject.Inject
 
-class AddTodoPartUseCase @Inject constructor(
+class UpdateTodoPartUseCase @Inject constructor(
     private val partsRepository: PartsRepository
 ) {
 
-    suspend operator fun invoke(todoPart: TodoPart): Resource<Long> =
-        partsRepository.addTodoPart(todoPart)
+    suspend operator fun invoke(todoPart: TodoPart): Resource<Unit> =
+        partsRepository.updateTodoPart(todoPart)
 
 }
