@@ -19,36 +19,14 @@ import javax.inject.Singleton
 @InstallIn(ApplicationComponent::class)
 object AppModule {
 
-    @Provides
-    @Singleton
-    fun provideDatabase(app: Application, callback: ComponentsDatabase.CallBack) =
-        Room.databaseBuilder(app, ComponentsDatabase::class.java, "task_database")
-            .fallbackToDestructiveMigration()
-            .addCallback(callback)
-            .build()
-
-    @Provides
-    fun provideTaskDao(db: ComponentsDatabase) = db.taskDao()
-
-    @Provides
-    fun provideFolderDao(db: ComponentsDatabase) = db.folderDao()
-
-    @Provides
-    @Singleton
-    fun providePartDatabase(app: Application, callback: PartsDatabase.CallBack) =
-        Room.databaseBuilder(app, PartsDatabase::class.java, "part_database")
-            .fallbackToDestructiveMigration()
-            .addCallback(callback)
-            .build()
-
     @ApplicationScope
     @Provides
     @Singleton
     fun provideApplicationScope() = CoroutineScope(SupervisorJob())
 
-    @Provides
+    /*@Provides
     @Singleton
-    fun provideApplicationContext(@ApplicationContext appContext: Context) = appContext
+    fun provideApplicationContext(@ApplicationContext appContext: Context) = appContext*/
 
 }
 
