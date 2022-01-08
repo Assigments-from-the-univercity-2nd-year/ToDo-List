@@ -5,8 +5,9 @@ import com.example.todolist.domain.useCases.folderUseCases.GetComponentsOfFolder
 import com.example.todolist.domain.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
+import javax.inject.Inject
 
-data class Folder constructor(
+data class Folder @Inject constructor(
     override var title: String,
     override var folderId: Long,
     val isPinned: Boolean,

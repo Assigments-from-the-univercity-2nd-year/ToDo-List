@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/tasksFragment"
-        android:name="com.example.todolist.ui.tasks.TasksFragment"
+        android:name="com.example.todolist.presentation.tasks.TasksFragment"
         tools:layout="@layout/fragment_tasks">
         <action
             android:id="@+id/action_tasksFragment_to_addEditTaskFragment"
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/addEditTaskFragment"
-        android:name="com.example.todolist.ui.addEditTask.AddEditTaskFragment"
+        android:name="com.example.todolist.presentation.addEditTask.AddEditTaskFragment"
         android:label="{title}"
         tools:layout="@layout/fragment_add_edit_task" >
         <argument
@@ -32,11 +32,11 @@
     </fragment>
     <dialog
         android:id="@+id/deleteAllCompletedDialogFragment"
-        android:name="com.example.todolist.ui.delteAllCompeted.DeleteAllCompletedDialogFragment"
+        android:name="com.example.todolist.presentation.delteAllCompeted.DeleteAllCompletedDialogFragment"
         android:label="DeleteAllCompletedDialogFragment" /><action android:id="@+id/action_global_deleteAllCompletedDialogFragment" app:destination="@id/deleteAllCompletedDialogFragment"/>
     <dialog
         android:id="@+id/deleteFolderDialogFragment"
-        android:name="com.example.todolist.ui.deleteFolder.DeleteFolderDialogFragment"
+        android:name="com.example.todolist.presentation.deleteFolder.DeleteFolderDialogFragment"
         android:label="DeleteFolderDialogFragment" >
         <argument
             android:name="folder"
@@ -44,7 +44,7 @@
     </dialog><action android:id="@+id/action_global_deleteFolderDialogFragment" app:destination="@id/deleteFolderDialogFragment"/>
     <dialog
         android:id="@+id/addEditFolderDialogFragment"
-        android:name="com.example.todolist.ui.addEditFolder.AddEditFolderDialogFragment"
+        android:name="com.example.todolist.presentation.addEditFolder.AddEditFolderDialogFragment"
         android:label="AddEditFolderDialogFragment" >
         <argument
             android:name="parentFolder"
@@ -58,7 +58,7 @@
     <action android:id="@+id/action_global_addEditFolderDialogFragment" app:destination="@id/addEditFolderDialogFragment" />
     <dialog
         android:id="@+id/quickFolderChangeDialogFragment"
-        android:name="com.example.todolist.ui.quickFolderChange.QuickFolderChangeDialogFragment"
+        android:name="com.example.todolist.presentation.quickFolderChange.QuickFolderChangeDialogFragment"
         android:label="QuickFolderChangeDialogFragment" >
         <argument
             android:name="pinnedFolders"

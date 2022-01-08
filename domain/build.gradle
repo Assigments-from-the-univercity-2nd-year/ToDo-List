@@ -18,6 +18,10 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
+    //Dagger inject version
+    def javaxInjectVersion = "1"
+    implementation "javax.inject:javax.inject:${javaxInjectVersion}"
+
     // Dagger Hilt
     /*implementation "com.google.dagger:hilt-android:$hiltVersion"
     kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
