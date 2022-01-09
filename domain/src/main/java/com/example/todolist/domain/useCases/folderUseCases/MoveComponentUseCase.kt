@@ -6,7 +6,7 @@ import com.example.todolist.domain.util.Resource
 
 class MoveComponentUseCase {
 
-    suspend operator fun invoke(component: Component, folderDestination: Folder): Resource<Unit> {
+    suspend operator fun invoke(component: Component, folderDestination: Folder): Resource<Unit, Throwable> {
         component.folderId = folderDestination.id
         return component.update()
     }

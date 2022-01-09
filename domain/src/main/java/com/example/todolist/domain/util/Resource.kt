@@ -1,23 +1,38 @@
 package com.example.todolist.domain.util
 
-import kotlin.contracts.contract
-
 /**
- * A sealed class that encapsulates a successful outcome with a value of type [S],
- * a domain error with a value of type [T] (recommended to use a sealed class)
+ * A sealed class that encapsulates a successful outcome with a value of type [T]
  * or a failure with an arbitrary [Throwable] exception.
  */
-sealed class Resource<out S : Any, out T : Any, out E : Throwable> {
-    data class Success<out S : Any>(val data: S) : Resource<S, Nothing, Nothing>()
-    data class Error<out T: Any>(val error: T) : Resource<Nothing, T, Nothing>()
-    data class Exception<out E : Throwable>(val exception: E): Resource<Nothing, Nothing, E>()
+sealed class Resource<out T : Any, out E : Throwable> {
+    data class Success<out T : Any>(val data: T) : Resource<T, Nothing>()
+    data class Failure<out E: Throwable>(val reason: E) : Resource<Nothing, E>()
 }
 
-fun <S : Any, T : Any, E : Throwable> Resource<S, T, E>.successOrReturn(
-    onSuccess: S,
-    onElse: E
-): Any {
+/*inline fun <T : Any, E : Throwable> Resource<T, E>.returnIfFailure(*//*block: (Resource.Failure<E>) -> Nothing*//*): T =
+    when (this) {
+        is Resource.Success -> data
+        is Resource.Failure -> Nothing(Resource.Failure(this.reason))
+    }*/
 
+inline fun <T : Any, E : Throwable> Resource<T, E>.onFailure(block: (Resource.Failure<E>) -> Nothing): T =
+    when (this) {
+        is Resource.Success -> data
+        is Resource.Failure -> block(this)
+    }
+
+inline fun <T : Any, E : Throwable> Resource<T, E>.onSuccess(block: (Resource.Success<T>) -> Nothing): E =
+    when (this) {
+        is Resource.Success -> block(this)
+        is Resource.Failure -> reason
+    }
+
+inline fun <T : Any, E : Throwable> Resource<T, E>.fold(
+    onSuccess: (Resource.Success<T>) -> Unit,
+    onFailure: (Resource.Failure<E>) -> Unit
+) {
+    when (this) {
+        is Resource.Success -> onSuccess(this)
+        is Resource.Failure -> onFailure(this)
+    }
 }
-
-// assumeNoError

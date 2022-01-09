@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.todolist.databinding.DialogFragmentAddEditFolderBinding
 //import com.example.todolist.domain.models.components.Folder
 import com.example.todolist.domain.useCases.folderUseCases.AddFolderUseCase
-import com.example.todolist.domain.useCases.folderUseCases.AddFolderUseCase.AddFolderUseCaseErrors
+import com.example.todolist.domain.useCases.folderUseCases.AddFolderUseCase.AddFolderUseCaseException
 import com.example.todolist.domain.useCases.folderUseCases.UpdateFolderUseCase
 import com.example.todolist.domain.useCases.folderUseCases.UpdateFolderUseCase.UpdateFolderUseCaseExceptions
 import com.example.todolist.domain.util.Resource
@@ -74,9 +74,9 @@ class AddEditFolderViewModel @Inject constructor(
                 TODO("Log")
             }
             is Resource.Error -> {
-                if (addingResult.exception is AddFolderUseCaseErrors) {
-                    when (addingResult.exception as AddFolderUseCaseErrors) {
-                        is AddFolderUseCaseErrors.BlankNameError -> {
+                if (addingResult.exception is AddFolderUseCaseException) {
+                    when (addingResult.exception as AddFolderUseCaseException) {
+                        is AddFolderUseCaseException.BlankNameError -> {
                             binding.edittextModalbottomsheetaddeditfolderFoldername.error = "Name is blank!"
                             TODO("Log")
                         }

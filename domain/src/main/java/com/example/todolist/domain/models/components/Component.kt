@@ -10,8 +10,8 @@ abstract class Component(
     open val id: Long
 ) {
 
-    abstract suspend fun delete(): Resource<Unit>
+    abstract suspend fun delete(): Resource<Unit, Throwable>
 
-    abstract suspend fun update(): Resource<Unit>
+    abstract suspend fun update(): Resource<Unit, Throwable>
 
 }

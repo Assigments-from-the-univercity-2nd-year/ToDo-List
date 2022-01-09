@@ -1,10 +1,11 @@
 package com.example.todolist.domain.models.components
 
 import com.example.todolist.domain.repositories.ComponentsRepository
+import com.example.todolist.domain.repositories.RepositoryExceptions
 import com.example.todolist.domain.useCases.folderUseCases.GetComponentsOfFolderUseCase
 import com.example.todolist.domain.util.Resource
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
+import com.example.todolist.domain.util.onFailure
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 data class Folder @Inject constructor(
@@ -18,50 +19,47 @@ data class Folder @Inject constructor(
     private val getComponentsOfFolderUseCase: GetComponentsOfFolderUseCase,
 ) : Component(title, folderId, createdDate, modifiedDate, id) {
 
-    private val subComponents: Resource<Flow<List<Component>>>
-        by lazy { getComponentsOfFolderUseCase(this) }
+    private val subComponents: Flow<Resource<List<Component>, GetComponentsOfFolderUseCase.GetComponentsOfFolderUseCaseException>>
+            by lazy { getComponentsOfFolderUseCase(this) }
 
-    override suspend fun delete(): Resource<Unit> =
-        when (val _subComponents = subComponents) { // we need to make _subComponents object because we init subComponents by lazy
-            is Resource.Error -> {
-                Resource.Error(_subComponents.exception)
-                TODO("Logging")
-            }
-            is Resource.Success -> {
-                _subComponents.data.collectLatest {
-                    for (component in it) {
-                        component.delete()
-                    }
-                }
+    override suspend fun delete(): Resource<Unit, FolderExceptions> {
+        val listOfComponents = subComponents.first()
+            .onFailure { return Resource.Failure(FolderExceptions.CantGetSubComponentsException(it.reason)) }
 
-                componentsRepository.deleteFolder(this)
-                Resource.Success(Unit)
+        listOfComponents.forEach { component ->
+            component.delete().onFailure {
+                return Resource.Failure(FolderExceptions.CantDeleteSubComponentException(it.reason))
             }
         }
 
-    override suspend fun update(): Resource<Unit> =
+        return Resource.Success(Unit)
+    }
+
+    override suspend fun update(): Resource<Unit, RepositoryExceptions> =
         componentsRepository.updateFolder(this)
 
-    suspend fun deleteCompletedTasks(): Resource<Unit> =
-        when(val _subComponents = subComponents) { // we need to make _subComponents object because we init subComponents by lazy
-            is Resource.Error -> {
-                Resource.Error(_subComponents.exception)
-                TODO("Logging")
-            }
-            is Resource.Success -> {
-                _subComponents.data.collectLatest {
-                    for (component in it) {
-                        if (component is Task && component.isCompleted) {
-                            component.delete()
-                        }
-                        if (component is Folder) {
-                            component.deleteCompletedTasks()
-                        }
-                    }
-                }
+    suspend fun deleteCompletedTasks(): Resource<Unit, FolderExceptions> {
+        val listOfComponents = subComponents.first()
+            .onFailure { return Resource.Failure(FolderExceptions.CantGetSubComponentsException(it.reason)) }
 
-                componentsRepository.deleteFolder(this)
-                Resource.Success(Unit)
+        listOfComponents.forEach { component ->
+            if (component is Task && component.isCompleted) {
+                component.delete().onFailure {
+                    return Resource.Failure(FolderExceptions.CantDeleteSubComponentException(it.reason))
+                }
+            }
+            if (component is Folder) {
+                component.deleteCompletedTasks().onFailure {
+                    return Resource.Failure(FolderExceptions.CantDeleteSubComponentException(it.reason))
+                }
             }
         }
+
+        return Resource.Success(Unit)
+    }
+
+    sealed class FolderExceptions : Throwable() {
+        data class CantGetSubComponentsException(override val cause: Throwable) : FolderExceptions()
+        data class CantDeleteSubComponentException(override val cause: Throwable) : FolderExceptions()
+    }
 }

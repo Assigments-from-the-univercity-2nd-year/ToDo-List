@@ -1,6 +1,6 @@
 package com.example.todolist.domain.repositories
 
-sealed class RepositoryExceptions : Exception() {
+sealed class RepositoryExceptions : Throwable() {
 
     object UnknownException : RepositoryExceptions()
 

@@ -9,15 +9,13 @@ class UpdateFolderUseCase constructor(
 ) {
 
     suspend operator fun invoke(folder: Folder) {
+        // maybe move thees checks to folder.
+        // Like create a checkInvariant() function
         require(folder.title.isNotBlank())
         require(folder.modifiedDate >= folder.createdDate)
         require(folder.createdDate > 0)
 
         componentsRepository.updateFolder(folder)
-    }
-
-    sealed class UpdateFolderUseCaseExceptions : Exception() {
-        object BlankNameException : UpdateFolderUseCaseExceptions()
     }
 
 }

@@ -6,7 +6,9 @@ import com.example.todolist.domain.models.parts.Part
 import com.example.todolist.domain.models.parts.TextPart
 import com.example.todolist.domain.models.parts.TodoPart
 import com.example.todolist.domain.repositories.PartsRepository
+import com.example.todolist.domain.useCases.folderUseCases.GetComponentsOfFolderUseCase
 import com.example.todolist.domain.util.Resource
+import com.example.todolist.domain.util.onFailure
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
@@ -14,40 +16,36 @@ class GetPartsOfTaskUseCase constructor(
     private val partsRepository: PartsRepository
 ) {
 
-    operator fun invoke(task: Task): Resource<Flow<List<Part>>> {
+    operator fun invoke(task: Task): Flow<Resource<List<Part>, GetPartsOfTaskUseCaseException>> {
+        return combine(
+            partsRepository.getTextPartsOfTask(task.id),
+            partsRepository.getImagePartsOfTask(task.id),
+            partsRepository.getTodoPartsOfTask(task.id)
+        ) { textRes,
+            imageRes,
+            TodoRes ->
 
-        val textPartResourceFlow = partsRepository.getTextPartsOfTask(task.id)
-        val imagePartResourceFlow = partsRepository.getImagePartsOfTask(task.id)
-        val todoPartResourceFlow = partsRepository.getTodoPartsOfTask(task.id)
+            val textParts = textRes.onFailure {
+                return@combine Resource.Failure(GetPartsOfTaskUseCaseException.ProblemWithTextPartsFlow(it.reason))
+            }
+            val imageParts = imageRes.onFailure {
+                return@combine Resource.Failure(GetPartsOfTaskUseCaseException.ProblemWithImagePartsFlow(it.reason))
+            }
+            val todoParts = TodoRes.onFailure {
+                return@combine Resource.Failure(GetPartsOfTaskUseCaseException.ProblemWithTodoPartsFlow(it.reason))
+            }
 
-        return when {
-            textPartResourceFlow is Resource.Error -> Resource.Error(textPartResourceFlow.exception)
-            imagePartResourceFlow is Resource.Error -> Resource.Error(imagePartResourceFlow.exception)
-            todoPartResourceFlow is Resource.Error -> Resource.Error(todoPartResourceFlow.exception)
-
-            else -> onSuccess(
-                textPartResourceFlow as Resource.Success<Flow<List<TextPart>>>,
-                imagePartResourceFlow as Resource.Success<Flow<List<ImagePart>>>,
-                todoPartResourceFlow as Resource.Success<Flow<List<TodoPart>>>
+            Resource.Success(
+                (textParts as List<Part>).plus(imageParts).plus(todoParts)
+                    .sortedBy { it.position }
             )
         }
     }
 
-    private fun onSuccess(
-        textPartResourceFlow: Resource.Success<Flow<List<TextPart>>>,
-        imagePartResourceFlow: Resource.Success<Flow<List<ImagePart>>>,
-        todoPartResourceFlow: Resource.Success<Flow<List<TodoPart>>>
-    ) : Resource<Flow<List<Part>>> =
-        Resource.Success(
-            combine(
-                textPartResourceFlow.data,
-                imagePartResourceFlow.data,
-                todoPartResourceFlow.data
-            ) {
-                textParts, imageParts, todoParts ->
-                (textParts as List<Part>).plus(imageParts).plus(todoParts)
-                    .sortedBy { it.position }
-            }
-        )
+    sealed class GetPartsOfTaskUseCaseException : Throwable() {
+        data class ProblemWithTextPartsFlow(override val cause: Throwable) : GetPartsOfTaskUseCaseException()
+        data class ProblemWithImagePartsFlow(override val cause: Throwable) : GetPartsOfTaskUseCaseException()
+        data class ProblemWithTodoPartsFlow(override val cause: Throwable) : GetPartsOfTaskUseCaseException()
+    }
 
 }
