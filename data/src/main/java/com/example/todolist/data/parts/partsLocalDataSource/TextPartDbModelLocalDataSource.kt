@@ -6,12 +6,12 @@ import kotlinx.coroutines.flow.Flow
 
 interface TextPartDbModelLocalDataSource {
 
-    fun getTextPartsOfTask(taskId: Long): Resource<Flow<List<TextPartDbModel>>>
+    fun getTextPartsOfTask(taskId: Long): Flow<List<TextPartDbModel>>
 
-    suspend fun addTextPart(textPart: TextPartDbModel): Resource<Long>
+    suspend fun addTextPart(textPart: TextPartDbModel): Long
 
-    suspend fun updateTextPart(textPart: TextPartDbModel): Resource<Unit>
+    suspend fun updateTextPart(textPart: TextPartDbModel): Unit
 
-    suspend fun deleteTextPart(textPart: TextPartDbModel): Resource<Unit>
+    suspend fun deleteTextPart(textPart: TextPartDbModel): Unit
 
 }

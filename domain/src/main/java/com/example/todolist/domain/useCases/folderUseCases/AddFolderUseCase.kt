@@ -15,11 +15,11 @@ class AddFolderUseCase @Inject constructor(
         // checking if user input valid or no. If no - return error
         isUserInputCorrect(folderCreatingDTO).onFailure { return it }
 
-        val insertedUserId: Long = componentsRepository.addFolder(folderCreatingDTO)
+        val insertedFolderId: Long = componentsRepository.addFolder(folderCreatingDTO)
             .onFailure { return Resource.Failure(
-                AddFolderUseCaseException.CantFindInsertedUserInDatabase(it.reason)
+                AddFolderUseCaseException.CantFindInsertedFolderInDatabase(it.reason)
             ) }
-        val parentFolder: Folder = componentsRepository.getParentFolderOfComponent(insertedUserId)
+        val parentFolder: Folder = componentsRepository.getParentFolderOfFolder(insertedFolderId)
             .onFailure { return  Resource.Failure(
                 AddFolderUseCaseException.CantFindParentFolderInDatabase(it.reason)
             ) }
@@ -28,7 +28,7 @@ class AddFolderUseCase @Inject constructor(
                 AddFolderUseCaseException.CantUpdateParentFolderInDatabase(it.reason)
             ) }
 
-        return Resource.Success(insertedUserId)
+        return Resource.Success(insertedFolderId)
     }
 
     private fun isUserInputCorrect(folderCreatingDTO: FolderCreatingDTO):
@@ -45,7 +45,7 @@ class AddFolderUseCase @Inject constructor(
 
     sealed class AddFolderUseCaseException : Throwable() {
         object BlankNameError : AddFolderUseCaseException()
-        data class CantFindInsertedUserInDatabase(override val cause: Throwable) : AddFolderUseCaseException()
+        data class CantFindInsertedFolderInDatabase(override val cause: Throwable) : AddFolderUseCaseException()
         data class CantFindParentFolderInDatabase(override val cause: Throwable) : AddFolderUseCaseException()
         data class CantUpdateParentFolderInDatabase(override val cause: Throwable) : AddFolderUseCaseException()
     }

@@ -6,12 +6,12 @@ import kotlinx.coroutines.flow.Flow
 
 interface TodoPartDbModelLocalDataSource {
 
-    fun getTodoPartOfTask(taskId: Long): Resource<Flow<List<TodoPartDbModel>>>
+    fun getTodoPartOfTask(taskId: Long): Flow<List<TodoPartDbModel>>
 
-    suspend fun addTodoPart(todoPart: TodoPartDbModel): Resource<Long>
+    suspend fun addTodoPart(todoPart: TodoPartDbModel): Long
 
-    suspend fun updateTodoPart(todoPart: TodoPartDbModel): Resource<Unit>
+    suspend fun updateTodoPart(todoPart: TodoPartDbModel): Unit
 
-    suspend fun deleteTodoPart(todoPart: TodoPartDbModel): Resource<Unit>
+    suspend fun deleteTodoPart(todoPart: TodoPartDbModel): Unit
 
 }

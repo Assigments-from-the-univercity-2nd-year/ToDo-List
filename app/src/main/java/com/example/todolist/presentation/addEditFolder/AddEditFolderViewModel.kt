@@ -4,12 +4,12 @@ import android.content.Context
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.todolist.databinding.DialogFragmentAddEditFolderBinding
-//import com.example.todolist.domain.models.components.Folder
+import com.example.todolist.domain.models.components.FolderCreatingDTO
 import com.example.todolist.domain.useCases.folderUseCases.AddFolderUseCase
 import com.example.todolist.domain.useCases.folderUseCases.AddFolderUseCase.AddFolderUseCaseException
 import com.example.todolist.domain.useCases.folderUseCases.UpdateFolderUseCase
-import com.example.todolist.domain.useCases.folderUseCases.UpdateFolderUseCase.UpdateFolderUseCaseExceptions
 import com.example.todolist.domain.util.Resource
 import com.example.todolist.presentation.ADD_FOLDER_RESULT_OK
 import com.example.todolist.presentation.EDIT_FOLDER_RESULT_OK
@@ -59,7 +59,7 @@ class AddEditFolderViewModel @Inject constructor(
         args: AddEditFolderDialogFragmentArgs
     ) {
         val addingResult = addFolderUseCase.invoke(
-            AddFolderUseCase.FolderDTO(
+            FolderCreatingDTO(
                 title = folderName,
                 folderId = args.parentFolder.id,
                 isPinned = isPinned
@@ -71,20 +71,16 @@ class AddEditFolderViewModel @Inject constructor(
                 addEditFolderEventChannel.send(
                     AddEditFolderEvent.NavigateBackWithResult(ADD_FOLDER_RESULT_OK)
                 )
-                TODO("Log")
             }
-            is Resource.Error -> {
-                if (addingResult.exception is AddFolderUseCaseException) {
-                    when (addingResult.exception as AddFolderUseCaseException) {
-                        is AddFolderUseCaseException.BlankNameError -> {
-                            binding.edittextModalbottomsheetaddeditfolderFoldername.error = "Name is blank!"
-                            TODO("Log")
-                        }
-                    }
-                } else {
-                    // unexpected error
-                    TODO("Log")
-                }
+            is Resource.Failure -> when (addingResult.reason) {
+                AddFolderUseCaseException.BlankNameError ->
+                    binding.edittextModalbottomsheetaddeditfolderFoldername.error = "Name is blank!"
+                is AddFolderUseCaseException.CantFindInsertedFolderInDatabase ->
+                    showInvalidInputMessage("Error: can't find inserted folder.")
+                is AddFolderUseCaseException.CantFindParentFolderInDatabase ->
+                    showInvalidInputMessage("Error: can't find parent folder for this folder.")
+                is AddFolderUseCaseException.CantUpdateParentFolderInDatabase ->
+                    showInvalidInputMessage("Error: can't update parent folder of created folder.")
             }
         }.exhaustive
     }
@@ -131,7 +127,12 @@ class AddEditFolderViewModel @Inject constructor(
         return context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     }
 
+    private fun showInvalidInputMessage(text: String) = viewModelScope.launch {
+        addEditFolderEventChannel.send(AddEditFolderEvent.ShowInvalidInputMessage(text))
+    }
+
     sealed class AddEditFolderEvent {
         data class NavigateBackWithResult(val result: Int) : AddEditFolderEvent()
+        data class ShowInvalidInputMessage(val msg: String) : AddEditFolderEvent()
     }
 }

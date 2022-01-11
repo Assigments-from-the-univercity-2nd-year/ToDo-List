@@ -13,7 +13,9 @@ interface ComponentsRepository {
 
     fun getSubFoldersOfFolder(folder: Folder): Flow<Resource<List<Folder>, RepositoryExceptions>>
 
-    suspend fun getParentFolderOfComponent(componentId: Long): Resource<Folder, RepositoryExceptions>
+    suspend fun getParentFolderOfTask(taskId: Long): Resource<Folder, RepositoryExceptions>
+
+    suspend fun getParentFolderOfFolder(folderId: Long): Resource<Folder, RepositoryExceptions>
 
     fun getTasksOfFolder(folder: Folder): Flow<Resource<List<Task>, RepositoryExceptions>>
 

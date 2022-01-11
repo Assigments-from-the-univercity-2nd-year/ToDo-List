@@ -11,6 +11,7 @@ import com.example.todolist.domain.models.parts.ImagePart
 import com.example.todolist.domain.models.parts.TextPart
 import com.example.todolist.domain.models.parts.TodoPart
 import com.example.todolist.domain.repositories.PartsRepository
+import com.example.todolist.domain.repositories.RepositoryExceptions
 import com.example.todolist.domain.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -22,47 +23,47 @@ class PartsRepositoryImpl(
     private val appContext: Context
 ) : PartsRepository {
 
-    override fun getTextPartsOfTask(taskId: Long): Resource<Flow<List<TextPart>>> =
-        when(val flow = textPartLocalDataSource.getTextPartsOfTask(taskId)) {
-            is Resource.Error -> Resource.Error(flow.exception)
-            is Resource.Success -> Resource.Success(flow.data.mapTextPartFlowToDomain())
+    override fun getTextPartsOfTask(taskId: Long): Flow<Resource<List<TextPart>, RepositoryExceptions>> {
+        return textPartLocalDataSource.getTextPartsOfTask(taskId).map {
+            Resource.Success(it.mapTextPartListToDomain())
         }
+    }
 
-    override fun getImagePartsOfTask(taskId: Long): Resource<Flow<List<ImagePart>>> =
-        when(val flow = imagePartLocalDataSource.getImagePartsOfTask(taskId, appContext)) {
-            is Resource.Error -> Resource.Error(flow.exception)
-            is Resource.Success -> Resource.Success(flow.data.mapImagePartFlowToDomain())
+    override fun getImagePartsOfTask(taskId: Long): Flow<Resource<List<ImagePart>, RepositoryExceptions>> {
+        return imagePartLocalDataSource.getImagePartsOfTask(taskId, appContext).map {
+            Resource.Success(it.mapImagePartListToDomain())
         }
+    }
 
-    override fun getTodoPartsOfTask(taskId: Long): Resource<Flow<List<TodoPart>>> =
-        when(val flow = todoPartLocalDataSource.getTodoPartOfTask(taskId)) {
-            is Resource.Error -> Resource.Error(flow.exception)
-            is Resource.Success -> Resource.Success(flow.data.mapTodoPartFlowToDomain())
+    override fun getTodoPartsOfTask(taskId: Long): Flow<Resource<List<TodoPart>, RepositoryExceptions>> {
+        return todoPartLocalDataSource.getTodoPartOfTask(taskId).map {
+            Resource.Success(it.mapTodoPartListToDomain())
         }
+    }
 
-    override suspend fun addTextPart(textPart: TextPart): Resource<Long> =
-        textPartLocalDataSource.addTextPart(textPart.mapToData())
+    override suspend fun addTextPart(textPart: TextPart): Resource<Long, RepositoryExceptions> =
+        Resource.Success(textPartLocalDataSource.addTextPart(textPart.mapToData()))
 
-    override suspend fun addTodoPart(todoPart: TodoPart): Resource<Long> =
-        todoPartLocalDataSource.addTodoPart(todoPart.mapToData())
+    override suspend fun addTodoPart(todoPart: TodoPart): Resource<Long, RepositoryExceptions> =
+        Resource.Success(todoPartLocalDataSource.addTodoPart(todoPart.mapToData()))
 
-    override suspend fun addImagePart(imagePart: ImagePart): Resource<Long> =
-        imagePartLocalDataSource.addImagePart(imagePart.mapToData(), appContext)
+    override suspend fun addImagePart(imagePart: ImagePart): Resource<Long, RepositoryExceptions> =
+        Resource.Success(imagePartLocalDataSource.addImagePart(imagePart.mapToData(), appContext))
 
-    override suspend fun updateTextPart(textPart: TextPart): Resource<Unit> =
-        textPartLocalDataSource.updateTextPart(textPart.mapToData())
+    override suspend fun updateTextPart(textPart: TextPart): Resource<Unit, RepositoryExceptions> =
+        Resource.Success(textPartLocalDataSource.updateTextPart(textPart.mapToData()))
 
-    override suspend fun updateTodoPart(todoPart: TodoPart): Resource<Unit> =
-        todoPartLocalDataSource.updateTodoPart(todoPart.mapToData())
+    override suspend fun updateTodoPart(todoPart: TodoPart): Resource<Unit, RepositoryExceptions> =
+        Resource.Success(todoPartLocalDataSource.updateTodoPart(todoPart.mapToData()))
 
-    override suspend fun deleteTextPart(textPart: TextPart): Resource<Unit> =
-        textPartLocalDataSource.deleteTextPart(textPart.mapToData())
+    override suspend fun deleteTextPart(textPart: TextPart): Resource<Unit, RepositoryExceptions> =
+        Resource.Success(textPartLocalDataSource.deleteTextPart(textPart.mapToData()))
 
-    override suspend fun deleteTodoPart(todoPart: TodoPart): Resource<Unit> =
-        todoPartLocalDataSource.deleteTodoPart(todoPart.mapToData())
+    override suspend fun deleteTodoPart(todoPart: TodoPart): Resource<Unit, RepositoryExceptions> =
+        Resource.Success(todoPartLocalDataSource.deleteTodoPart(todoPart.mapToData()))
 
-    override suspend fun deleteImagePart(imagePart: ImagePart): Resource<Unit> =
-        imagePartLocalDataSource.deleteImagePart(imagePart.mapToData(), appContext)
+    override suspend fun deleteImagePart(imagePart: ImagePart): Resource<Unit, RepositoryExceptions> =
+        Resource.Success(imagePartLocalDataSource.deleteImagePart(imagePart.mapToData(), appContext))
 
     private fun TextPartDbModel.mapToDomain(): TextPart {
         TODO("Not yet implemented")
@@ -88,25 +89,19 @@ class PartsRepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    private fun Flow<List<TextPartDbModel>>.mapTextPartFlowToDomain(): Flow<List<TextPart>> =
-        this.map { list ->
-            list.map {
-                it.mapToDomain()
-            }
+    private fun List<TextPartDbModel>.mapTextPartListToDomain(): List<TextPart> =
+        this.map {
+            it.mapToDomain()
         }
 
-    private fun Flow<List<ImagePartDbModel>>.mapImagePartFlowToDomain(): Flow<List<ImagePart>> =
-        this.map { list ->
-            list.map {
-                it.mapToDomain()
-            }
+    private fun List<ImagePartDbModel>.mapImagePartListToDomain(): List<ImagePart> =
+        this.map {
+            it.mapToDomain()
         }
 
-    private fun Flow<List<TodoPartDbModel>>.mapTodoPartFlowToDomain(): Flow<List<TodoPart>> =
-        this.map { list ->
-            list.map {
-                it.mapToDomain()
-            }
+    private fun List<TodoPartDbModel>.mapTodoPartListToDomain(): List<TodoPart> =
+        this.map {
+            it.mapToDomain()
         }
 
 }

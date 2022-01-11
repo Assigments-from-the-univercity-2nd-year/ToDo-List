@@ -11,6 +11,10 @@ interface FolderLocalDataSource {
 
     fun getFoldersOfFolder(folderId: Long): Flow<List<FolderDbModel>>
 
+    suspend fun getParentFolderIdOfFolder(folderId: Long): Long
+
+    suspend fun getFolder(folderId: Long): FolderDbModel
+
     suspend fun addFolder(folder: FolderDbModel): Long
 
     suspend fun updateFolder(folder: FolderDbModel)
