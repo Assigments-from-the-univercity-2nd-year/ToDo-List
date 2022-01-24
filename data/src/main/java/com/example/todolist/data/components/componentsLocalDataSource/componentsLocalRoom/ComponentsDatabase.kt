@@ -10,7 +10,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
 
-@Database(entities = [TaskDbModelDao::class, FolderDbModelDao::class], version = 1)
+@Database(
+    entities = [TaskDbModel::class, FolderDbModel::class],
+    version = 1,
+    exportSchema = false,
+)
 abstract class ComponentsDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDbModelDao
     abstract fun folderDao(): FolderDbModelDao

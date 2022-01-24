@@ -6,14 +6,14 @@ import androidx.recyclerview.widget.ListAdapter
 import com.example.todolist.databinding.ItemImagePartBinding
 import com.example.todolist.databinding.ItemTextPartBinding
 import com.example.todolist.databinding.ItemTodoPartBinding
-import com.example.todolist.presentation.entities.BasePart
-import com.example.todolist.presentation.entities.ImagePart
-import com.example.todolist.presentation.entities.TextPart
-import com.example.todolist.presentation.entities.TodoPart
+import com.example.todolist.presentation.entities.parts.ImagePartUiState
+import com.example.todolist.presentation.entities.parts.PartUiState
+import com.example.todolist.presentation.entities.parts.TextPartUiState
+import com.example.todolist.presentation.entities.parts.TodoPartUiState
 
 class PartAdapter(
     private val onPartClickListener: OnPartClickListener
-) : ListAdapter<BasePart, PartViewHolder>(PartDiffCallback()) {
+) : ListAdapter<PartUiState, PartViewHolder>(PartDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PartViewHolder =
         when(viewType) {
             TYPE_TEXT_PART -> {
@@ -35,14 +35,15 @@ class PartAdapter(
         }
 
     override fun onBindViewHolder(holder: PartViewHolder, position: Int) {
-        holder.onBindViewHolder(getItem(position))
+        //holder.onBindViewHolder(getItem(position))
     }
 
     override fun getItemViewType(position: Int): Int =
         when(getItem(position)) {
-            is TextPart -> TYPE_TEXT_PART
-            is TodoPart -> TYPE_TODO_PART
-            is ImagePart -> TYPE_IMAGE_PART
+            is TextPartUiState -> TYPE_TEXT_PART
+            is TodoPartUiState -> TYPE_TODO_PART
+            is ImagePartUiState -> TYPE_IMAGE_PART
+            else -> -1
         }
 }
 

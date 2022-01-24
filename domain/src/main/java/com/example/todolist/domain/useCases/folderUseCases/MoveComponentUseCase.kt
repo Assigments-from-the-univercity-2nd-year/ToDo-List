@@ -8,7 +8,8 @@ class MoveComponentUseCase {
 
     suspend operator fun invoke(component: Component, folderDestination: Folder): Resource<Unit, Throwable> {
         component.folderId = folderDestination.id
-        return component.update()
+        TODO()
+        //return component.update()
     }
 
 }

@@ -31,8 +31,7 @@ class AddFolderUseCase @Inject constructor(
         return Resource.Success(insertedFolderId)
     }
 
-    private fun isUserInputCorrect(folderCreatingDTO: FolderCreatingDTO):
-            Resource<Unit, AddFolderUseCaseException> {
+    private fun isUserInputCorrect(folderCreatingDTO: FolderCreatingDTO): Resource<Unit, AddFolderUseCaseException> {
         return when {
             folderCreatingDTO.title.isBlank() -> {
                 Resource.Failure(reason = AddFolderUseCaseException.BlankNameError)

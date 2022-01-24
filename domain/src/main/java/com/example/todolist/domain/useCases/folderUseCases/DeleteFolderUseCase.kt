@@ -5,7 +5,9 @@ import com.example.todolist.domain.util.Resource
 
 class DeleteFolderUseCase {
 
-    suspend operator fun invoke(folder: Folder): Resource<Unit, Folder.FolderExceptions> =
-        folder.delete()
+    suspend operator fun invoke(folder: Folder): Resource<Unit, Folder.FolderExceptions> {
+        TODO()
+    }
+        //folder.delete()
 
 }

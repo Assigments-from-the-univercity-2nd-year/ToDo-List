@@ -2,7 +2,7 @@ package com.example.todolist.presentation.entities
 
 import android.graphics.Bitmap
 
-sealed class BasePart {
+/*sealed class BasePart {
     abstract val position: Int
 
     abstract suspend fun update(position: Int, appRepository: AppRepository)
@@ -40,4 +40,4 @@ data class ImagePart(
     override suspend fun update(position: Int, appRepository: AppRepository) {
         appRepository.updateImagePart(this.copy(position = position))
     }
-}
+}*/

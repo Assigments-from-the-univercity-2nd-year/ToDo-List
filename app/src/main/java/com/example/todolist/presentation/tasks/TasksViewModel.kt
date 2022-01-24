@@ -1,26 +1,27 @@
 package com.example.todolist.presentation.tasks
 
 import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.todolist.data.*
-import com.example.todolist.data.componentsDB.*
 import com.example.todolist.data.components.componentsLocalDataSource.componentsLocalRoom.FolderDbModelDao
 import com.example.todolist.data.components.componentsLocalDataSource.componentsLocalRoom.TaskDbModelDao
 import com.example.todolist.data.userPreferences.userPreferencesLocalDataSource.userPreferencesLocalDataStore.UserPreferencesDataStore
 import com.example.todolist.presentation.*
 import com.example.todolist.util.exhaustive
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TasksViewModel @ViewModelInject constructor(
+@HiltViewModel
+class TasksViewModel @Inject constructor(
     private val taskDao: TaskDbModelDao,
     private val folderDao: FolderDbModelDao,
     private val preferencesManager: UserPreferencesDataStore,
     @Assisted private val state: SavedStateHandle
 ) : ViewModel() {
-
+/*
     val searchQuery = state.getLiveData("searchQuery", "")
     val currentFolder = state.getLiveData<Folder>("currentFolder")
     val onAddButtonClicked = state.getLiveData("onAddButtonClicked", FABAnimation.DO_NOTHING) // -1 - hide, 0 - do noting, 1 - show
@@ -229,4 +230,4 @@ class TasksViewModel @ViewModelInject constructor(
         HIDE_FABS,
         DO_NOTHING
     }
- }
+*/ }

@@ -1,189 +1,218 @@
 package com.example.todolist.presentation.addEditTask
 
-import android.app.Activity
 import android.content.ContentResolver
-import android.content.Intent
+import android.net.Uri
 import android.provider.MediaStore
+import androidx.activity.result.ActivityResultRegistry
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.todolist.data.components.componentsLocalDataSource.componentsLocalRoom.FolderDbModelDao
-import com.example.todolist.data.componentsDB.Task
-import com.example.todolist.data.components.componentsLocalDataSource.componentsLocalRoom.TaskDbModelDao
-import com.example.todolist.presentation.ADD_TASK_RESULT_OK
-import com.example.todolist.presentation.EDIT_TASK_RESULT_NOTHING_CHANGED
-import com.example.todolist.presentation.EDIT_TASK_RESULT_OK
-import com.example.todolist.presentation.entities.BasePart
-import com.example.todolist.presentation.entities.ImagePart
-import com.example.todolist.presentation.entities.TextPart
-import com.example.todolist.presentation.entities.TodoPart
-import com.example.todolist.util.exhaustive
+import androidx.lifecycle.*
+import com.example.todolist.domain.models.components.TaskCreatingDTO
+import com.example.todolist.domain.repositories.RepositoryExceptions
+import com.example.todolist.domain.useCases.imagePartUseCases.AddImagePartUseCase
+import com.example.todolist.domain.useCases.tasksUseCases.*
+import com.example.todolist.domain.useCases.textPartUseCases.AddTextPartUseCase
+import com.example.todolist.domain.useCases.todoPartUseCases.AddTodoPartUseCase
+import com.example.todolist.domain.useCases.todoPartUseCases.UpdateTodoPartUseCase
+import com.example.todolist.domain.util.Resource
+import com.example.todolist.domain.util.onFailure
+import com.example.todolist.presentation.entities.components.mapToDomain
+import com.example.todolist.presentation.entities.components.mapToPresentation
+import com.example.todolist.presentation.entities.parts.PartUiState
+import com.example.todolist.presentation.entities.parts.TodoPartUiState
+import com.example.todolist.presentation.entities.parts.mapToPresentation
+import com.example.todolist.util.toByteArray
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
+import javax.inject.Inject
 
-class AddEditTaskViewModel @ViewModelInject constructor(
-    private val taskDao: TaskDbModelDao,
-    private val folderDao: FolderDbModelDao,
-    private val appRepository: AppRepository,
+@ExperimentalCoroutinesApi
+@HiltViewModel
+class AddEditTaskViewModel @Inject constructor(
+    private val getPartsOfTaskUseCase: GetPartsOfTaskUseCase,
+    private val getTaskFlowUseCase: GetTaskFlowUseCase,
+
+    // Add task
+    private val addTaskUseCase: AddTaskUseCase,
+
+    // Update task
+    private val updateTaskUseCase: UpdateTaskUseCase,
+
+    // Add part
+    private val addTextPartUseCase: AddTextPartUseCase,
+    private val addTodoPartUseCase: AddTodoPartUseCase,
+    private val addImagePartUseCase: AddImagePartUseCase,
+
+    // Update part
+    private val changePartContentUseCase: ChangePartContentUseCase,
+    private val updateTodoPartUseCase: UpdateTodoPartUseCase,
+
+    // Delete part
+    private val deletePartUseCase: DeletePartUseCase,
+
     @Assisted private val state: SavedStateHandle
 ) : ViewModel() {
 
-    private val folderId = state.get<Long>("folderId")
-    val task = state.get<Task>("task") ?: Task("", folderId!!)
-    val isModifyingTask: Boolean
-        get() = state.get<Task>("task") != null
+    private val action: AddEditTaskAction = state.get("action") ?: TODO("show user can't load state")
 
-    var taskName = state.get<String>("taskName") ?: task.title ?: ""
-        set(value) {
-            field = value
-            state.set("taskName", value)
-        }
-
-    var taskImportance = state.get<Boolean>("taskImportance") ?: task.isImportant
-        set(value) {
-            field = value
-            state.set("taskImportance", value)
-        }
-
-    private val partsFlow = appRepository.getPartsOfTaks(task.id)
-    val parts = partsFlow.asLiveData()
+    private val _uiState: MutableStateFlow<AddEditTaskUiState> = MutableStateFlow(AddEditTaskUiState())
+    val uiState/*: StateFlow<AddEditTaskUiState>*/ = _uiState.asLiveData()
 
     private val addEditTaskEventChannel = Channel<AddEditTaskEvent>()
     val addEditTaskEvent = addEditTaskEventChannel.receiveAsFlow()
 
-    fun onSaveClicked(showNothingChangeMessage: Boolean = true) {
-        if (taskName.isBlank()) {
-            showInvalidInputMessage("Name can not be empty.")
-            return
+    init {
+        fetchTaskData()
+    }
+
+    private fun fetchTaskData() = viewModelScope.launch {
+        val taskId: Long = getTaskId().onFailure {
+            TODO("show message to user")
+            return@launch
         }
 
-        if (isModifyingTask) { // if the task exists
-            if (state.get<Task>("task") != task) { // if some data of the task have changed
-                val updatedTask = task.copy(
-                    title = taskName,
-                    isImportant = taskImportance,
-                    modifiedDate = System.currentTimeMillis()
-                )
-                updateTask(updatedTask)
-                updateFolder()
-            } else if(showNothingChangeMessage) { // if nothing have changed
-                viewModelScope.launch {
-                    addEditTaskEventChannel.send(AddEditTaskEvent.NavigateBackWithResult(
-                        EDIT_TASK_RESULT_NOTHING_CHANGED))
-                }
+        combine(getTaskFlowUseCase(taskId), getPartsOfTaskUseCase(taskId)) {
+                taskDataRes,
+                partsRes ->
+
+            val taskData = taskDataRes.onFailure {
+                TODO("show message to user")
+                return@combine
             }
-        } else { // if it is a new task
-            val newTask = Task(taskName, folderId!!, taskImportance)
-            insertTask(newTask)
-            updateFolder()
+            val parts = partsRes.onFailure {
+                _uiState.value = AddEditTaskUiState(
+                    isLoading = false,
+                    taskData = taskData.mapToPresentation(),
+                    parts = emptyList()
+                )
+                TODO("show message to user")
+                return@combine
+            }
+
+            _uiState.value = AddEditTaskUiState(
+                isLoading = false,
+                taskData = taskData.mapToPresentation(),
+                parts = parts.map { it.mapToPresentation() }
+            )
         }
     }
 
-    fun onAddTextPartClicked() = viewModelScope.launch {
-        appRepository.insertTextPart(TextPart("", getPositionOfLatestPart() + 1, task.id))
-        updateFolder()
+    private suspend fun getTaskId(): Resource<Long, RepositoryExceptions> {
+        return when (action) {
+            is AddEditTaskAction.AddTask -> addTaskUseCase(
+                TaskCreatingDTO(folderId = action.parentFolderIdForTask)
+            )
+            is AddEditTaskAction.EditTask -> Resource.Success(action.taskId)
+        }
+    }
+
+    // Adding parts
+    fun onAddTextPartClicked()  = viewModelScope.launch {
+        val taskData = _uiState.value.taskData
+        if (taskData != null) {
+            addTextPartUseCase(taskData.id).onFailure { TODO() }
+        }
     }
 
     fun onAddTodoPartClicked() = viewModelScope.launch {
-        appRepository.insertTodoPart(TodoPart("", getPositionOfLatestPart() + 1, task.id))
-        updateFolder()
-    }
-
-    fun onAddImagePartClicked() = viewModelScope.launch {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.setType("image/*")
-        addEditTaskEventChannel.send(AddEditTaskEvent.StartActivityForResult(intent))
-    }
-
-    fun onPartContentChanged(part: BasePart, newContent: String) = viewModelScope.launch {
-        when(part) {
-            is TextPart -> appRepository.updateTextPart(part.copy(content = newContent))
-            is TodoPart -> appRepository.updateTodoPart(part.copy(content = newContent))
-            else -> throw IllegalArgumentException()
-        }.exhaustive
-        updateFolder()
-    }
-
-    fun onTodoPartCheckBoxClicked(todoPart: TodoPart, isChecked: Boolean) = viewModelScope.launch {
-        val newTodoPart = todoPart.copy(isCompleted = isChecked)
-        appRepository.updateTodoPart(newTodoPart)
-        updateFolder()
-    }
-
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?, contentResolver: ContentResolver) = viewModelScope.launch {
-        if (requestCode == SELECT_PHOTO
-            && resultCode == Activity.RESULT_OK
-            && data != null
-            && data.data != null
-        ) {
-            try {
-                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, data.data)
-                appRepository.insertImagePart(
-                    ImagePart(bitmap, getPositionOfLatestPart() + 1, task.id)
-                )
-            } catch (e: FileNotFoundException) {
-                e.printStackTrace() // Todo: proper handling
-            }
+        val taskData = _uiState.value.taskData
+        if (taskData != null) {
+            addTodoPartUseCase(taskData.id).onFailure { TODO() }
         }
     }
 
-    fun onDeleteActionSelected(part: BasePart) = viewModelScope.launch {
-        when(part) {
-            is TextPart -> appRepository.deleteTextPart(part)
-            is TodoPart -> appRepository.deleteTodoPart(part)
-            is ImagePart -> appRepository.deleteImagePart(part)
-        }.exhaustive
+    fun onAddImagePartClicked(
+        registry: ActivityResultRegistry,
+        contentResolver: ContentResolver
+    ) = viewModelScope.launch {
+        val taskData = _uiState.value.taskData
+        if (taskData != null) {
+            registry.register("pick_image", ActivityResultContracts.GetContent()) { imageUri ->
+                viewModelScope.launch {
+                    imagePickerCallback(imageUri, contentResolver, taskData.id)
+                }
+            }.launch("image/*")
+        }
+    }
+
+    private suspend fun imagePickerCallback(
+        imageUri: Uri?,
+        contentResolver: ContentResolver,
+        taskId: Long
+    ) {
+        try {
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+            addImagePartUseCase(
+                bitmap.toByteArray().onFailure { TODO() },
+                taskId
+            )
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace() // Todo: proper handling
+        }
+    }
+
+    // Modifying parts
+    fun onPartContentChanged(part: PartUiState, newContent: String) = viewModelScope.launch {
+        changePartContentUseCase(part.mapToDomain(), newContent)
+    }
+
+    fun onTodoPartCheckBoxClicked(todoPart: TodoPartUiState, isChecked: Boolean) = viewModelScope.launch {
+        updateTodoPartUseCase(todoPart.copy(isCompleted = isChecked).mapToDomain())
     }
 
     fun onMoveUpActionSelected(positionOfMovingPart: Int) = viewModelScope.launch {
-        if (positionOfMovingPart > 0) {
-            val movingPart = parts.value?.get(positionOfMovingPart)!!
-            val upPart = parts.value?.get(positionOfMovingPart - 1)!!
-
-            movingPart.update(upPart.position, appRepository)
-            upPart.update(movingPart.position, appRepository)
-        }
+        // TODO
+//        if (positionOfMovingPart > 0) {
+//            val movingPart = parts.value?.get(positionOfMovingPart)!!
+//            val upPart = parts.value?.get(positionOfMovingPart - 1)!!
+//
+//            movingPart.update(upPart.position, appRepository)
+//            upPart.update(movingPart.position, appRepository)
+//        }
     }
 
     fun onMoveDownActionSelected(positionOfMovingPart: Int) = viewModelScope.launch {
-        if (positionOfMovingPart < parts.value!!.size - 1) {
-            val movingPart = parts.value?.get(positionOfMovingPart)!!
-            val downPart = parts.value?.get(positionOfMovingPart + 1)!!
+        // TODO
+//        if (positionOfMovingPart < parts.value!!.size - 1) {
+//            val movingPart = parts.value?.get(positionOfMovingPart)!!
+//            val downPart = parts.value?.get(positionOfMovingPart + 1)!!
+//
+//            movingPart.update(downPart.position, appRepository)
+//            downPart.update(movingPart.position, appRepository)
+//        }
+    }
 
-            movingPart.update(downPart.position, appRepository)
-            downPart.update(movingPart.position, appRepository)
+    // Deleting parts
+    fun onDeleteActionSelected(part: PartUiState) = viewModelScope.launch {
+        deletePartUseCase(part.mapToDomain())
+    }
+
+    // Modifying task
+    fun updateTaskTitle(title: String) = viewModelScope.launch {
+        _uiState.value.taskData?.let {
+            updateTaskUseCase(it.copy(title = title).mapToDomain())
         }
     }
 
+    fun updateTaskImportance(isImportant: Boolean) = viewModelScope.launch {
+        _uiState.value.taskData?.let {
+            updateTaskUseCase(it.copy(isImportant = isImportant).mapToDomain())
+        }
+    }
+
+    // Making events for Fragment
     private fun showInvalidInputMessage(text: String) = viewModelScope.launch {
         addEditTaskEventChannel.send(AddEditTaskEvent.ShowInvalidInputMessage(text))
     }
 
-    private fun updateTask(task: Task) = viewModelScope.launch {
-        taskDao.updateTask(task)
-        addEditTaskEventChannel.send(AddEditTaskEvent.NavigateBackWithResult(EDIT_TASK_RESULT_OK))
-    }
-
-    private fun insertTask(task: Task) = viewModelScope.launch {
-        taskDao.insertTask(task)
-        addEditTaskEventChannel.send(AddEditTaskEvent.NavigateBackWithResult(ADD_TASK_RESULT_OK))
-    }
-
-    private fun updateFolder() = viewModelScope.launch {
-        val folder = folderDao.getFolder(folderId!!)
-        folderDao.updateFolder(folder.copy(modifiedDate = System.currentTimeMillis()))
-    }
-
-    private fun getPositionOfLatestPart(): Int =
-        parts.value?.get(parts.value!!.size - 1)?.position ?: 1
-
     sealed class AddEditTaskEvent {
         data class ShowInvalidInputMessage(val msg: String) : AddEditTaskEvent()
         data class NavigateBackWithResult(val result: Int) : AddEditTaskEvent()
-        data class StartActivityForResult(val intent: Intent): AddEditTaskEvent()
     }
 }

@@ -1,26 +1,22 @@
 package com.example.todolist.domain.useCases.tasksUseCases
 
-import com.example.todolist.domain.models.components.Task
-import com.example.todolist.domain.models.parts.ImagePart
 import com.example.todolist.domain.models.parts.Part
-import com.example.todolist.domain.models.parts.TextPart
-import com.example.todolist.domain.models.parts.TodoPart
 import com.example.todolist.domain.repositories.PartsRepository
-import com.example.todolist.domain.useCases.folderUseCases.GetComponentsOfFolderUseCase
 import com.example.todolist.domain.util.Resource
 import com.example.todolist.domain.util.onFailure
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import javax.inject.Inject
 
-class GetPartsOfTaskUseCase constructor(
+class GetPartsOfTaskUseCase @Inject constructor(
     private val partsRepository: PartsRepository
 ) {
 
-    operator fun invoke(task: Task): Flow<Resource<List<Part>, GetPartsOfTaskUseCaseException>> {
+    operator fun invoke(taskId: Long): Flow<Resource<List<Part>, GetPartsOfTaskUseCaseException>> {
         return combine(
-            partsRepository.getTextPartsOfTask(task.id),
-            partsRepository.getImagePartsOfTask(task.id),
-            partsRepository.getTodoPartsOfTask(task.id)
+            partsRepository.getTextPartsOfTask(taskId),
+            partsRepository.getImagePartsOfTask(taskId),
+            partsRepository.getTodoPartsOfTask(taskId)
         ) { textRes,
             imageRes,
             TodoRes ->

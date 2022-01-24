@@ -1,5 +1,6 @@
 package com.example.todolist.domain.models.components
 
+import com.example.todolist.domain.repositories.ComponentsRepository
 import com.example.todolist.domain.util.Resource
 
 abstract class Component(
@@ -10,8 +11,12 @@ abstract class Component(
     open val id: Long
 ) {
 
-    abstract suspend fun delete(): Resource<Unit, Throwable>
+    abstract suspend fun delete(
+        componentsRepository: ComponentsRepository
+    ): Resource<Unit, Throwable>
 
-    abstract suspend fun update(): Resource<Unit, Throwable>
+    abstract suspend fun update(
+        componentsRepository: ComponentsRepository
+    ): Resource<Unit, Throwable>
 
 }

@@ -1,13 +1,13 @@
 package com.example.todolist.presentation.addEditTask.partsListAdapter
 
-import com.example.todolist.presentation.entities.BasePart
-import com.example.todolist.presentation.entities.TodoPart
+import com.example.todolist.presentation.entities.parts.PartUiState
+import com.example.todolist.presentation.entities.parts.TodoPartUiState
 
 interface OnPartClickListener {
-    fun onPartContentChanged(part: BasePart, newContent: String)
-    fun onTodoPartCheckBoxClicked(todoPart: TodoPart, isChecked: Boolean)
+    fun onPartContentChanged(part: PartUiState, newContent: String)
+    fun onTodoPartCheckBoxClicked(todoPart: TodoPartUiState, isChecked: Boolean)
 
-    fun onDeleteActionSelected(part: BasePart)
+    fun onDeleteActionSelected(part: PartUiState)
     fun onMoveUpActionSelected(positionOfMovingPart: Int)
     fun onMoveDownActionSelected(positionOfMovingPart: Int)
 }

@@ -1,3 +1,4 @@
+/*
 package com.example.todolist.presentation.addEditFolder
 
 import android.content.Context
@@ -6,14 +7,17 @@ import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todolist.databinding.DialogFragmentAddEditFolderBinding
+import com.example.todolist.di.ApplicationScope
 import com.example.todolist.domain.models.components.FolderCreatingDTO
+import com.example.todolist.domain.repositories.RepositoryExceptions
 import com.example.todolist.domain.useCases.folderUseCases.AddFolderUseCase
 import com.example.todolist.domain.useCases.folderUseCases.AddFolderUseCase.AddFolderUseCaseException
 import com.example.todolist.domain.useCases.folderUseCases.UpdateFolderUseCase
 import com.example.todolist.domain.util.Resource
 import com.example.todolist.presentation.ADD_FOLDER_RESULT_OK
 import com.example.todolist.presentation.EDIT_FOLDER_RESULT_OK
-import com.example.todolist.presentation.entities.Folder
+import com.example.todolist.presentation.entities.FolderUiState
+import com.example.todolist.presentation.entities.mapToDomain
 import com.example.todolist.util.exhaustive
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -24,7 +28,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddEditFolderViewModel @Inject constructor(
-    private val applicationScope: CoroutineScope,
+    @ApplicationScope private val applicationScope: CoroutineScope,
     private val addFolderUseCase: AddFolderUseCase,
     private val updateFolderUseCase: UpdateFolderUseCase
 ) : ViewModel() {
@@ -39,7 +43,7 @@ class AddEditFolderViewModel @Inject constructor(
 
         val folderName: String = binding.edittextModalbottomsheetaddeditfolderFoldername.text.toString()
         val isPinned: Boolean = binding.checkboxModalbottomsheetaddeditfolderPinning.isChecked
-        val currentFolder: Folder? = args.currentFolder
+        val currentFolder: FolderUiState? = args.currentFolder
 
         applicationScope.launch {
             if (isNewFolder(currentFolder)) {
@@ -50,7 +54,7 @@ class AddEditFolderViewModel @Inject constructor(
         }
     }
 
-    private fun isNewFolder(currentFolder: Folder?): Boolean = currentFolder == null
+    private fun isNewFolder(currentFolder: FolderUiState?): Boolean = currentFolder == null
 
     private suspend fun addNewFolder(
         folderName: String,
@@ -88,7 +92,7 @@ class AddEditFolderViewModel @Inject constructor(
     private suspend fun editFolder(
         folderName: String,
         isPinned: Boolean,
-        currentFolder: Folder,
+        currentFolder: FolderUiState,
         binding: DialogFragmentAddEditFolderBinding
     ) {
         val updatingResult = updateFolderUseCase.invoke(
@@ -102,17 +106,11 @@ class AddEditFolderViewModel @Inject constructor(
                 )
                 TODO("Log")
             }
-            is Resource.Error -> {
-                if (updatingResult.exception is UpdateFolderUseCaseExceptions) {
-                    when(updatingResult.exception as UpdateFolderUseCaseExceptions) {
-                        is UpdateFolderUseCaseExceptions.BlankNameException -> {
-                            binding.edittextModalbottomsheetaddeditfolderFoldername.error = "Name is blank!"
-                            TODO("Log")
-                        }
+            is Resource.Failure -> {
+                when (updatingResult.reason) {
+                    RepositoryExceptions.UnknownException -> {
+                        binding.edittextModalbottomsheetaddeditfolderFoldername.error = "Name is blank!"
                     }
-                } else {
-                    // unexpected error
-                    TODO("Log")
                 }
             }
         }.exhaustive
@@ -135,4 +133,4 @@ class AddEditFolderViewModel @Inject constructor(
         data class NavigateBackWithResult(val result: Int) : AddEditFolderEvent()
         data class ShowInvalidInputMessage(val msg: String) : AddEditFolderEvent()
     }
-}
+}*/

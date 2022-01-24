@@ -24,6 +24,8 @@ interface PartsRepository {
 
     suspend fun updateTodoPart(todoPart: TodoPart): Resource<Unit, RepositoryExceptions>
 
+    suspend fun updateImagePart(imagePart: ImagePart): Resource<Unit, RepositoryExceptions>
+
     suspend fun deleteTextPart(textPart: TextPart): Resource<Unit, RepositoryExceptions>
 
     suspend fun deleteTodoPart(todoPart: TodoPart): Resource<Unit, RepositoryExceptions>

@@ -10,15 +10,15 @@ import kotlinx.coroutines.flow.Flow
 interface TextPartDataDao : TextPartDbModelLocalDataSource {
 
     @Query("SELECT * FROM textpartdbmodel WHERE parentId = :taskId")
-    override fun getTextPartsOfTask(taskId: Long): Resource<Flow<List<TextPartDbModel>>>
+    override fun getTextPartsOfTask(taskId: Long): Flow<List<TextPartDbModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    override suspend fun addTextPart(textPart: TextPartDbModel): Resource<Long>
+    override suspend fun addTextPart(textPart: TextPartDbModel): Long
 
     @Update
-    override suspend fun updateTextPart(textPart: TextPartDbModel): Resource<Unit>
+    override suspend fun updateTextPart(textPart: TextPartDbModel): Unit
 
     @Delete
-    override suspend fun deleteTextPart(textPart: TextPartDbModel): Resource<Unit>
+    override suspend fun deleteTextPart(textPart: TextPartDbModel): Unit
 
 }

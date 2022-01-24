@@ -1,3 +1,4 @@
+/*
 package com.example.todolist.presentation.addEditTask.partsListAdapter
 
 import android.view.View
@@ -8,21 +9,24 @@ import com.example.todolist.R
 import com.example.todolist.databinding.ItemImagePartBinding
 import com.example.todolist.databinding.ItemTextPartBinding
 import com.example.todolist.databinding.ItemTodoPartBinding
-import com.example.todolist.presentation.entities.BasePart
+import com.example.todolist.presentation.entities.components.ComponentUiState
 import com.example.todolist.presentation.entities.ImagePart
 import com.example.todolist.presentation.entities.TextPart
 import com.example.todolist.presentation.entities.TodoPart
+import com.example.todolist.presentation.entities.parts.ImagePartUiState
+import com.example.todolist.presentation.entities.parts.TextPartUiState
+import com.example.todolist.presentation.entities.parts.TodoPartUiState
 
 sealed class PartViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    abstract fun onBindViewHolder(basePart: BasePart)
+    abstract fun onBindViewHolder(basePart: ComponentUiState)
 
     class TextViewHolder(
         private val binding: ItemTextPartBinding,
         private val onPartClickListener: OnPartClickListener
     ) : PartViewHolder(binding) {
-        override fun onBindViewHolder(basePart: BasePart) {
-            val currentTextPart = basePart as TextPart
+        override fun onBindViewHolder(basePart: ComponentUiState) {
+            val currentTextPart = basePart as TextPartUiState
 
             binding.apply {
                 edittextItemtextpartContent.setText(currentTextPart.content)
@@ -45,8 +49,8 @@ sealed class PartViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(bind
         private val binding: ItemTodoPartBinding,
         private val onPartClickListener: OnPartClickListener
     ) : PartViewHolder(binding) {
-        override fun onBindViewHolder(basePart: BasePart) {
-            val currentTodoPart = basePart as TodoPart
+        override fun onBindViewHolder(basePart: ComponentUiState) {
+            val currentTodoPart = basePart as TodoPartUiState
 
             binding.apply {
                 edittextItemtodopartContent.setText(currentTodoPart.content)
@@ -77,8 +81,8 @@ sealed class PartViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(bind
         private val binding: ItemImagePartBinding,
         private val onPartClickListener: OnPartClickListener
     ) : PartViewHolder(binding) {
-        override fun onBindViewHolder(basePart: BasePart) {
-            val currentImagePart = basePart as ImagePart
+        override fun onBindViewHolder(basePart: ComponentUiState) {
+            val currentImagePart = basePart as ImagePartUiState
 
             binding.apply {
                 imageviewItemimagepartContentimage.setImageBitmap(currentImagePart.content)
@@ -87,7 +91,7 @@ sealed class PartViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(bind
         }
     }
 
-    protected fun callMenu(view: View, onPartClickListener: OnPartClickListener, basePart: BasePart): Boolean {
+    protected fun callMenu(view: View, onPartClickListener: OnPartClickListener, basePart: ComponentUiState): Boolean {
         val popupMenu = PopupMenu(view.context, view)
         popupMenu.inflate(R.menu.menu_part)
         popupMenu.setOnMenuItemClickListener {
@@ -110,4 +114,4 @@ sealed class PartViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(bind
         popupMenu.show()
         return false
     }
-}
+}*/

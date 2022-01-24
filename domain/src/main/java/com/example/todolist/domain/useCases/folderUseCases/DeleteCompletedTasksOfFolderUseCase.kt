@@ -5,7 +5,10 @@ import com.example.todolist.domain.util.Resource
 
 class DeleteCompletedTasksOfFolderUseCase {
 
-    suspend operator fun invoke(folder: Folder): Resource<Unit, Folder.FolderExceptions> =
-        folder.deleteCompletedTasks()
+    suspend operator fun invoke(folder: Folder): Resource<Unit, Folder.FolderExceptions> {
+        TODO("get root folder")
+        //return folder.deleteCompletedTasks()
+    }
+
 
 }

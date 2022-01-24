@@ -56,6 +56,10 @@ class PartsRepositoryImpl(
     override suspend fun updateTodoPart(todoPart: TodoPart): Resource<Unit, RepositoryExceptions> =
         Resource.Success(todoPartLocalDataSource.updateTodoPart(todoPart.mapToData()))
 
+    override suspend fun updateImagePart(imagePart: ImagePart): Resource<Unit, RepositoryExceptions> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun deleteTextPart(textPart: TextPart): Resource<Unit, RepositoryExceptions> =
         Resource.Success(textPartLocalDataSource.deleteTextPart(textPart.mapToData()))
 

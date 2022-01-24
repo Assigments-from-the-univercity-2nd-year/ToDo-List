@@ -1,4 +1,4 @@
-package com.example.todolist.di
+/*package com.example.todolist.di
 
 import android.app.Application
 import android.content.Context
@@ -11,7 +11,7 @@ import com.example.todolist.data.parts.PartsRepositoryImpl
 import com.example.todolist.data.parts.partsLocalDataSource.ImagePartDbModelLocalDataSource
 import com.example.todolist.data.parts.partsLocalDataSource.TextPartDbModelLocalDataSource
 import com.example.todolist.data.parts.partsLocalDataSource.TodoPartDbModelLocalDataSource
-import com.example.todolist.data.parts.partsLocalDataSource.partsLocalRoom.ImagePartDbModelDataDao
+import com.example.todolist.data.parts.partsLocalDataSource.partsLocalRoom.ImagePartDataDao.ImagePartDbModelDataDao
 import com.example.todolist.data.parts.partsLocalDataSource.partsLocalRoom.PartsDatabase
 import com.example.todolist.data.userPreferences.UserPreferencesRepositoryImpl
 import com.example.todolist.data.userPreferences.userPreferencesLocalDataSource.UserPreferencesLocalDataSource
@@ -36,7 +36,7 @@ class DataModule {
     @Singleton
     fun provideUserPreferencesLocalDataSource(
         @ApplicationContext appContext: Context
-    ): UserPreferencesDataStore =
+    ): UserPreferencesLocalDataSource =
         UserPreferencesDataStore(appContext)
 
     @Provides
@@ -109,11 +109,14 @@ class DataModule {
     fun providePartsRepository(
         textPartLocalDataSource: TextPartDbModelLocalDataSource,
         imagePartLocalDataSource: ImagePartDbModelLocalDataSource,
-        todoPartLocalDataSource: TodoPartDbModelLocalDataSource
+        todoPartLocalDataSource: TodoPartDbModelLocalDataSource,
+        @ApplicationContext appContext: Context
     ): PartsRepository =
         PartsRepositoryImpl(
             textPartLocalDataSource,
             imagePartLocalDataSource,
-            todoPartLocalDataSource
+            todoPartLocalDataSource,
+            appContext
         )
 }
+ */

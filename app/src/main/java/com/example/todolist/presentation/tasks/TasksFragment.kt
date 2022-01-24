@@ -19,10 +19,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
-import com.example.todolist.data.componentsDB.Folder
-import com.example.todolist.data.SortOrder
-import com.example.todolist.data.componentsDB.Task
 import com.example.todolist.databinding.FragmentTasksBinding
+import com.example.todolist.presentation.entities.FolderUiState
 import com.example.todolist.presentation.tasks.componentListAdapter.ComponentAdapter
 import com.example.todolist.presentation.tasks.componentListAdapter.OnComponentClickListener
 import com.example.todolist.presentation.tasks.simpleCallbacks.MovingSimpleCallback
@@ -61,8 +59,6 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
             }
         }
 
-    private val rotateOpenAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open_anim) }
-    private val rotateCloseAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close_anim) }
     private val fromBottomAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.from_bottom_anim) }
     private val toBottomAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.to_bottom_anim) }
 
@@ -120,7 +116,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
         }
 
         setFragmentResultListener("folder_to_change_request") { s: String, bundle: Bundle ->
-            val result = bundle.getParcelable<Folder>("folder_to_change_result")
+            val result = bundle.getParcelable<FolderUiState>("folder_to_change_result")
             viewModel.onQuickFolderChangeResult(result)
         }
 
@@ -240,7 +236,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
         viewModel.onTaskCheckChanged(task, isChecked)
     }
 
-    override fun onFolderClicked(folder: Folder) {
+    override fun onFolderClicked(folder: FolderUiState) {
         viewModel.onSubFolderSelected(folder)
     }
 

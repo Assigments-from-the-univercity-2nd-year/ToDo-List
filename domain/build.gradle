@@ -11,19 +11,11 @@ java {
 
 dependencies {
 
-    //Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
-    //Dagger inject version
+    // Dagger inject version
     def javaxInjectVersion = "1"
-    implementation "javax.inject:javax.inject:${javaxInjectVersion}"
+    implementation "javax.inject:javax.inject:$javaxInjectVersion"
 
-    // Dagger Hilt
-    /*implementation "com.google.dagger:hilt-android:$hiltVersion"
-    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
-    kapt "androidx.hilt:hilt-compiler:$hiltAndroidXVersion"*/
 }
