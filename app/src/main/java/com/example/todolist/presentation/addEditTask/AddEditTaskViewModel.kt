@@ -26,6 +26,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -72,7 +73,7 @@ class AddEditTaskViewModel @Inject constructor(
     }
 
     private fun fetchTaskData() = viewModelScope.launch {
-        val taskId: Long = getTaskId().onFailure {
+        /*val taskId: Long = getTaskId().onFailure {
             TODO("show message to user")
             return@launch
         }
@@ -100,31 +101,31 @@ class AddEditTaskViewModel @Inject constructor(
                 taskData = taskData.mapToPresentation(),
                 parts = parts.map { it.mapToPresentation() }
             )
-        }
+        }*/
     }
 
-    private suspend fun getTaskId(): Resource<Long, RepositoryExceptions> {
+    /*private suspend fun getTaskId(): Resource<Long, RepositoryExceptions> {
         return when (action) {
             is AddEditTaskAction.AddTask -> addTaskUseCase(
                 TaskCreatingDTO(folderId = action.parentFolderIdForTask)
             )
             is AddEditTaskAction.EditTask -> Resource.Success(action.taskId)
         }
-    }
+    }*/
 
     // Adding parts
     fun onAddTextPartClicked()  = viewModelScope.launch {
-        val taskData = _uiState.value.taskData
+        /*val taskData = _uiState.value.taskData
         if (taskData != null) {
             addTextPartUseCase(taskData.id).onFailure { TODO() }
-        }
+        }*/
     }
 
     fun onAddTodoPartClicked() = viewModelScope.launch {
-        val taskData = _uiState.value.taskData
+       /* val taskData = _uiState.value.taskData
         if (taskData != null) {
             addTodoPartUseCase(taskData.id).onFailure { TODO() }
-        }
+        }*/
     }
 
     fun onAddImagePartClicked(
@@ -137,7 +138,7 @@ class AddEditTaskViewModel @Inject constructor(
                 viewModelScope.launch {
                     imagePickerCallback(imageUri, contentResolver, taskData.id)
                 }
-            }.launch("image/*")
+            }.launch("image")
         }
     }
 
@@ -147,11 +148,11 @@ class AddEditTaskViewModel @Inject constructor(
         taskId: Long
     ) {
         try {
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+            /*val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
             addImagePartUseCase(
                 bitmap.toByteArray().onFailure { TODO() },
                 taskId
-            )
+            )*/
         } catch (e: FileNotFoundException) {
             e.printStackTrace() // Todo: proper handling
         }

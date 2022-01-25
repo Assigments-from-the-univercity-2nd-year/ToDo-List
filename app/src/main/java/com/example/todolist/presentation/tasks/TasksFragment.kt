@@ -20,7 +20,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTasksBinding
-import com.example.todolist.presentation.entities.FolderUiState
+import com.example.todolist.domain.models.components.Folder
+import com.example.todolist.domain.models.components.Task
+//import com.example.todolist.presentation.entities.FolderUiState
 import com.example.todolist.presentation.tasks.componentListAdapter.ComponentAdapter
 import com.example.todolist.presentation.tasks.componentListAdapter.OnComponentClickListener
 import com.example.todolist.presentation.tasks.simpleCallbacks.MovingSimpleCallback
@@ -29,7 +31,7 @@ import com.example.todolist.util.exhaustive
 import com.example.todolist.util.onQueryTextChanged
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_tasks.*
+//import kotlinx.android.synthetic.main.fragment_tasks.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -38,7 +40,7 @@ import kotlinx.coroutines.launch
 class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListener {
 
     private val viewModel: TasksViewModel by viewModels()
-    private lateinit var searchView: SearchView
+    /*private lateinit var searchView: SearchView
     private val onBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
             viewModel.onHomeButtonSelected()
@@ -317,5 +319,17 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
         if (viewModel.onAddButtonClicked.value == TasksViewModel.FABAnimation.HIDE_FABS) {
             viewModel.onAddButtonClicked.value = TasksViewModel.FABAnimation.DO_NOTHING
         }
+    }*/
+
+    override fun onFolderClicked(folder: Folder) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onTaskClicked(task: Task) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onCheckBoxClicked(task: Task, isChecked: Boolean) {
+        TODO("Not yet implemented")
     }
 }

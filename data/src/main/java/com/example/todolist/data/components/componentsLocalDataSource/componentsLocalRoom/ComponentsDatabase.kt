@@ -6,6 +6,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.todolist.data.components.componentsLocalDataSource.entities.FolderDbModel
 import com.example.todolist.data.components.componentsLocalDataSource.entities.TaskDbModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
@@ -21,7 +22,7 @@ abstract class ComponentsDatabase : RoomDatabase() {
 
     class CallBack @Inject constructor(
         private val database: Provider<ComponentsDatabase>,
-        private val applicationScope: CoroutineScope
+        //private val applicationScope: CoroutineScope
     ) : RoomDatabase.Callback() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
@@ -29,7 +30,8 @@ abstract class ComponentsDatabase : RoomDatabase() {
             val folderDao = database.get().folderDao()
             val taskDao = database.get().taskDao()
 
-            applicationScope.launch {
+            /*applicationScope*/
+            CoroutineScope(SupervisorJob()).launch {
                 val rootFolder = folderDao.addFolder(FolderDbModel("All", null))
                 val folder = folderDao.addFolder(FolderDbModel("Folder name", rootFolder))
 

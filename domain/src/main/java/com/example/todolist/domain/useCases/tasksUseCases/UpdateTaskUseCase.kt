@@ -4,8 +4,9 @@ import com.example.todolist.domain.models.components.Task
 import com.example.todolist.domain.repositories.ComponentsRepository
 import com.example.todolist.domain.repositories.RepositoryExceptions
 import com.example.todolist.domain.util.Resource
+import javax.inject.Inject
 
-class UpdateTaskUseCase constructor(
+class UpdateTaskUseCase @Inject constructor(
     private val componentsRepository: ComponentsRepository
 ) {
 

@@ -16,8 +16,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TasksViewModel @Inject constructor(
-    private val taskDao: TaskDbModelDao,
-    private val folderDao: FolderDbModelDao,
     private val preferencesManager: UserPreferencesDataStore,
     @Assisted private val state: SavedStateHandle
 ) : ViewModel() {

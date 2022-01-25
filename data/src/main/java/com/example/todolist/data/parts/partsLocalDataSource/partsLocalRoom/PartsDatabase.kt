@@ -12,6 +12,7 @@ import com.example.todolist.data.parts.partsLocalDataSource.partsLocalRoom.image
 import com.example.todolist.data.parts.partsLocalDataSource.partsLocalRoom.imagePartDataDao.entities.ImageContent
 import com.example.todolist.data.parts.partsLocalDataSource.partsLocalRoom.imagePartDataDao.entities.ImageMetaInfo
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
@@ -28,7 +29,7 @@ abstract class PartsDatabase : RoomDatabase() {
 
     class CallBack @Inject constructor(
         private val database: Provider<PartsDatabase>,
-        private val applicationScope: CoroutineScope
+        //private val applicationScope: CoroutineScope = CoroutineScope(SupervisorJob())
     ) : RoomDatabase.Callback() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
@@ -36,7 +37,8 @@ abstract class PartsDatabase : RoomDatabase() {
             val textPartDao = database.get().textPartDataDao()
             val todoPartDao = database.get().todoPartDataDao()
 
-            applicationScope.launch {
+            /*applicationScope*/
+            CoroutineScope(SupervisorJob()).launch {
                 textPartDao.addTextPart(TextPartDbModel("You need to to your homework!!", 1, 1))
                 textPartDao.addTextPart(TextPartDbModel("You need to to your homework!! - 2", 2, 1))
                 textPartDao.addTextPart(TextPartDbModel("You need to to your homework!! - 3", 4, 1))

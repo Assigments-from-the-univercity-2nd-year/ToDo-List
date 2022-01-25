@@ -19,7 +19,7 @@
         tools:layout="@layout/fragment_add_edit_task">
         <argument
             android:name="task"
-            app:argType="com.example.todolist.presentation.entities.Task"
+            app:argType="com.example.todolist.presentation.entities.components.TaskUiState"
             app:nullable="true" />
     </fragment>
     <dialog
@@ -32,7 +32,7 @@
         android:label="DeleteFolderDialogFragment" >
         <argument
             android:name="folder"
-            app:argType="com.example.todolist.data.componentsDB.Folder" />
+            app:argType="com.example.todolist.presentation.entities.components.FolderUiState" />
     </dialog><action android:id="@+id/action_global_deleteFolderDialogFragment" app:destination="@id/deleteFolderDialogFragment"/>
     <dialog
         android:id="@+id/addEditFolderDialogFragment"
@@ -40,12 +40,11 @@
         android:label="AddEditFolderDialogFragment" >
         <argument
             android:name="parentFolder"
-            app:argType="com.example.todolist.data.componentsDB.Folder" />
+            app:argType="com.example.todolist.presentation.entities.components.FolderUiState" />
         <argument
             android:name="currentFolder"
-            app:argType="com.example.todolist.data.componentsDB.Folder"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:argType="com.example.todolist.presentation.entities.components.FolderUiState"
+            app:nullable="true" />
     </dialog>
     <action android:id="@+id/action_global_addEditFolderDialogFragment" app:destination="@id/addEditFolderDialogFragment" />
     <dialog
@@ -54,7 +53,7 @@
         android:label="QuickFolderChangeDialogFragment" >
         <argument
             android:name="pinnedFolders"
-            app:argType="com.example.todolist.data.componentsDB.Folder[]" />
+            app:argType="com.example.todolist.presentation.entities.components.FolderUiState[]" />
     </dialog>
     <action android:id="@+id/action_global_quickFolderChangeDialogFragment" app:destination="@id/quickFolderChangeDialogFragment" />
 </navigation>

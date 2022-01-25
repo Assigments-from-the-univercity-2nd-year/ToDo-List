@@ -9,7 +9,7 @@ import com.example.todolist.data.parts.partsLocalDataSource.partsLocalRoom.image
 import java.io.IOException
 
 
-interface ImageContentDao {
+class ImageContentDao {
 
     fun savePhotoToInternalStorage(imageContent: ImageContent, appContext: Context): Boolean {
         return try {

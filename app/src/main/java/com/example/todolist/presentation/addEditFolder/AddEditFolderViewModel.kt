@@ -1,4 +1,3 @@
-/*
 package com.example.todolist.presentation.addEditFolder
 
 import android.content.Context
@@ -16,8 +15,8 @@ import com.example.todolist.domain.useCases.folderUseCases.UpdateFolderUseCase
 import com.example.todolist.domain.util.Resource
 import com.example.todolist.presentation.ADD_FOLDER_RESULT_OK
 import com.example.todolist.presentation.EDIT_FOLDER_RESULT_OK
-import com.example.todolist.presentation.entities.FolderUiState
-import com.example.todolist.presentation.entities.mapToDomain
+//import com.example.todolist.presentation.entities.FolderUiState
+//import com.example.todolist.presentation.entities.mapToDomain
 import com.example.todolist.util.exhaustive
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -40,7 +39,7 @@ class AddEditFolderViewModel @Inject constructor(
         binding: DialogFragmentAddEditFolderBinding,
         args: AddEditFolderDialogFragmentArgs
     ) {
-
+/*
         val folderName: String = binding.edittextModalbottomsheetaddeditfolderFoldername.text.toString()
         val isPinned: Boolean = binding.checkboxModalbottomsheetaddeditfolderPinning.isChecked
         val currentFolder: FolderUiState? = args.currentFolder
@@ -51,10 +50,10 @@ class AddEditFolderViewModel @Inject constructor(
             } else {
                 editFolder(folderName, isPinned, currentFolder!!, binding)
             }
-        }
+        }*/
     }
 
-    private fun isNewFolder(currentFolder: FolderUiState?): Boolean = currentFolder == null
+    //private fun isNewFolder(currentFolder: FolderUiState?): Boolean = currentFolder == null
 
     private suspend fun addNewFolder(
         folderName: String,
@@ -92,9 +91,9 @@ class AddEditFolderViewModel @Inject constructor(
     private suspend fun editFolder(
         folderName: String,
         isPinned: Boolean,
-        currentFolder: FolderUiState,
+        //currentFolder: FolderUiState,
         binding: DialogFragmentAddEditFolderBinding
-    ) {
+    ) {/*
         val updatingResult = updateFolderUseCase.invoke(
             currentFolder.copy(title = folderName, isPinned = isPinned).mapToDomain()
         )
@@ -113,7 +112,7 @@ class AddEditFolderViewModel @Inject constructor(
                     }
                 }
             }
-        }.exhaustive
+        }.exhaustive*/
     }
 
     fun hideKeyboard(view: View) {
@@ -133,4 +132,4 @@ class AddEditFolderViewModel @Inject constructor(
         data class NavigateBackWithResult(val result: Int) : AddEditFolderEvent()
         data class ShowInvalidInputMessage(val msg: String) : AddEditFolderEvent()
     }
-}*/
+}

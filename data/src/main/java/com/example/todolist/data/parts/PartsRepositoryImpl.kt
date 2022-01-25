@@ -14,6 +14,7 @@ import com.example.todolist.domain.models.parts.TodoPart
 import com.example.todolist.domain.repositories.PartsRepository
 import com.example.todolist.domain.repositories.RepositoryExceptions
 import com.example.todolist.domain.util.Resource
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -22,7 +23,7 @@ class PartsRepositoryImpl(
     private val textPartLocalDataSource: TextPartDbModelLocalDataSource,
     private val imagePartLocalDataSource: ImagePartDbModelLocalDataSource,
     private val todoPartLocalDataSource: TodoPartDbModelLocalDataSource,
-    private val appContext: Context
+    @ApplicationContext private val appContext: Context
 ) : PartsRepository {
 
     override fun getTextPartsOfTask(taskId: Long): Flow<Resource<List<TextPart>, RepositoryExceptions>> {

@@ -11,7 +11,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.todolist.R
 import com.example.todolist.domain.useCases.folderUseCases.GetStarredFoldersUseCase
 import com.example.todolist.domain.util.Resource
-import com.example.todolist.presentation.entities.mapToPresentation
+import com.example.todolist.presentation.entities.components.mapToPresentation
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
