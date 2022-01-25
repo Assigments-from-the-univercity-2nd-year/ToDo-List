@@ -21,9 +21,8 @@ class UserPreferencesRepositoryImpl @Inject constructor(
 
     override fun getFilterPreferences(): Flow<Resource<FilterPreferences, RepositoryExceptions>> {
         return userPreferencesLocalDataSource.getFilterPreferencesDbModel()
-            .map {
-                Resource.Success(it.mapToDomain()) as Resource<FilterPreferences, RepositoryExceptions>
-            }.catch { exception ->
+            .map { Resource.Success(it.mapToDomain()) as Resource<FilterPreferences, RepositoryExceptions> }
+            .catch { exception ->
                 Log.e(TAG, "Error reading preferences", exception)
                 if (exception is IOException) {
                     emit(
