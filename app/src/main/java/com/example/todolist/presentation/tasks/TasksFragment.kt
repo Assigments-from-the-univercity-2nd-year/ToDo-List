@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListener {
+class TasksFragment : Fragment(R.layout.fragment_tasks)/*, OnComponentClickListener*/ {
 
     private val viewModel: TasksViewModel by viewModels()
     /*private lateinit var searchView: SearchView
@@ -321,15 +321,15 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
         }
     }*/
 
-    override fun onFolderClicked(folder: Folder) {
+    fun onFolderClicked(folder: Folder) {
         TODO("Not yet implemented")
     }
 
-    override fun onTaskClicked(task: Task) {
+    fun onTaskClicked(task: Task) {
         TODO("Not yet implemented")
     }
 
-    override fun onCheckBoxClicked(task: Task, isChecked: Boolean) {
+    fun onCheckBoxClicked(task: Task, isChecked: Boolean) {
         TODO("Not yet implemented")
     }
 }

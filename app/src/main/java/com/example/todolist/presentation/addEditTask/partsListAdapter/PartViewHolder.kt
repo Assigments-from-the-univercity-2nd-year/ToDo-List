@@ -1,6 +1,7 @@
-/*
+
 package com.example.todolist.presentation.addEditTask.partsListAdapter
 
+import android.graphics.BitmapFactory
 import android.view.View
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
@@ -10,10 +11,8 @@ import com.example.todolist.databinding.ItemImagePartBinding
 import com.example.todolist.databinding.ItemTextPartBinding
 import com.example.todolist.databinding.ItemTodoPartBinding
 import com.example.todolist.presentation.entities.components.ComponentUiState
-import com.example.todolist.presentation.entities.ImagePart
-import com.example.todolist.presentation.entities.TextPart
-import com.example.todolist.presentation.entities.TodoPart
 import com.example.todolist.presentation.entities.parts.ImagePartUiState
+import com.example.todolist.presentation.entities.parts.PartUiState
 import com.example.todolist.presentation.entities.parts.TextPartUiState
 import com.example.todolist.presentation.entities.parts.TodoPartUiState
 
@@ -85,13 +84,19 @@ sealed class PartViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(bind
             val currentImagePart = basePart as ImagePartUiState
 
             binding.apply {
-                imageviewItemimagepartContentimage.setImageBitmap(currentImagePart.content)
+                imageviewItemimagepartContentimage.setImageBitmap(
+                    BitmapFactory.decodeByteArray(
+                        currentImagePart.content,
+                        0,
+                        currentImagePart.content.size
+                    )
+                )
                 root.setOnLongClickListener { callMenu(it, onPartClickListener, currentImagePart) }
             }
         }
     }
 
-    protected fun callMenu(view: View, onPartClickListener: OnPartClickListener, basePart: ComponentUiState): Boolean {
+    protected fun callMenu(view: View, onPartClickListener: OnPartClickListener, basePart: PartUiState): Boolean {
         val popupMenu = PopupMenu(view.context, view)
         popupMenu.inflate(R.menu.menu_part)
         popupMenu.setOnMenuItemClickListener {
@@ -114,4 +119,4 @@ sealed class PartViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(bind
         popupMenu.show()
         return false
     }
-}*/
+}

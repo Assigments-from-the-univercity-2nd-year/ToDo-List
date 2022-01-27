@@ -1,3 +1,4 @@
+/*
 package com.example.todolist.presentation.mappers
 
 import android.graphics.Bitmap
@@ -21,4 +22,4 @@ class ImagePartMapper {
                 imagePart.id
             )
     }
-}
+}*/

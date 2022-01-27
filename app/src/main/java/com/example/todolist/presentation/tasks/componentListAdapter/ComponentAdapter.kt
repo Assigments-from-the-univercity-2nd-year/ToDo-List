@@ -3,15 +3,15 @@ package com.example.todolist.presentation.tasks.componentListAdapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.example.todolist.data.componentsDB.Component
-import com.example.todolist.data.componentsDB.Folder
-import com.example.todolist.data.componentsDB.Task
 import com.example.todolist.databinding.ItemFolderBinding
 import com.example.todolist.databinding.ItemTaskBinding
+import com.example.todolist.presentation.entities.components.ComponentUiState
+import com.example.todolist.presentation.entities.components.FolderUiState
+import com.example.todolist.presentation.entities.components.TaskUiState
 
 class ComponentAdapter(
     private val onComponentClickListener: OnComponentClickListener,
-) : ListAdapter<Component, ComponentViewHolder>(ItemDiffCallback()) {
+) : ListAdapter<ComponentUiState, ComponentViewHolder>(ItemDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ComponentViewHolder {
         return when(viewType) {
             TYPE_FOLDER -> {
@@ -34,8 +34,9 @@ class ComponentAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when(getItem(position)) {
-            is Task -> TYPE_TASK
-            is Folder -> TYPE_FOLDER
+            is TaskUiState -> TYPE_TASK
+            is FolderUiState -> TYPE_FOLDER
+            else -> {throw Exception()}
         }
     }
 }

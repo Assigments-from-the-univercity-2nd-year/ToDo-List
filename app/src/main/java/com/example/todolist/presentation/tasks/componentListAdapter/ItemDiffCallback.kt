@@ -1,31 +1,34 @@
 package com.example.todolist.presentation.tasks.componentListAdapter
 
+import android.annotation.SuppressLint
 import androidx.recyclerview.widget.DiffUtil
-import com.example.todolist.data.componentsDB.Component
-import com.example.todolist.data.componentsDB.Folder
-import com.example.todolist.data.componentsDB.Task
+import com.example.todolist.presentation.entities.components.ComponentUiState
+import com.example.todolist.presentation.entities.components.FolderUiState
+import com.example.todolist.presentation.entities.components.TaskUiState
 
-class ItemDiffCallback : DiffUtil.ItemCallback<Component>() {
-    override fun areItemsTheSame(oldItem: Component, newItem: Component): Boolean {
-        return oldItem.uniqueStringId == newItem.uniqueStringId
+class ItemDiffCallback : DiffUtil.ItemCallback<ComponentUiState>() {
+    override fun areItemsTheSame(oldItem: ComponentUiState, newItem: ComponentUiState): Boolean {
+        return false//oldItem.uniqueStringId == newItem.uniqueStringId
     }
 
-    override fun areContentsTheSame(oldItem: Component, newItem: Component): Boolean {
+    @SuppressLint("DiffUtilEquals")
+    override fun areContentsTheSame(oldItem: ComponentUiState, newItem: ComponentUiState): Boolean {
         return when (oldItem) {
-            is Folder -> {
-                if (newItem is Folder) {
+            is FolderUiState -> {
+                if (newItem is FolderUiState) {
                     oldItem == newItem
                 } else {
                     false
                 }
             }
-            is Task -> {
-                if (newItem is Task) {
+            is TaskUiState -> {
+                if (newItem is TaskUiState) {
                     oldItem == newItem
                 } else {
                     false
                 }
             }
+            else -> {true}
         }
     }
 }

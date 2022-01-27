@@ -1,19 +1,19 @@
 package com.example.todolist.presentation.tasks
 
-import com.example.todolist.data.componentsDB.Component
-import com.example.todolist.data.componentsDB.Task
+import com.example.todolist.presentation.entities.components.ComponentUiState
+import com.example.todolist.presentation.entities.components.TaskUiState
 
 class CompareComponents {
-    companion object : Comparator<Component> {
-        override fun compare(o1: Component?, o2: Component?) = when {
-            (o1 as? Task)?.isImportant ?: false -> {
-                if ((o2 as? Task)?.isImportant ?: false) {
+    companion object : Comparator<ComponentUiState> {
+        override fun compare(o1: ComponentUiState?, o2: ComponentUiState?) = when {
+            (o1 as? TaskUiState)?.isImportant ?: false -> {
+                if ((o2 as? TaskUiState)?.isImportant ?: false) {
                     0
                 } else {
                     -1
                 }
             }
-            (o2 as? Task)?.isImportant ?: false -> {
+            (o2 as? TaskUiState)?.isImportant ?: false -> {
                 1
             }
             else -> 0

@@ -1,10 +1,10 @@
 package com.example.todolist.presentation.tasks.componentListAdapter
 
-import com.example.todolist.data.componentsDB.Folder
-import com.example.todolist.data.componentsDB.Task
+import com.example.todolist.presentation.entities.components.FolderUiState
+import com.example.todolist.presentation.entities.components.TaskUiState
 
 interface OnComponentClickListener {
-    fun onFolderClicked(folder: Folder)
-    fun onTaskClicked(task: Task)
-    fun onCheckBoxClicked(task: Task, isChecked: Boolean)
+    fun onFolderClicked(folder: FolderUiState)
+    fun onTaskClicked(task: TaskUiState)
+    fun onCheckBoxClicked(task: TaskUiState, isChecked: Boolean)
 }
