@@ -11,8 +11,8 @@ data class TaskUiState(
     override val folderId: Long = 0,
              val isImportant: Boolean = false,
              val isCompleted: Boolean = false,
-    override val createdDate: Long = System.currentTimeMillis(),
-    override val modifiedDate: Long = System.currentTimeMillis(),
+    override val createdDate: String = "date/time",
+    override val modifiedDate: String = "date/time",
     override val id: Long = 0,
 ) : ComponentUiState(title, folderId, createdDate, modifiedDate, id), Parcelable
 

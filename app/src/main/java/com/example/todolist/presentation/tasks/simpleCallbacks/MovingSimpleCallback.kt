@@ -1,3 +1,4 @@
+/*
 package com.example.todolist.presentation.tasks.simpleCallbacks
 
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -5,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.presentation.entities.components.ComponentUiState
 import com.example.todolist.presentation.tasks.TasksViewModel
-import com.example.todolist.presentation.tasks.componentListAdapter.ComponentViewHolder
+import com.example.todolist.presentation.tasks.componentAdapter.ComponentViewHolder
 
 class MovingSimpleCallback(
     private val taskAdapter: ListAdapter<ComponentUiState, ComponentViewHolder>,
@@ -33,11 +34,14 @@ class MovingSimpleCallback(
 
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
         super.clearView(recyclerView, viewHolder)
-        /*if (fromPos != -1 && toPos != -1 && fromPos != toPos) {
+        */
+/*if (fromPos != -1 && toPos != -1 && fromPos != toPos) {
             val component = taskAdapter.currentList[fromPos]
             val folder = taskAdapter.currentList[toPos] as? Folder
             viewModel.taskMovedToFolder(component, folder)
-        }*/
+        }*//*
+
     }
 
 }
+*/

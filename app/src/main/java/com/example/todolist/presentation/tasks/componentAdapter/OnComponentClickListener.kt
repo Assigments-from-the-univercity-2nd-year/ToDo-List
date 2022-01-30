@@ -1,4 +1,4 @@
-package com.example.todolist.presentation.tasks.componentListAdapter
+package com.example.todolist.presentation.tasks.componentAdapter
 
 import com.example.todolist.presentation.entities.components.FolderUiState
 import com.example.todolist.presentation.entities.components.TaskUiState

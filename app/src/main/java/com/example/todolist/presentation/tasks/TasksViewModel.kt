@@ -49,10 +49,8 @@ class TasksViewModel @Inject constructor(
             title = "Root folder",
             folderId = 1,
             isPinned = true,
-            createdDate = System.currentTimeMillis(),
-            modifiedDate = System.currentTimeMillis(),
             id = 1,
-            numberOfSubComponents = 8,
+            numberOfSubComponents = "8",
         )
     }
 

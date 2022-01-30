@@ -1,3 +1,4 @@
+/*
 package com.example.todolist.presentation.tasks.simpleCallbacks
 
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -5,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.presentation.entities.components.ComponentUiState
 import com.example.todolist.presentation.tasks.TasksViewModel
-import com.example.todolist.presentation.tasks.componentListAdapter.ComponentViewHolder
+import com.example.todolist.presentation.tasks.componentAdapter.ComponentViewHolder
 
 class SwipingSimpleCallback(
     private val taskAdapter: ListAdapter<ComponentUiState, ComponentViewHolder>,
@@ -27,4 +28,4 @@ class SwipingSimpleCallback(
         //viewModel.onComponentSwiped(component, viewHolder.adapterPosition)
     }
 
-}
+}*/

@@ -15,8 +15,11 @@ import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTasksBinding
 import com.example.todolist.presentation.entities.components.FolderUiState
 import com.example.todolist.presentation.entities.components.TaskUiState
-import com.example.todolist.presentation.tasks.componentListAdapter.ComponentAdapter
-import com.example.todolist.presentation.tasks.componentListAdapter.OnComponentClickListener
+import com.example.todolist.presentation.tasks.componentAdapter.ComponentAdapter
+import com.example.todolist.presentation.tasks.componentAdapter.ComponentFingerprint
+import com.example.todolist.presentation.tasks.componentAdapter.OnComponentClickListener
+import com.example.todolist.presentation.tasks.componentAdapter.folder.FolderFingerprint
+import com.example.todolist.presentation.tasks.componentAdapter.task.TaskFingerprint
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -51,7 +54,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
         super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentTasksBinding.bind(view)
-        val componentAdapter = ComponentAdapter(this)
+        val componentAdapter = ComponentAdapter(getFingerprints(), this)
 
         setUpRecyclerView(componentAdapter, binding)
         setUpListeners(binding)
@@ -95,6 +98,13 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
         }
 
         setHasOptionsMenu(true)
+    }
+
+    private fun getFingerprints(): List<ComponentFingerprint<*, *>> {
+        return listOf(
+            FolderFingerprint(),
+            TaskFingerprint(),
+        )
     }
 
     private fun setUpRecyclerView(

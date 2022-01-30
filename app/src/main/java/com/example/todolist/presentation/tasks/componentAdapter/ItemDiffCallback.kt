@@ -1,4 +1,4 @@
-package com.example.todolist.presentation.tasks.componentListAdapter
+package com.example.todolist.presentation.tasks.componentAdapter
 
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.DiffUtil
