@@ -24,7 +24,7 @@ sealed class ComponentViewHolder(binding: ViewBinding) :
             binding.apply {
                 checkboxItemtaskCompleted.isChecked = currentTask.isCompleted
                 textviewItemtaskTaskname.text = currentTask.title
-                textviewItemtaskModifieddate.text = TODO() //currentTask.modifiedDateFormatted
+                //textviewItemtaskModifieddate.text = TODO() //currentTask.modifiedDateFormatted
                 textviewItemtaskTaskname.paint.isStrikeThruText = currentTask.isCompleted
                 appCompatImageViewItemTaskPriority.isVisible = currentTask.isImportant
 

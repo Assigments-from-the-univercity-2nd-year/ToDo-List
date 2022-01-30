@@ -7,13 +7,13 @@ import com.example.todolist.domain.models.components.Folder as DomainFolder
 
 @Parcelize
 data class FolderUiState(
-    override val title: String,
-    override val folderId: Long,
-             val isPinned: Boolean,
-    override val createdDate: Long,
-    override val modifiedDate: Long,
-    override val id: Long,
-             val numberOfSubComponents: Int
+    override val title: String = "New folder",
+    override val folderId: Long = 0,
+             val isPinned: Boolean = false,
+    override val createdDate: Long = System.currentTimeMillis(),
+    override val modifiedDate: Long = System.currentTimeMillis(),
+    override val id: Long = 0,
+             val numberOfSubComponents: Int = 0,
 ) : ComponentUiState(title, folderId, createdDate, modifiedDate, id), Parcelable
 
 fun FolderUiState.mapToDomain(): DomainFolder {

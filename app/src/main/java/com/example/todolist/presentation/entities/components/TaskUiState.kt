@@ -13,7 +13,7 @@ data class TaskUiState(
              val isCompleted: Boolean = false,
     override val createdDate: Long = System.currentTimeMillis(),
     override val modifiedDate: Long = System.currentTimeMillis(),
-    override val id: Long = 0
+    override val id: Long = 0,
 ) : ComponentUiState(title, folderId, createdDate, modifiedDate, id), Parcelable
 
 fun TaskUiState.mapToDomain(): DomainTask {
