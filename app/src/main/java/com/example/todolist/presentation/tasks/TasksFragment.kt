@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTasksBinding
 import com.example.todolist.presentation.entities.components.FolderUiState
@@ -20,6 +22,9 @@ import com.example.todolist.presentation.tasks.componentAdapter.ComponentFingerp
 import com.example.todolist.presentation.tasks.componentAdapter.OnComponentClickListener
 import com.example.todolist.presentation.tasks.componentAdapter.folder.FolderFingerprint
 import com.example.todolist.presentation.tasks.componentAdapter.task.TaskFingerprint
+import com.example.todolist.presentation.tasks.componentAdapter.itemDecorations.HorizontalItemDecoration
+import com.example.todolist.presentation.tasks.componentAdapter.itemDecorations.VerticalItemDecoration
+import com.example.todolist.presentation.tasks.simpleCallbacks.SwipingSimpleCallback
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -62,10 +67,6 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
         collectEvents(binding)
 
         /*binding.apply {
-            ItemTouchHelper(SwipingSimpleCallback(
-                taskAdapter, viewModel
-            )).attachToRecyclerView(recyclerviewFragmenttasksTasks)
-
             ItemTouchHelper(MovingSimpleCallback(
                 taskAdapter, viewModel
             )).attachToRecyclerView(recyclerviewFragmenttasksTasks)
@@ -93,7 +94,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
                 componentAdapter.submitList(it.components)
                 enableBackButton(viewModel.isCurrentFolderRoot())
                 (activity as? AppCompatActivity)?.supportActionBar?.title =
-                        viewModel.getTitleName(resources.getString(R.string.app_name))
+                        viewModel.getTitleName(resources.getString(R.string.taskfragment_all_tasks_title))
             }
         }
 
@@ -115,6 +116,13 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
             adapter = componentAdapter
             layoutManager = LinearLayoutManager(requireContext())
             //setHasFixedSize(true)
+
+            addItemDecoration(HorizontalItemDecoration(24))
+            addItemDecoration(VerticalItemDecoration(8))
+
+            ItemTouchHelper(SwipingSimpleCallback { positionOfSwipedComponent: Int ->
+                viewModel.onComponentSwiped(positionOfSwipedComponent)
+            }).attachToRecyclerView(this)
         }
     }
 

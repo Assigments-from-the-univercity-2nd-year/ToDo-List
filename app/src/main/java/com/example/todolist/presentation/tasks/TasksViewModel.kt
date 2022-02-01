@@ -143,9 +143,9 @@ class TasksViewModel @Inject constructor(
 
     /*fun onSortOrderSelected(sortOrder: SortOrder) = viewModelScope.launch {
         preferencesManager.updateSortOrderDbModel(sortOrder)
-    }
+    }*/
 
-    fun onHideCompletedSelected(hideCompleted: Boolean) = viewModelScope.launch {
+    /*fun onHideCompletedSelected(hideCompleted: Boolean) = viewModelScope.launch {
         preferencesManager.updateHideCompleted(hideCompleted)
     }*/
 
@@ -165,28 +165,29 @@ class TasksViewModel @Inject constructor(
 
     /*fun onHomeButtonSelected() = viewModelScope.launch {
         currentFolder.postValue(folderDao.getFolder(currentFolder.value?.folderId ?: 1L))
-    }
+    }*/
 
-    fun onTaskSwiped(task: Task) = viewModelScope.launch {
+    /*fun onTaskSwiped(task: Task) = viewModelScope.launch {
         taskDao.deleteTask(task)
         val parentFolder = folderDao.getFolder(task.folderId)
         parentFolder.updateDate(folderDao)
         tasksEventChannel.send(TasksEvent.MessageEvent.ShowUndoDeleteTaskMessage(task, parentFolder))
-    }
+    }*/
 
-    fun onFolderSwiped(folder: Folder, position: Int) = viewModelScope.launch {
+    /*fun onFolderSwiped(folder: Folder, position: Int) = viewModelScope.launch {
         tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToDeleteFolderScreen(folder))
         tasksEventChannel.send(TasksEvent.NotifyAdapterItemChanged(position))
-    }
+    }*/
 
-    fun onComponentSwiped(component: Component, position: Int) {
-        when(component) {
+    fun onComponentSwiped(position: Int) {
+        TODO()
+        /*when(component) {
             is Folder -> onFolderSwiped(component, position)
             is Task -> onTaskSwiped(component)
-        }.exhaustive
+        }.exhaustive*/
     }
 
-    fun onUndoDeleteClicked(task: Task, parentFolder: Folder) = viewModelScope.launch {
+    /*fun onUndoDeleteClicked(task: Task, parentFolder: Folder) = viewModelScope.launch {
         taskDao.insertTask(task)
         folderDao.updateFolder(parentFolder)
     }*/
@@ -217,9 +218,9 @@ class TasksViewModel @Inject constructor(
             EDIT_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task updated")
             EDIT_TASK_RESULT_NOTHING_CHANGED -> showTaskSavedConfirmationMessage("Task data didn't change")
         }
-    }
+    }*/
 
-    fun onAddEditFolderResult(result: Int) = viewModelScope.launch {
+    /*fun onAddEditFolderResult(result: Int) = viewModelScope.launch {
         when (result) {
             ADD_FOLDER_RESULT_OK -> showTaskSavedConfirmationMessage("Folder added")
             EDIT_FOLDER_RESULT_OK -> {
@@ -227,37 +228,37 @@ class TasksViewModel @Inject constructor(
                 currentFolder.postValue(folderDao.getFolder(currentFolder.value!!.id))
             }
         }
-    }
+    }*/
 
-    fun onQuickFolderChangeResult(result: Folder?) {
+    /*fun onQuickFolderChangeResult(result: Folder?) {
         if (result != null) {
             currentFolder.value = result
         }
-    }
+    }*/
 
-    private fun showTaskSavedConfirmationMessage(msg: String) = viewModelScope.launch {
+    /*private fun showTaskSavedConfirmationMessage(msg: String) = viewModelScope.launch {
         tasksEventChannel.send(TasksEvent.MessageEvent.ShowTaskSavedConfirmationMessage(msg))
-    }
+    }*/
 
-    fun onDeleteAllCompletedClicked() = viewModelScope.launch {
+    /*fun onDeleteAllCompletedClicked() = viewModelScope.launch {
         tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToDeleteAllCompletedScreen)
-    }
+    }*/
 
-    fun onQuickFolderChangeClicked() = viewModelScope.launch {
+    /*fun onQuickFolderChangeClicked() = viewModelScope.launch {
         tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToQuickFolderChange(
             folderDao.getPinnedFolders().onEach {
                 it.setNumberOfSubComponents(folderDao, taskDao)
             }
         ))
-    }
+    }*/
 
-    fun onEditFolderClicked() = viewModelScope.launch {
+    /*fun onEditFolderClicked() = viewModelScope.launch {
         tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToEditFolderScreen(
             folderDao.getFolder(currentFolder.value!!.folderId ?: 1L)
         ))
-    }
+    }*/
 
-    fun taskMovedToFolder(component: Component?, folder: Folder?) = viewModelScope.launch {
+    /*fun taskMovedToFolder(component: Component?, folder: Folder?) = viewModelScope.launch {
         if (folder != null) {
             when(component) {
                 is Task -> {

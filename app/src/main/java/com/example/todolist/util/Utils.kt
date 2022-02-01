@@ -1,5 +1,6 @@
 package com.example.todolist.util
 
+import android.content.res.Resources
 import android.graphics.Bitmap
 import com.example.todolist.domain.util.Resource
 import java.io.ByteArrayOutputStream
@@ -16,3 +17,6 @@ fun Bitmap.toByteArray() : Resource<ByteArray, Throwable> {
         return Resource.Success(stream.toByteArray())
     }
 }
+
+val Int.dp: Int
+    get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
