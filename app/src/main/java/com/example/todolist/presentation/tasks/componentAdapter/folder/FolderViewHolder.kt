@@ -7,6 +7,7 @@ import com.example.todolist.presentation.tasks.componentAdapter.ComponentViewHol
 
 class FolderViewHolder(
     binding: ItemFolderBinding,
+    private val onFolderClicked: (FolderUiState) -> Unit,
 ) : ComponentViewHolder<ItemFolderBinding, FolderUiState>(binding) {
 
     override fun onBindViewHolder(component: FolderUiState) {
@@ -16,8 +17,7 @@ class FolderViewHolder(
             imageviewItemfolderPinning.isVisible = component.isPinned
 
             root.setOnClickListener {
-                //TODO
-                //onComponentClickListener.onFolderClicked(currentFolder)
+                onFolderClicked(component)
             }
         }
     }

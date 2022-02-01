@@ -10,7 +10,8 @@ import com.example.todolist.presentation.tasks.componentAdapter.ComponentFingerp
 import com.example.todolist.presentation.tasks.componentAdapter.ComponentViewHolder
 
 class TaskFingerprint(
-
+    private val onTaskClicked: (TaskUiState) -> Unit,
+    private val onCheckBoxClicked: (TaskUiState, isChecked: Boolean) -> Unit,
 ) : ComponentFingerprint<ItemTaskBinding, TaskUiState> {
     override fun isRelativeItem(item: ComponentUiState): Boolean {
         return item is TaskUiState
@@ -25,6 +26,6 @@ class TaskFingerprint(
         parent: ViewGroup
     ): ComponentViewHolder<ItemTaskBinding, TaskUiState> {
         val binding = ItemTaskBinding.inflate(layoutInflater, parent, false)
-        return TaskViewHolder(binding)
+        return TaskViewHolder(binding, onTaskClicked, onCheckBoxClicked)
     }
 }

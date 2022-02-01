@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -12,14 +13,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTasksBinding
 import com.example.todolist.presentation.entities.components.FolderUiState
-import com.example.todolist.presentation.entities.components.TaskUiState
 import com.example.todolist.presentation.tasks.componentAdapter.ComponentAdapter
 import com.example.todolist.presentation.tasks.componentAdapter.ComponentFingerprint
-import com.example.todolist.presentation.tasks.componentAdapter.OnComponentClickListener
 import com.example.todolist.presentation.tasks.componentAdapter.folder.FolderFingerprint
 import com.example.todolist.presentation.tasks.componentAdapter.task.TaskFingerprint
 import com.example.todolist.presentation.tasks.componentAdapter.itemDecorations.HorizontalItemDecoration
@@ -28,7 +26,7 @@ import com.example.todolist.presentation.tasks.simpleCallbacks.SwipingSimpleCall
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListener {
+class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
     private val viewModel: TasksViewModel by viewModels()
     /*private lateinit var searchView: SearchView
@@ -59,7 +57,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
         super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentTasksBinding.bind(view)
-        val componentAdapter = ComponentAdapter(getFingerprints(), this)
+        val componentAdapter = ComponentAdapter(getFingerprints())
 
         setUpRecyclerView(componentAdapter, binding)
         setUpListeners(binding)
@@ -103,8 +101,13 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
 
     private fun getFingerprints(): List<ComponentFingerprint<*, *>> {
         return listOf(
-            FolderFingerprint(),
-            TaskFingerprint(),
+            FolderFingerprint { folder -> viewModel.onSubFolderSelected(folder) },
+            TaskFingerprint(
+                onTaskClicked = { task -> viewModel.onTaskSelected(task) },
+                onCheckBoxClicked = { task, isChecked ->
+                    viewModel.onTaskCheckChanged(task, isChecked)
+                }
+            ),
         )
     }
 
@@ -255,18 +258,6 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), OnComponentClickListene
             fab_fragmenttasks_addfolder.startAnimation(toBottomAnim)
         }
     }*/
-
-    override fun onFolderClicked(folder: FolderUiState) {
-        viewModel.onSubFolderSelected(folder)
-    }
-
-    override fun onTaskClicked(task: TaskUiState) {
-        viewModel.onTaskSelected(task)
-    }
-
-    override fun onCheckBoxClicked(task: TaskUiState, isChecked: Boolean) {
-        viewModel.onTaskCheckChanged(task, isChecked)
-    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_fragment_tasks, menu)

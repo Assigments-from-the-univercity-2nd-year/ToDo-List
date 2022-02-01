@@ -10,7 +10,7 @@ import com.example.todolist.presentation.tasks.componentAdapter.ComponentFingerp
 import com.example.todolist.presentation.tasks.componentAdapter.ComponentViewHolder
 
 class FolderFingerprint(
-
+    private val onFolderClicked: (FolderUiState) -> Unit,
 ) : ComponentFingerprint<ItemFolderBinding, FolderUiState> {
 
     override fun isRelativeItem(item: ComponentUiState): Boolean {
@@ -26,6 +26,6 @@ class FolderFingerprint(
         parent: ViewGroup
     ): ComponentViewHolder<ItemFolderBinding, FolderUiState> {
         val binding = ItemFolderBinding.inflate(layoutInflater, parent, false)
-        return FolderViewHolder(binding)
+        return FolderViewHolder(binding, onFolderClicked)
     }
 }

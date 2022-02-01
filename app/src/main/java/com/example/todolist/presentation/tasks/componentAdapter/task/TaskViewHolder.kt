@@ -7,6 +7,8 @@ import com.example.todolist.presentation.tasks.componentAdapter.ComponentViewHol
 
 class TaskViewHolder(
     binding: ItemTaskBinding,
+    private val onTaskClicked: (TaskUiState) -> Unit,
+    private val onCheckBoxClicked: (TaskUiState, isChecked: Boolean) -> Unit,
 ) : ComponentViewHolder<ItemTaskBinding, TaskUiState>(binding) {
 
     override fun onBindViewHolder(component: TaskUiState) {
@@ -18,13 +20,10 @@ class TaskViewHolder(
             appCompatImageViewItemTaskPriority.isVisible = component.isImportant
 
             root.setOnClickListener {
-                //onComponentClickListener.onTaskClicked(currentTask)
+                onTaskClicked(component)
             }
             checkboxItemtaskCompleted.setOnClickListener {
-                /*onComponentClickListener.onCheckBoxClicked(
-                    currentTask,
-                    checkboxItemtaskCompleted.isChecked
-                )*/
+                onCheckBoxClicked(component, checkboxItemtaskCompleted.isChecked)
             }
         }
     }

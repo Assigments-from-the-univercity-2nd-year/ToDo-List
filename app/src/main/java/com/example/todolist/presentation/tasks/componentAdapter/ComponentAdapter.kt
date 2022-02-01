@@ -12,7 +12,7 @@ import com.example.todolist.presentation.entities.components.TaskUiState
 
 class ComponentAdapter(
     private val fingerprints: List<ComponentFingerprint<*, *>>,
-    private val onComponentClickListener: OnComponentClickListener,
+    //private val onComponentClickListener: OnComponentClickListener,
 ) : ListAdapter<ComponentUiState, ComponentViewHolder<ViewBinding, ComponentUiState>>(
     ItemDiffCallback()
 ) {
