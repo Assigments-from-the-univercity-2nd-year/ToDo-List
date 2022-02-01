@@ -6,11 +6,13 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
@@ -23,14 +25,17 @@ import com.example.todolist.presentation.tasks.componentAdapter.task.TaskFingerp
 import com.example.todolist.presentation.tasks.componentAdapter.itemDecorations.HorizontalItemDecoration
 import com.example.todolist.presentation.tasks.componentAdapter.itemDecorations.VerticalItemDecoration
 import com.example.todolist.presentation.tasks.simpleCallbacks.SwipingSimpleCallback
+import com.example.todolist.util.exhaustive
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
     private val viewModel: TasksViewModel by viewModels()
-    /*private lateinit var searchView: SearchView
-    private val onBackPressedCallback = object : OnBackPressedCallback(false) {
+    //private lateinit var searchView: SearchView
+    /*private val onBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
             viewModel.onHomeButtonSelected()
         }
@@ -62,7 +67,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         setUpRecyclerView(componentAdapter, binding)
         setUpListeners(binding)
         setUpFragmentResultListeners()
-        collectEvents(binding)
+        collectEvents()
 
         /*binding.apply {
             ItemTouchHelper(MovingSimpleCallback(
@@ -162,51 +167,48 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         }
     }
 
-    private fun collectEvents(binding: FragmentTasksBinding) {
+    private fun collectEvents() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            /*viewModel.tasksEvent.collect { event ->
+            viewModel.tasksEvent.collect { event ->
                 when (event) {
-                    is TasksViewModel.TasksEvent.MessageEvent.ShowUndoDeleteTaskMessage -> {
-                        Snackbar.make(requireView(), "Task deleted", Snackbar.LENGTH_LONG)
-                            .setAction("UNDO") {
-                                viewModel.onUndoDeleteClicked(event.task, event.parentFolder)
-                            }.show()
-                    }
                     is TasksViewModel.TasksEvent.NavigationEvent.NavigateToAddTaskScreen -> {
-                        val action =
+                        /*val action =
                             TasksFragmentDirections.actionTasksFragmentToAddEditTaskFragment(
+                                TODO()
                                 title = "New Task",
                                 folderId = viewModel.currentFolder.value?.id ?: 1L
                             )
-                        findNavController().navigate(action)
+                        findNavController().navigate(action)*/
+                    }
+                    is TasksViewModel.TasksEvent.NavigationEvent.NavigateToAddFolderScreen -> {
+                        /*val action = TasksFragmentDirections.actionGlobalAddEditFolderDialogFragment(
+                            viewModel.currentFolder.value!!
+                        )
+                        findNavController().navigate(action)*/
                     }
                     is TasksViewModel.TasksEvent.NavigationEvent.NavigateToEditTaskScreen -> {
-                        val action =
+                        /*val action =
                             TasksFragmentDirections.actionTasksFragmentToAddEditTaskFragment(
                                 event.task,
                                 "Edit Task",
                                 viewModel.currentFolder.value?.id ?: 1L
                             )
-                        findNavController().navigate(action)
+                        findNavController().navigate(action)*/
                     }
-                    is TasksViewModel.TasksEvent.MessageEvent.ShowTaskSavedConfirmationMessage -> {
-                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
+                    is TasksViewModel.TasksEvent.NavigationEvent.NavigateToEditFolderScreen -> {
+                        /*val action = TasksFragmentDirections.actionGlobalAddEditFolderDialogFragment(
+                            event.parentFolder, viewModel.currentFolder.value!!
+                        )
+                        findNavController().navigate(action)*/
                     }
                     is TasksViewModel.TasksEvent.NavigationEvent.NavigateToDeleteAllCompletedScreen -> {
-                        val action = TasksFragmentDirections.actionGlobalDeleteAllCompletedDialogFragment()
+                        val action =
+                            TasksFragmentDirections.actionGlobalDeleteAllCompletedDialogFragment()
                         findNavController().navigate(action)
-                    }
-                    is TasksViewModel.TasksEvent.NotifyAdapterItemChanged -> {
-                        taskAdapter.notifyItemChanged(event.position)
                     }
                     is TasksViewModel.TasksEvent.NavigationEvent.NavigateToDeleteFolderScreen -> {
-                        val action = TasksFragmentDirections.actionGlobalDeleteFolderDialogFragment(event.folder)
-                        findNavController().navigate(action)
-                    }
-                    is TasksViewModel.TasksEvent.NavigationEvent.NavigateToAddFolderScreen -> {
-                        val action = TasksFragmentDirections.actionGlobalAddEditFolderDialogFragment(
-                            viewModel.currentFolder.value!!
-                        )
+                        val action =
+                            TasksFragmentDirections.actionGlobalDeleteFolderDialogFragment(event.folder)
                         findNavController().navigate(action)
                     }
                     is TasksViewModel.TasksEvent.NavigationEvent.NavigateToQuickFolderChange -> {
@@ -215,17 +217,27 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
                         )
                         findNavController().navigate(action)
                     }
+                    is TasksViewModel.TasksEvent.MessageEvent.ShowUndoDeleteTaskMessage -> {
+                        Snackbar.make(requireView(), "Task deleted", Snackbar.LENGTH_LONG)
+                            .setAction("UNDO") {
+                                viewModel.onUndoDeleteClicked(
+                                    event.task,
+                                    event.parentFolder
+                                )
+                            }
+                            .show()
+                    }
+                    is TasksViewModel.TasksEvent.MessageEvent.ShowTaskSavedConfirmationMessage -> {
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
+                    }
                     is TasksViewModel.TasksEvent.MessageEvent.ShowFolderSavedConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
                     }
-                    is TasksViewModel.TasksEvent.NavigationEvent.NavigateToEditFolderScreen -> {
-                        val action = TasksFragmentDirections.actionGlobalAddEditFolderDialogFragment(
-                            event.parentFolder, viewModel.currentFolder.value!!
-                        )
-                        findNavController().navigate(action)
-                    }
+                    /*is TasksViewModel.TasksEvent.NotifyAdapterItemChanged -> {
+                        taskAdapter.notifyItemChanged(event.position)
+                    }*/
                 }.exhaustive
-            }*/
+            }
         }
     }
 

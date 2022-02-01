@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.example.todolist.R
 import com.example.todolist.data.*
 import com.example.todolist.data.userPreferences.userPreferencesLocalDataSource.userPreferencesLocalDataStore.UserPreferencesDataStore
+import com.example.todolist.domain.useCases.folderUseCases.AddFolderUseCase
 import com.example.todolist.domain.useCases.folderUseCases.GetComponentsOfFolderUseCase
 import com.example.todolist.domain.useCases.folderUseCases.GetRootFolderUseCase
 import com.example.todolist.domain.util.Resource
@@ -27,6 +28,8 @@ class TasksViewModel @Inject constructor(
 
     private val getRootFolderUseCase: GetRootFolderUseCase,
     private val getComponentsOfFolderUseCase: GetComponentsOfFolderUseCase,
+
+    //private val addFolderUseCase: AddFolderUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TasksUiState())
@@ -163,9 +166,11 @@ class TasksViewModel @Inject constructor(
         // TODO: change search query and collapse searcing
     }
 
-    /*fun onHomeButtonSelected() = viewModelScope.launch {
-        currentFolder.postValue(folderDao.getFolder(currentFolder.value?.folderId ?: 1L))
-    }*/
+    fun onHomeButtonSelected() = viewModelScope.launch {
+        //TODO: navigate to the parent folder of the current folder
+        //_uiState.value = _uiState.value
+        //currentFolder.postValue(folderDao.getFolder(currentFolder.value?.folderId ?: 1L))
+    }
 
     /*fun onTaskSwiped(task: Task) = viewModelScope.launch {
         taskDao.deleteTask(task)
@@ -180,6 +185,7 @@ class TasksViewModel @Inject constructor(
     }*/
 
     fun onComponentSwiped(position: Int) {
+        val component = _uiState.value.components[position]
         TODO()
         /*when(component) {
             is Folder -> onFolderSwiped(component, position)
@@ -187,29 +193,29 @@ class TasksViewModel @Inject constructor(
         }.exhaustive*/
     }
 
-    /*fun onUndoDeleteClicked(task: Task, parentFolder: Folder) = viewModelScope.launch {
-        taskDao.insertTask(task)
-        folderDao.updateFolder(parentFolder)
-    }*/
+    fun onUndoDeleteClicked(task: TaskUiState, parentFolder: FolderUiState) = viewModelScope.launch {
+        //TODO
+        //taskDao.insertTask(task)
+        //folderDao.updateFolder(parentFolder)
+    }
 
     fun onAddNewTaskClicked() = viewModelScope.launch {
-        //TODO
-        /*onAddButtonClicked.value = FABAnimation.DO_NOTHING
-        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToAddTaskScreen)*/
+        _uiState.value = _uiState.value.copy(isExtraFabShown = TasksUiState.FABAnimation.DO_NOTHING)
+        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToAddTaskScreen)
     }
 
     fun onAddNewFolderClicked() = viewModelScope.launch {
-        //TODO
-        /*onAddButtonClicked.value = FABAnimation.HIDE_FABS
-        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToAddFolderScreen)*/
+        _uiState.value = _uiState.value.copy(isExtraFabShown = TasksUiState.FABAnimation.HIDE_FABS)
+        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToAddFolderScreen)
     }
 
     fun onAddButtonClicked() = viewModelScope.launch {
-        //TODO
-        /*onAddButtonClicked.value = when(onAddButtonClicked.value) {
-            FABAnimation.SHOW_FABS -> FABAnimation.HIDE_FABS
-            else -> FABAnimation.SHOW_FABS
-        }*/
+        _uiState.value = _uiState.value.copy(
+            isExtraFabShown = when (_uiState.value.isExtraFabShown) {
+                TasksUiState.FABAnimation.SHOW_FABS -> TasksUiState.FABAnimation.HIDE_FABS
+                else -> TasksUiState.FABAnimation.SHOW_FABS
+            }
+        )
     }
 
     /*fun onAddEditResult(result: Int) {
@@ -285,26 +291,29 @@ class TasksViewModel @Inject constructor(
     }*/
 
     sealed class TasksEvent {
+
         sealed class NavigationEvent {
             object NavigateToAddTaskScreen : TasksEvent()
-            data class NavigateToEditTaskScreen(val task: TaskUiState) : TasksEvent()
             object NavigateToAddFolderScreen : TasksEvent()
+
+            data class NavigateToEditTaskScreen(val task: TaskUiState) : TasksEvent()
             data class NavigateToEditFolderScreen(val parentFolder: FolderUiState) : TasksEvent()
+
             object NavigateToDeleteAllCompletedScreen : TasksEvent()
             data class NavigateToDeleteFolderScreen(val folder: FolderUiState) : TasksEvent()
+
             data class NavigateToQuickFolderChange(val pinnedFolders: List<FolderUiState>) : TasksEvent()
         }
+
         sealed class MessageEvent {
             data class ShowUndoDeleteTaskMessage(val task: TaskUiState, val parentFolder: FolderUiState) : TasksEvent()
+
             data class ShowTaskSavedConfirmationMessage(val msg: String) : TasksEvent()
             data class ShowFolderSavedConfirmationMessage(val msg: String) : TasksEvent()
         }
-        data class NotifyAdapterItemChanged(val position: Int) : TasksEvent()
+
+        //data class NotifyAdapterItemChanged(val position: Int) : TasksEvent()
+
     }
 
-    /*enum class FABAnimation {
-        SHOW_FABS,
-        HIDE_FABS,
-        DO_NOTHING
-    }*/
 }
