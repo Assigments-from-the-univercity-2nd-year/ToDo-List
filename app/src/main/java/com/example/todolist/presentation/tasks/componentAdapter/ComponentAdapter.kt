@@ -4,15 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
-import com.example.todolist.databinding.ItemFolderBinding
-import com.example.todolist.databinding.ItemTaskBinding
 import com.example.todolist.presentation.entities.components.ComponentUiState
-import com.example.todolist.presentation.entities.components.FolderUiState
-import com.example.todolist.presentation.entities.components.TaskUiState
 
 class ComponentAdapter(
     private val fingerprints: List<ComponentFingerprint<*, *>>,
-    //private val onComponentClickListener: OnComponentClickListener,
 ) : ListAdapter<ComponentUiState, ComponentViewHolder<ViewBinding, ComponentUiState>>(
     ItemDiffCallback()
 ) {

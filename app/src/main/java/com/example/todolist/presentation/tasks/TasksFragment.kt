@@ -65,12 +65,12 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentTasksBinding.bind(view)
-        val componentAdapter = ComponentAdapter(getFingerprints())
+        val componentAdapter = ComponentAdapter(viewModel.fingerprints)
 
         setUpRecyclerView(componentAdapter, binding)
         setUpListeners(binding)
         setUpFragmentResultListeners()
-        collectEvents()
+        collectEvents(componentAdapter)
 
         /*binding.apply {
             ItemTouchHelper(MovingSimpleCallback(
@@ -92,18 +92,6 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         setHasOptionsMenu(true)
     }
 
-    private fun getFingerprints(): List<ComponentFingerprint<*, *>> {
-        return listOf(
-            FolderFingerprint { folder -> viewModel.onSubFolderSelected(folder) },
-            TaskFingerprint(
-                onTaskClicked = { task -> viewModel.onTaskSelected(task) },
-                onCheckBoxClicked = { task, isChecked ->
-                    viewModel.onTaskCheckChanged(task, isChecked)
-                }
-            ),
-        )
-    }
-
     private fun setUpRecyclerView(
         componentAdapter: ComponentAdapter,
         binding: FragmentTasksBinding
@@ -116,9 +104,8 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
             addItemDecoration(HorizontalItemDecoration(24))
             addItemDecoration(VerticalItemDecoration(8))
 
-            ItemTouchHelper(SwipingSimpleCallback { positionOfSwipedComponent: Int ->
-                viewModel.onComponentSwiped(positionOfSwipedComponent)
-            }).attachToRecyclerView(this)
+            ItemTouchHelper(SwipingSimpleCallback(viewModel.fingerprintsWithAction))
+                .attachToRecyclerView(this)
         }
     }
 
@@ -155,7 +142,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         }
     }
 
-    private fun collectEvents() {
+    private fun collectEvents(componentAdapter: ComponentAdapter) {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.tasksEvent.collect { event ->
                 when (event) {
@@ -221,9 +208,9 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
                     is TasksViewModel.TasksEvent.MessageEvent.ShowFolderSavedConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
                     }
-                    /*is TasksViewModel.TasksEvent.NotifyAdapterItemChanged -> {
-                        taskAdapter.notifyItemChanged(event.position)
-                    }*/
+                    is TasksViewModel.TasksEvent.NotifyAdapterItemChanged -> {
+                        componentAdapter.notifyItemChanged(event.position)
+                    }
                 }.exhaustive
             }
         }

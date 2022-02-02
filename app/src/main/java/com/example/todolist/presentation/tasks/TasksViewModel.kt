@@ -1,5 +1,6 @@
 package com.example.todolist.presentation.tasks
 
+import android.util.Log
 import androidx.hilt.Assisted
 import androidx.lifecycle.*
 import com.example.todolist.data.userPreferences.userPreferencesLocalDataSource.userPreferencesLocalDataStore.UserPreferencesDataStore
@@ -14,6 +15,9 @@ import com.example.todolist.domain.util.onFailure
 import com.example.todolist.presentation.entities.components.ComponentUiState
 import com.example.todolist.presentation.entities.components.FolderUiState
 import com.example.todolist.presentation.entities.components.TaskUiState
+import com.example.todolist.presentation.tasks.componentAdapter.ComponentFingerprint
+import com.example.todolist.presentation.tasks.componentAdapter.folder.FolderFingerprint
+import com.example.todolist.presentation.tasks.componentAdapter.task.TaskFingerprint
 import com.example.todolist.util.exhaustive
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -41,6 +45,9 @@ class TasksViewModel @Inject constructor(
 
     private val tasksEventChannel = Channel<TasksEvent>()
     val tasksEvent = tasksEventChannel.receiveAsFlow()
+
+    val fingerprintsWithAction = initFingerprintsWithAction()
+    val fingerprints = fingerprintsWithAction.map { it.fingerprint }
 
     //    val searchQuery = state.getLiveData("searchQuery", "")
 
@@ -108,6 +115,38 @@ class TasksViewModel @Inject constructor(
         }
     }
 
+    private fun initFingerprintsWithAction(): List<FingerprintsWithAction> {
+        return listOf(
+            getFolderFingerprintWithAction(),
+            getTaskFingerprintWithAction(),
+        )
+    }
+
+    private fun getFolderFingerprintWithAction(): FingerprintsWithAction {
+        return FingerprintsWithAction(
+            FolderFingerprint { folder -> onSubFolderSelected(folder) },
+            onSwipe = { position ->
+                val folder = _uiState.value.components[position] as FolderUiState
+                onFolderSwiped(folder, position)
+            }
+        )
+    }
+
+    private fun getTaskFingerprintWithAction(): FingerprintsWithAction {
+        return FingerprintsWithAction(
+            TaskFingerprint(
+                onTaskClicked = { task -> onTaskSelected(task) },
+                onCheckBoxClicked = { task, isChecked ->
+                    onTaskCheckChanged(task, isChecked)
+                }
+            ),
+            onSwipe = { position ->
+                val task = _uiState.value.components[position] as TaskUiState
+                onTaskSwiped(task)
+            },
+        )
+    }
+
     fun onSortOrderSelected(sortOrder: SortOrder) = viewModelScope.launch {
         updateSortOrderUseCase(sortOrder)
     }
@@ -136,25 +175,16 @@ class TasksViewModel @Inject constructor(
         //currentFolder.postValue(folderDao.getFolder(currentFolder.value?.folderId ?: 1L))
     }
 
-    /*fun onTaskSwiped(task: Task) = viewModelScope.launch {
-        taskDao.deleteTask(task)
+    fun onTaskSwiped(task: TaskUiState) = viewModelScope.launch {
+        /*taskDao.deleteTask(task)
         val parentFolder = folderDao.getFolder(task.folderId)
         parentFolder.updateDate(folderDao)
-        tasksEventChannel.send(TasksEvent.MessageEvent.ShowUndoDeleteTaskMessage(task, parentFolder))
-    }*/
+        tasksEventChannel.send(TasksEvent.MessageEvent.ShowUndoDeleteTaskMessage(task, parentFolder))*/
+    }
 
-    /*fun onFolderSwiped(folder: Folder, position: Int) = viewModelScope.launch {
+    fun onFolderSwiped(folder: FolderUiState, position: Int) = viewModelScope.launch {
         tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToDeleteFolderScreen(folder))
         tasksEventChannel.send(TasksEvent.NotifyAdapterItemChanged(position))
-    }*/
-
-    fun onComponentSwiped(position: Int) {
-        val component = _uiState.value.components[position]
-        //TODO()
-        /*when(component) {
-            is Folder -> onFolderSwiped(component, position)
-            is Task -> onTaskSwiped(component)
-        }.exhaustive*/
     }
 
     fun onUndoDeleteClicked(task: TaskUiState, parentFolder: FolderUiState) = viewModelScope.launch {
@@ -278,8 +308,13 @@ class TasksViewModel @Inject constructor(
             data class ShowFolderSavedConfirmationMessage(val msg: String) : TasksEvent()
         }
 
-        //data class NotifyAdapterItemChanged(val position: Int) : TasksEvent()
+        data class NotifyAdapterItemChanged(val position: Int) : TasksEvent()
 
     }
+
+    data class FingerprintsWithAction(
+        val fingerprint: ComponentFingerprint<*, *>,
+        val onSwipe : (position: Int) -> Unit,
+    )
 
 }
