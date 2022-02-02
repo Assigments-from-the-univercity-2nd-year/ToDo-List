@@ -5,6 +5,8 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTasksBinding
+import com.example.todolist.domain.models.userPreferences.SortOrder
 import com.example.todolist.presentation.entities.components.FolderUiState
 import com.example.todolist.presentation.tasks.componentAdapter.ComponentAdapter
 import com.example.todolist.presentation.tasks.componentAdapter.ComponentFingerprint
@@ -55,8 +58,8 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
             }
         }*/
 
-    //private val fromBottomAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.from_bottom_anim) }
-    //private val toBottomAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.to_bottom_anim) }
+    private val fromBottomAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.from_bottom_anim) }
+    private val toBottomAnim: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.to_bottom_anim) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,16 +78,6 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
             )).attachToRecyclerView(recyclerviewFragmenttasksTasks)
         }*/
 
-        /*viewModel.onAddButtonClicked.observe(viewLifecycleOwner) {
-            if (it == TasksViewModel.FABAnimation.SHOW_FABS) {
-                setVisibility(true)
-                setAnimation(true)
-            } else if (it == TasksViewModel.FABAnimation.HIDE_FABS) {
-                setVisibility(false)
-                setAnimation(false)
-            }
-        }*/
-
         /*requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             onBackPressedCallback
@@ -92,13 +85,8 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
         //findNavController().addOnDestinationChangedListener(onDestinationChangedListener)
 
-        viewModel.uiState.observe(viewLifecycleOwner) {
-            if (it.folderData != null) {
-                componentAdapter.submitList(it.components)
-                enableBackButton(viewModel.isCurrentFolderRoot())
-                (activity as? AppCompatActivity)?.supportActionBar?.title =
-                        viewModel.getTitleName(resources.getString(R.string.taskfragment_all_tasks_title))
-            }
+        viewModel.uiState.observe(viewLifecycleOwner) { taskUiState ->
+            observeUiState(taskUiState, binding, componentAdapter)
         }
 
         setHasOptionsMenu(true)
@@ -241,6 +229,27 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         }
     }
 
+    private fun observeUiState(
+        tasksUiState: TasksUiState,
+        binding: FragmentTasksBinding,
+        componentAdapter: ComponentAdapter,
+    ) {
+        if (tasksUiState.folderData != null) {
+            componentAdapter.submitList(tasksUiState.components)
+            enableBackButton(!viewModel.isCurrentFolderRoot())
+            (activity as? AppCompatActivity)?.supportActionBar?.title =
+                viewModel.getTitleName(resources.getString(R.string.taskfragment_all_tasks_title))
+        }
+
+        if (tasksUiState.fabAnimation == TasksUiState.FABAnimation.SHOW_FABS) {
+            setVisibility(binding, true)
+            setAnimation(binding, true)
+        } else if (tasksUiState.fabAnimation == TasksUiState.FABAnimation.HIDE_FABS) {
+            setVisibility(binding, false)
+            setAnimation(binding, false)
+        }
+    }
+
     private fun enableBackButton(enable: Boolean) {
         if (enable) {
             (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -251,25 +260,30 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         }
     }
 
-    /*private fun setVisibility(clicked: Boolean) {
-        if (clicked) {
-            fab_fragmenttasks_addtask.visibility = View.VISIBLE
-            fab_fragmenttasks_addfolder.visibility = View.VISIBLE
-        } else {
-            fab_fragmenttasks_addtask.visibility = View.INVISIBLE
-            fab_fragmenttasks_addfolder.visibility = View.INVISIBLE
+    private fun setVisibility(binding: FragmentTasksBinding, clicked: Boolean) {
+        binding.apply {
+            if (clicked) {
+                fabFragmenttasksAddtask.visibility = View.VISIBLE
+                fabFragmenttasksAddfolder.visibility = View.VISIBLE
+            } else {
+                fabFragmenttasksAddtask.visibility = View.INVISIBLE
+                fabFragmenttasksAddfolder.visibility = View.INVISIBLE
+            }
         }
-    }*/
 
-    /*private fun setAnimation(clicked: Boolean) {
-        if (clicked) {
-            fab_fragmenttasks_addtask.startAnimation(fromBottomAnim)
-            fab_fragmenttasks_addfolder.startAnimation(fromBottomAnim)
-        } else {
-            fab_fragmenttasks_addtask.startAnimation(toBottomAnim)
-            fab_fragmenttasks_addfolder.startAnimation(toBottomAnim)
+    }
+
+    private fun setAnimation(binding: FragmentTasksBinding, clicked: Boolean) {
+        binding.apply {
+            if (clicked) {
+                fabFragmenttasksAddtask.startAnimation(fromBottomAnim)
+                fabFragmenttasksAddfolder.startAnimation(fromBottomAnim)
+            } else {
+                fabFragmenttasksAddtask.startAnimation(toBottomAnim)
+                fabFragmenttasksAddfolder.startAnimation(toBottomAnim)
+            }
         }
-    }*/
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_fragment_tasks, menu)
@@ -303,33 +317,33 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_menuFragmentTasks_sortByName -> {
-                //viewModel.onSortOrderSelected(SortOrder.BY_NAME)
+                viewModel.onSortOrderSelected(SortOrder.BY_NAME)
                 true
             }
             R.id.action_menuFragmentTasks_sortByDateCreated -> {
-                //viewModel.onSortOrderSelected(SortOrder.BY_DATE)
+                viewModel.onSortOrderSelected(SortOrder.BY_DATE)
                 true
             }
             R.id.action_menuFragmentTasks_hideCompletedTasks -> {
                 item.isChecked = !item.isChecked
-                //viewModel.onHideCompletedSelected(item.isChecked)
+                viewModel.onHideCompletedSelected(item.isChecked)
                 true
             }
             R.id.action_menuFragmentTasks_deleteAllCompletedTasks -> {
-                //viewModel.onDeleteAllCompletedClicked()
+                viewModel.onDeleteAllCompletedClicked()
                 true
             }
             R.id.action_menuFragmentTasks_quickFolderChange -> {
-                //viewModel.onQuickFolderChangeClicked()
+                viewModel.onQuickFolderChangeClicked()
                 true
             }
             R.id.action_menuFragmentTasks_editFolder -> {
-                //viewModel.onEditFolderClicked()
+                viewModel.onEditFolderClicked()
                 true
             }
             android.R.id.home -> {
-                //viewModel.onHomeButtonSelected()
-                return true
+                viewModel.onHomeButtonSelected()
+                true
             }
             else -> super.onOptionsItemSelected(item)
         }

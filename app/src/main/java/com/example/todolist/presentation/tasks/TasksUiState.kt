@@ -5,7 +5,7 @@ import com.example.todolist.presentation.entities.components.FolderUiState
 
 data class TasksUiState(
     val isLoading: Boolean = false,
-    val isExtraFabShown: FABAnimation = FABAnimation.DO_NOTHING,
+    val fabAnimation: FABAnimation = FABAnimation.DO_NOTHING,
     val folderData: FolderUiState? = null,
     val components: List<ComponentUiState> = emptyList()
 ) {
