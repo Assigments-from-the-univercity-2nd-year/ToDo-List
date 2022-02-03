@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -22,9 +21,6 @@ import com.example.todolist.databinding.FragmentTasksBinding
 import com.example.todolist.domain.models.userPreferences.SortOrder
 import com.example.todolist.presentation.entities.components.FolderUiState
 import com.example.todolist.presentation.tasks.componentAdapter.ComponentAdapter
-import com.example.todolist.presentation.tasks.componentAdapter.ComponentFingerprint
-import com.example.todolist.presentation.tasks.componentAdapter.folder.FolderFingerprint
-import com.example.todolist.presentation.tasks.componentAdapter.task.TaskFingerprint
 import com.example.todolist.presentation.tasks.componentAdapter.itemDecorations.HorizontalItemDecoration
 import com.example.todolist.presentation.tasks.componentAdapter.itemDecorations.VerticalItemDecoration
 import com.example.todolist.presentation.tasks.simpleCallbacks.SwipingSimpleCallback
@@ -38,11 +34,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
     private val viewModel: TasksViewModel by viewModels()
     //private lateinit var searchView: SearchView
-    /*private val onBackPressedCallback = object : OnBackPressedCallback(false) {
-        override fun handleOnBackPressed() {
-            viewModel.onHomeButtonSelected()
-        }
-    }*/
+    private val onBackPressedCallback = initBackPressedCallback()
     /*private val onDestinationChangedListener =
         NavController.OnDestinationChangedListener { controller, destination, arguments ->
             if (destination.id == controller.graph.startDestination) {
@@ -68,7 +60,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         val componentAdapter = ComponentAdapter(viewModel.fingerprints)
 
         setUpRecyclerView(componentAdapter, binding)
-        setUpListeners(binding)
+        setUpFabListeners(binding)
         setUpFragmentResultListeners()
         collectEvents(componentAdapter)
 
@@ -78,10 +70,10 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
             )).attachToRecyclerView(recyclerviewFragmenttasksTasks)
         }*/
 
-        /*requireActivity().onBackPressedDispatcher.addCallback(
+        requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             onBackPressedCallback
-        )*/
+        )
 
         //findNavController().addOnDestinationChangedListener(onDestinationChangedListener)
 
@@ -109,7 +101,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         }
     }
 
-    private fun setUpListeners(binding: FragmentTasksBinding) {
+    private fun setUpFabListeners(binding: FragmentTasksBinding) {
         binding.apply {
             fabFragmenttasksAddbutton.setOnClickListener {
                 viewModel.onAddButtonClicked()
@@ -126,20 +118,22 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
     }
 
     private fun setUpFragmentResultListeners() {
+
         setFragmentResultListener("add_edit_request") { s: String, bundle: Bundle ->
             val result = bundle.getInt("add_edit_result")
-            //TODO: viewModel.onAddEditResult(result)
+            viewModel.onAddEditResult(result)
         }
 
         setFragmentResultListener("add_edit_folder_request") { s: String, bundle: Bundle ->
             val result = bundle.getInt("add_edit_folder_result")
-            //TODO: viewModel.onAddEditFolderResult(result)
+            viewModel.onAddEditFolderResult(result)
         }
 
         setFragmentResultListener("folder_to_change_request") { s: String, bundle: Bundle ->
             val result = bundle.getParcelable<FolderUiState>("folder_to_change_result")
-            //TODO: viewModel.onQuickFolderChangeResult(result)
+            viewModel.onQuickFolderChangeResult(result)
         }
+
     }
 
     private fun collectEvents(componentAdapter: ComponentAdapter) {
@@ -194,12 +188,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
                     }
                     is TasksViewModel.TasksEvent.MessageEvent.ShowUndoDeleteTaskMessage -> {
                         Snackbar.make(requireView(), "Task deleted", Snackbar.LENGTH_LONG)
-                            .setAction("UNDO") {
-                                viewModel.onUndoDeleteClicked(
-                                    event.task,
-                                    event.parentFolder
-                                )
-                            }
+                            .setAction("UNDO") { viewModel.onUndoDeleteClicked(event.task) }
                             .show()
                     }
                     is TasksViewModel.TasksEvent.MessageEvent.ShowTaskSavedConfirmationMessage -> {
@@ -225,7 +214,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
             componentAdapter.submitList(tasksUiState.components)
             enableBackButton(!viewModel.isCurrentFolderRoot())
             (activity as? AppCompatActivity)?.supportActionBar?.title =
-                viewModel.getTitleName(resources.getString(R.string.taskfragment_all_tasks_title))
+                viewModel.getTitleName(resources)
         }
 
         if (tasksUiState.fabAnimation == TasksUiState.FABAnimation.SHOW_FABS) {
@@ -240,10 +229,18 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
     private fun enableBackButton(enable: Boolean) {
         if (enable) {
             (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            //onBackPressedCallback.isEnabled = true
+            onBackPressedCallback.isEnabled = true
         } else {
             (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-            //onBackPressedCallback.isEnabled = false
+            onBackPressedCallback.isEnabled = false
+        }
+    }
+
+    private fun initBackPressedCallback(): OnBackPressedCallback {
+        return object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                viewModel.onHomeButtonSelected()
+            }
         }
     }
 
@@ -340,6 +337,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         super.onDestroyView()
         searchView.setOnQueryTextListener(null)
         findNavController().removeOnDestinationChangedListener(onDestinationChangedListener)
+        TODO: if FABAnimation has state HIDE_FABS than change it's state to DO_NOTHING
         if (viewModel.onAddButtonClicked.value == TasksViewModel.FABAnimation.HIDE_FABS) {
             viewModel.onAddButtonClicked.value = TasksViewModel.FABAnimation.DO_NOTHING
         }

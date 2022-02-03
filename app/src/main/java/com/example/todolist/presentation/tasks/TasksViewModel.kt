@@ -1,43 +1,53 @@
 package com.example.todolist.presentation.tasks
 
-import android.util.Log
-import androidx.hilt.Assisted
-import androidx.lifecycle.*
-import com.example.todolist.data.userPreferences.userPreferencesLocalDataSource.userPreferencesLocalDataStore.UserPreferencesDataStore
+import android.content.res.Resources
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
+import com.example.todolist.R
+import com.example.todolist.domain.models.components.Component
+import com.example.todolist.domain.models.components.Folder
 import com.example.todolist.domain.models.userPreferences.SortOrder
 import com.example.todolist.domain.useCases.folderUseCases.GetComponentsOfFolderUseCase
+import com.example.todolist.domain.useCases.folderUseCases.GetFolderUseCase
 import com.example.todolist.domain.useCases.folderUseCases.GetRootFolderUseCase
 import com.example.todolist.domain.useCases.folderUseCases.UpdateFolderUseCase
+import com.example.todolist.domain.useCases.tasksUseCases.AddTaskUseCase
+import com.example.todolist.domain.useCases.tasksUseCases.DeleteTaskUseCase
+import com.example.todolist.domain.useCases.tasksUseCases.UpdateTaskUseCase
 import com.example.todolist.domain.useCases.userPreferencesUseCases.UpdateHideCompletedUseCase
 import com.example.todolist.domain.useCases.userPreferencesUseCases.UpdateSortOrderUseCase
-import com.example.todolist.domain.util.Resource
 import com.example.todolist.domain.util.onFailure
-import com.example.todolist.presentation.entities.components.ComponentUiState
-import com.example.todolist.presentation.entities.components.FolderUiState
-import com.example.todolist.presentation.entities.components.TaskUiState
+import com.example.todolist.presentation.*
+import com.example.todolist.presentation.entities.components.*
 import com.example.todolist.presentation.tasks.componentAdapter.ComponentFingerprint
 import com.example.todolist.presentation.tasks.componentAdapter.folder.FolderFingerprint
 import com.example.todolist.presentation.tasks.componentAdapter.task.TaskFingerprint
-import com.example.todolist.util.exhaustive
+import dagger.assisted.Assisted
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TasksViewModel @Inject constructor(
-    private val preferencesManager: UserPreferencesDataStore,
-    @Assisted private val state: SavedStateHandle,
-
     private val getRootFolderUseCase: GetRootFolderUseCase,
+    private val getFolderUseCase: GetFolderUseCase,
     private val getComponentsOfFolderUseCase: GetComponentsOfFolderUseCase,
 
-    //private val addFolderUseCase: AddFolderUseCase,
     private val updateSortOrderUseCase: UpdateSortOrderUseCase,
     private val updateHideCompletedUseCase: UpdateHideCompletedUseCase,
 
     private val updateFolderUseCase: UpdateFolderUseCase,
+    private val updateTaskUseCase: UpdateTaskUseCase,
+
+    private val deleteTaskUseCase: DeleteTaskUseCase,
+
+    private val addTaskUseCase: AddTaskUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TasksUiState())
@@ -52,50 +62,39 @@ class TasksViewModel @Inject constructor(
     //    val searchQuery = state.getLiveData("searchQuery", "")
 
     init {
-        //todo: fetchTaskData()
-        _uiState.value = TasksUiState(
-            isLoading = false,
-            folderData = initRootFolderTemp(),
-            components = initComponentsTemp(),
-        )
+        fetchTasksData()
     }
 
-    private fun initRootFolderTemp(): FolderUiState {
-        return FolderUiState(
-            title = "Root folder",
-            folderId = 1,
-            isPinned = true,
-            id = 1,
-            numberOfSubComponents = "8",
-        )
+    private fun fetchTasksData() = viewModelScope.launch {
+        val rootFolder = getRootFolderUseCase().onFailure { TODO() }
+        navigateToFolder(rootFolder.id)
     }
 
-    private fun initComponentsTemp(): List<ComponentUiState> {
-        return listOf(
-            TaskUiState(title = "Note #1", isImportant = true),
-            TaskUiState(title = "Note #2", isImportant = true),
-            FolderUiState(title = "Folder #1"),
-            TaskUiState(title = "Note #3"),
-            TaskUiState(title = "Note #4"),
-            TaskUiState(title = "Note #5"),
-            FolderUiState(title = "Folder #2"),
-            TaskUiState(title = "Note #6"),
-        )
-    }
-
-    private fun fetchTaskData() = viewModelScope.launch {
-        val rootFolder = getRootFolderUseCase()
-            .onFailure { TODO() }
-        val componentsList = getComponentsOfFolderUseCase(rootFolder)
-        componentsList.collect {
-            when (it) {
-                is Resource.Failure -> TODO()
-                is Resource.Success -> {
-
-                }
-            }.exhaustive
+    private suspend fun navigateToFolder(folderId: Long) {
+        val currentFolder = getFolderUseCase(folderId)
+        currentFolder.collect { folderResource ->
+            val folder = folderResource.onFailure { TODO() }
+            fetchComponentsData(folder)
         }
-        //TODO: fetch data from useCases to _uiState
+    }
+
+    private suspend fun fetchComponentsData(folder: Folder) {
+        getComponentsOfFolderUseCase(folder).collect {
+            val listOfComponents = it
+                .onFailure { TODO() }
+                .mapListOfComponentsToPresentation()
+
+            _uiState.value = TasksUiState(
+                isLoading = false,
+                fabAnimation = _uiState.value.fabAnimation,
+                folderData = folder.mapToPresentation(),
+                components = listOfComponents,
+            )
+        }
+    }
+
+    private fun List<Component>.mapListOfComponentsToPresentation(): List<ComponentUiState> {
+        TODO()
     }
 
     fun isCurrentFolderRoot(): Boolean {
@@ -107,11 +106,12 @@ class TasksViewModel @Inject constructor(
         }
     }
 
-    fun getTitleName(rootFolderTitle: String): String {
+    fun getTitleName(resources: Resources): String {
         return if (isCurrentFolderRoot()) {
-            rootFolderTitle
+            resources.getString(R.string.taskfragment_all_tasks_title)
         } else {
-            _uiState.value.folderData?.title ?: TODO()
+            _uiState.value.folderData?.title
+                ?: resources.getString(R.string.taskfragment_loading_title)
         }
     }
 
@@ -155,42 +155,35 @@ class TasksViewModel @Inject constructor(
         updateHideCompletedUseCase(hideCompleted)
     }
 
-    fun onTaskSelected(task: TaskUiState) = viewModelScope.launch {
+    private fun onTaskSelected(task: TaskUiState) = viewModelScope.launch {
         tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToEditTaskScreen(task))
     }
 
-    fun onTaskCheckChanged(task: TaskUiState, isChecked: Boolean) = viewModelScope.launch {
-        //taskDao.updateTask(task.copy(isCompleted = isChecked))
-        // TODO: implement
+    private fun onTaskCheckChanged(task: TaskUiState, isChecked: Boolean) = viewModelScope.launch {
+        updateTaskUseCase(task.copy(isCompleted = isChecked).mapToDomain())
     }
 
-    fun onSubFolderSelected(folder: FolderUiState) = viewModelScope.launch {
-        //currentFolder.postValue(folderDao.getFolder(folder.id))
-        // TODO: change search query and collapse searcing
+    private fun onSubFolderSelected(folder: FolderUiState) = viewModelScope.launch {
+        navigateToFolder(folderId = folder.id)
+        // TODO: change search query and collapse searching
     }
 
     fun onHomeButtonSelected() = viewModelScope.launch {
-        //TODO: navigate to the parent folder of the current folder
-        //_uiState.value = _uiState.value
-        //currentFolder.postValue(folderDao.getFolder(currentFolder.value?.folderId ?: 1L))
+        navigateToFolder(_uiState.value.folderData?.folderId ?: TODO())
     }
 
-    fun onTaskSwiped(task: TaskUiState) = viewModelScope.launch {
-        /*taskDao.deleteTask(task)
-        val parentFolder = folderDao.getFolder(task.folderId)
-        parentFolder.updateDate(folderDao)
-        tasksEventChannel.send(TasksEvent.MessageEvent.ShowUndoDeleteTaskMessage(task, parentFolder))*/
+    private fun onTaskSwiped(task: TaskUiState) = viewModelScope.launch {
+        deleteTaskUseCase(task.mapToDomain())
+        tasksEventChannel.send(TasksEvent.MessageEvent.ShowUndoDeleteTaskMessage(task))
     }
 
-    fun onFolderSwiped(folder: FolderUiState, position: Int) = viewModelScope.launch {
+    private fun onFolderSwiped(folder: FolderUiState, position: Int) = viewModelScope.launch {
         tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToDeleteFolderScreen(folder))
         tasksEventChannel.send(TasksEvent.NotifyAdapterItemChanged(position))
     }
 
-    fun onUndoDeleteClicked(task: TaskUiState, parentFolder: FolderUiState) = viewModelScope.launch {
-        //TODO
-        //taskDao.insertTask(task)
-        //folderDao.updateFolder(parentFolder)
+    fun onUndoDeleteClicked(task: TaskUiState) = viewModelScope.launch {
+        addTaskUseCase(task.mapToDomain())
     }
 
     fun onAddNewTaskClicked() = viewModelScope.launch {
@@ -212,33 +205,34 @@ class TasksViewModel @Inject constructor(
         )
     }
 
-    /*fun onAddEditResult(result: Int) {
+    fun onAddEditResult(result: Int) {
         when (result) {
             ADD_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task added")
             EDIT_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task updated")
             EDIT_TASK_RESULT_NOTHING_CHANGED -> showTaskSavedConfirmationMessage("Task data didn't change")
         }
-    }*/
+    }
 
-    /*fun onAddEditFolderResult(result: Int) = viewModelScope.launch {
+    fun onAddEditFolderResult(result: Int) = viewModelScope.launch {
         when (result) {
             ADD_FOLDER_RESULT_OK -> showTaskSavedConfirmationMessage("Folder added")
             EDIT_FOLDER_RESULT_OK -> {
                 showTaskSavedConfirmationMessage("Folder updated")
-                currentFolder.postValue(folderDao.getFolder(currentFolder.value!!.id))
+                //TODO: WTF?
+                //currentFolder.postValue(folderDao.getFolder(currentFolder.value!!.id))
             }
         }
-    }*/
+    }
 
-    /*fun onQuickFolderChangeResult(result: Folder?) {
+    fun onQuickFolderChangeResult(result: FolderUiState?) = viewModelScope.launch {
         if (result != null) {
-            currentFolder.value = result
+            navigateToFolder(result.id)
         }
-    }*/
+    }
 
-    /*private fun showTaskSavedConfirmationMessage(msg: String) = viewModelScope.launch {
+    private fun showTaskSavedConfirmationMessage(msg: String) = viewModelScope.launch {
         tasksEventChannel.send(TasksEvent.MessageEvent.ShowTaskSavedConfirmationMessage(msg))
-    }*/
+    }
 
     fun onDeleteAllCompletedClicked() = viewModelScope.launch {
         tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToDeleteAllCompletedScreen)
@@ -302,7 +296,7 @@ class TasksViewModel @Inject constructor(
         }
 
         sealed class MessageEvent {
-            data class ShowUndoDeleteTaskMessage(val task: TaskUiState, val parentFolder: FolderUiState) : TasksEvent()
+            data class ShowUndoDeleteTaskMessage(val task: TaskUiState) : TasksEvent()
 
             data class ShowTaskSavedConfirmationMessage(val msg: String) : TasksEvent()
             data class ShowFolderSavedConfirmationMessage(val msg: String) : TasksEvent()

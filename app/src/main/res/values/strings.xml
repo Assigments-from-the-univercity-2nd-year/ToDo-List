@@ -44,6 +44,7 @@
 
     <!-- TasksFragment -->
     <string name="taskfragment_all_tasks_title">All tasks</string>
+    <string name="taskfragment_loading_title">Loading...</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -1,7 +1,6 @@
 package com.example.todolist.domain.useCases.tasksUseCases
 
 import com.example.todolist.domain.models.components.Task
-import com.example.todolist.domain.models.components.TaskCreatingDTO
 import com.example.todolist.domain.repositories.ComponentsRepository
 import com.example.todolist.domain.repositories.RepositoryExceptions
 import com.example.todolist.domain.util.Resource
@@ -27,6 +26,10 @@ class AddTaskUseCase @Inject constructor(
         )
 
         return componentsRepository.addTask(task)
+    }
+
+    suspend operator fun invoke(task: Task): Resource<Long, RepositoryExceptions> {
+        TODO()
     }
 
 }
