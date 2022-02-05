@@ -5,175 +5,160 @@ import com.example.todolist.data.components.componentsLocalDataSource.FolderLoca
 import com.example.todolist.data.components.componentsLocalDataSource.TaskLocalDataSource
 import com.example.todolist.data.components.componentsLocalDataSource.entities.FolderDbModel
 import com.example.todolist.data.components.componentsLocalDataSource.entities.TaskDbModel
+import com.example.todolist.domain.models.components.Component
 import com.example.todolist.domain.models.components.Folder
 import com.example.todolist.domain.models.components.FolderCreatingDTO
 import com.example.todolist.domain.models.components.Task
 import com.example.todolist.domain.repositories.ComponentsRepository
-import com.example.todolist.domain.repositories.RepositoryExceptions
-import com.example.todolist.domain.util.Resource
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
 class ComponentsRepositoryImpl(
     private val folderLocalDataSource: FolderLocalDataSource,
-    private val taskLocalDataSource: TaskLocalDataSource
+    private val taskLocalDataSource: TaskLocalDataSource,
 ) : ComponentsRepository {
 
-    override suspend fun getRootFolder(): Resource<Folder, RepositoryExceptions> {
-        return try {
-            Resource.Success(folderLocalDataSource.getRootFolder().mapToDomain())
-        } catch (exception: Exception) {
-            Resource.Failure(RepositoryExceptions.UnknownException(cause = exception.cause))
+    override fun getSubFoldersFlow(parentFolder: Folder): Flow<List<Folder>> {
+        return folderLocalDataSource.getSubFoldersFlow(parentFolder.id)
+            .map { it.mapFolderListToDomain() }
+    }
+
+    override fun getSubTasksFlow(parentFolder: Folder): Flow<List<Task>> {
+        return taskLocalDataSource.getSubTasksFlow(parentFolder.id)
+            .map { it.mapTaskListToDomain() }
+    }
+
+    override fun getFolderFlow(folderId: Long): Flow<Folder> {
+        return folderLocalDataSource.getFolderFlow(folderId)
+            .map { it.mapToDomain() }
+    }
+
+    override suspend fun getRootFolder(): Folder {
+        Log.d("TAG", "getRootFolder: started!")
+        var rootFolder =  folderLocalDataSource.getRootFolder()
+        while(rootFolder == null) {
+            Log.i("TAG", "getRootFolder: root folder is $rootFolder")
+            delay(500)
+            rootFolder = folderLocalDataSource.getRootFolder()
         }
+        Log.d("TAG", "getRootFolder: finished!")
+        return rootFolder.mapToDomain()
     }
 
-    override fun getSubFoldersOfFolder(folder: Folder): Flow<Resource<List<Folder>, RepositoryExceptions>> {
-        return folderLocalDataSource.getFoldersOfFolder(folder.mapToData().id)
-            .map { Resource.Success(it.mapFolderListToDomain()) as Resource<List<Folder>, RepositoryExceptions>}
-            .catch { exception ->
-                Log.e(TAG, "getTextPartsOfTask: ", exception)
-                emit(Resource.Failure(reason = RepositoryExceptions.UnknownException(exception.cause)))
-            }
+    override suspend fun getPinnedFolders(): List<Folder> {
+        return folderLocalDataSource.getPinnedFolders().mapFolderListToDomain()
     }
 
-    override fun getTasksOfFolder(folder: Folder): Flow<Resource<List<Task>, RepositoryExceptions>> {
-        return taskLocalDataSource.getTasksOfFolder(folder.mapToData().id)
-            .map { Resource.Success(it.mapTaskListToDomain()) as Resource<List<Task>, RepositoryExceptions>}
-            .catch { exception ->
-                Log.e(TAG, "getTextPartsOfTask: ", exception)
-                emit(Resource.Failure(reason = RepositoryExceptions.UnknownException(exception.cause)))
-            }
+    override suspend fun getFolder(folderId: Long): Folder {
+        return folderLocalDataSource.getFolder(folderId).mapToDomain()
     }
 
-    override fun getPinnedFolders(): Flow<Resource<List<Folder>, RepositoryExceptions>> {
-        return folderLocalDataSource.getPinnedFolders()
-            .map { Resource.Success(it.mapFolderListToDomain()) as Resource<List<Folder>, RepositoryExceptions>}
-            .catch { exception ->
-                Log.e(TAG, "getTextPartsOfTask: ", exception)
-                emit(Resource.Failure(reason = RepositoryExceptions.UnknownException(exception.cause)))
-            }
+    override suspend fun addTask(task: Task): Long {
+        return taskLocalDataSource.addTask(task.mapToData())
     }
 
-    override suspend fun getParentFolderOfTask(taskId: Long): Resource<Folder, RepositoryExceptions> {
-        return try {
-            Resource.Success(
-                folderLocalDataSource.getFolder(
-                    taskLocalDataSource.getParentFolderIdOfTask(taskId)
-                ).mapToDomain()
+    override suspend fun addFolder(folderCreatingDTO: FolderCreatingDTO): Long {
+        return folderLocalDataSource.addFolder(
+            FolderDbModel(
+                title = folderCreatingDTO.title,
+                parentFolderId = folderCreatingDTO.folderId,
+                isPinned = folderCreatingDTO.isPinned
             )
-        } catch (exception: Exception) {
-            Resource.Failure(RepositoryExceptions.UnknownException(cause = exception.cause))
-        }
+        )
     }
 
-    override suspend fun getParentFolderOfFolder(folderId: Long): Resource<Folder, RepositoryExceptions> {
-        return try {
-            Resource.Success(
-                folderLocalDataSource.getFolder(
-                    folderLocalDataSource.getParentFolderIdOfFolder(folderId)
-                ).mapToDomain()
-            )
-        } catch (exception: Exception) {
-            Resource.Failure(RepositoryExceptions.UnknownException(cause = exception.cause))
-        }
+    override suspend fun updateTask(task: Task) {
+        taskLocalDataSource.updateTask(task.mapToData())
     }
 
-    override suspend fun addTask(task: Task): Resource<Long, RepositoryExceptions> {
-        return try {
-            Resource.Success(taskLocalDataSource.addTask(task.mapToData()))
-        } catch (exception: Exception) {
-            Resource.Failure(RepositoryExceptions.UnknownException(cause = exception.cause))
-        }
+    override suspend fun updateFolder(folder: Folder) {
+        folderLocalDataSource.updateFolder(folder.mapToData())
     }
 
-    override suspend fun addFolder(folderCreatingDTO: FolderCreatingDTO): Resource<Long, RepositoryExceptions> {
-        return try {
-            Resource.Success(
-                folderLocalDataSource.addFolder(
-                    FolderDbModel(
-                        title = folderCreatingDTO.title,
-                        folderId = folderCreatingDTO.folderId,
-                        isPinned = folderCreatingDTO.isPinned
-
-                    )
-                )
-            )
-        } catch (exception: Exception) {
-            Resource.Failure(RepositoryExceptions.UnknownException(cause = exception.cause))
-        }
+    override suspend fun deleteTask(task: Task) {
+        taskLocalDataSource.deleteTask(task.mapToData())
     }
 
-    override suspend fun updateTask(task: Task): Resource<Unit, RepositoryExceptions> {
-        return try {
-            Resource.Success(taskLocalDataSource.updateTask(task.mapToData()))
-        } catch (exception: Exception) {
-            Resource.Failure(RepositoryExceptions.UnknownException(cause = exception.cause))
-        }
+    override suspend fun deleteCompletedTasks() {
+        taskLocalDataSource.deleteCompletedTasks()
     }
 
-    override suspend fun updateFolder(folder: Folder): Resource<Unit, RepositoryExceptions> {
-        return try {
-            Resource.Success(folderLocalDataSource.updateFolder(folder.mapToData()))
-        } catch (exception: Exception) {
-            Resource.Failure(RepositoryExceptions.UnknownException(cause = exception.cause))
-        }
+    override suspend fun deleteFolder(folder: Folder) {
+        folderLocalDataSource.deleteFolder(folder.mapToData())
     }
 
-    override suspend fun deleteTask(task: Task): Resource<Unit, RepositoryExceptions> {
-        return try {
-            Resource.Success(taskLocalDataSource.deleteTask(task.mapToData()))
-        } catch (exception: Exception) {
-            Resource.Failure(RepositoryExceptions.UnknownException(cause = exception.cause))
-        }
+    private suspend fun FolderDbModel.mapToDomain(): Folder {
+        return Folder(
+            title = title,
+            parentFolderId = parentFolderId,
+            isPinned = isPinned,
+            createdDate = createdDate,
+            modifiedDate = modifiedDate,
+            id = id,
+            subComponents = getSubComponents(id)
+        )
     }
 
-    override suspend fun deleteCompletedTasks(): Resource<Unit, RepositoryExceptions> {
-        return try {
-            Resource.Success(taskLocalDataSource.deleteCompletedTasks())
-        } catch (exception: Exception) {
-            Resource.Failure(RepositoryExceptions.UnknownException(cause = exception.cause))
-        }
-    }
+    private suspend fun getSubComponents(parentFolderId: Long): List<Component> {
+        Log.d("TAG", "getSubComponents: started!")
+        val subFoldersList = folderLocalDataSource.getSubFolders(parentFolderId)
+        val foldersList = subFoldersList.mapFolderListToDomain()
+        /*val foldersList = folderLocalDataSource
+            .getSubFolders(parentFolderId)
+            .mapFolderListToDomain()
+            as List<Component>*/
+        Log.d("TAG", "getSubComponents: first step completed!")
+        val tasksList = taskLocalDataSource
+            .getSubTasks(parentFolderId)
+            .mapTaskListToDomain()
+            as List<Component>
 
-    override suspend fun deleteFolder(folder: Folder): Resource<Unit, RepositoryExceptions> {
-        return try {
-            Resource.Success(folderLocalDataSource.deleteFolder(folder.mapToData()))
-        } catch (exception: Exception) {
-            Resource.Failure(RepositoryExceptions.UnknownException(cause = exception.cause))
-        }
-    }
-
-    private fun FolderDbModel.mapToDomain(): Folder {
-        TODO("Not yet implemented")
+        Log.d("TAG", "getSubComponents: finished!")
+        return foldersList.plus(tasksList)
     }
 
     private fun Folder.mapToData(): FolderDbModel {
-        TODO("Not yet implemented")
+        return FolderDbModel(
+            title = title,
+            parentFolderId = parentFolderId,
+            isPinned = isPinned,
+            createdDate = createdDate,
+            modifiedDate = modifiedDate,
+            id = id,
+        )
     }
 
     private fun TaskDbModel.mapToDomain(): Task {
-        TODO("Not yet implemented")
+        return Task(
+            title = title,
+            parentFolderId = parentFolderId,
+            isImportant = isImportant,
+            isCompleted = isCompleted,
+            createdDate = createdDate,
+            modifiedDate = modifiedDate,
+            id = id,
+        )
     }
 
     private fun Task.mapToData(): TaskDbModel {
-        TODO("Not yet implemented")
+        return TaskDbModel(
+            title = title,
+            parentFolderId = parentFolderId,
+            isImportant = isImportant,
+            isCompleted = isCompleted,
+            createdDate = createdDate,
+            modifiedDate = modifiedDate,
+            id = id,
+        )
     }
 
-    private fun List<FolderDbModel>.mapFolderListToDomain(): List<Folder> {
-        return this.map {
-            it.mapToDomain()
-        }
+    private suspend fun List<FolderDbModel>.mapFolderListToDomain(): List<Folder> {
+        return this.map { it.mapToDomain() }
     }
 
     private fun List<TaskDbModel>.mapTaskListToDomain(): List<Task> {
-        return this.map {
-            it.mapToDomain()
-        }
-    }
-
-    private companion object {
-        private const val TAG = "ComponentsRepoImpl"
+        return this.map { it.mapToDomain() }
     }
 
 }

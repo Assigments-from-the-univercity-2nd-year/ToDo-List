@@ -8,28 +8,20 @@ import kotlinx.coroutines.flow.Flow
 
 interface PartsRepository {
 
-    fun getTextPartsOfTask(taskId: Long): Flow<Resource<List<TextPart>, RepositoryExceptions>>
+    fun getTextPartsOfTask(taskId: Long): Flow<List<TextPart>>
+    fun getImagePartsOfTask(taskId: Long): Flow<List<ImagePart>>
+    fun getTodoPartsOfTask(taskId: Long): Flow<List<TodoPart>>
 
-    fun getImagePartsOfTask(taskId: Long): Flow<Resource<List<ImagePart>, RepositoryExceptions>>
+    suspend fun addTextPart(textPart: TextPart): Long
+    suspend fun addTodoPart(todoPart: TodoPart): Long
+    suspend fun addImagePart(imagePart: ImagePart): Long
 
-    fun getTodoPartsOfTask(taskId: Long): Flow<Resource<List<TodoPart>, RepositoryExceptions>>
+    suspend fun updateTextPart(textPart: TextPart)
+    suspend fun updateTodoPart(todoPart: TodoPart)
+    suspend fun updateImagePart(imagePart: ImagePart)
 
-    suspend fun addTextPart(textPart: TextPart): Resource<Long, RepositoryExceptions>
-
-    suspend fun addTodoPart(todoPart: TodoPart): Resource<Long, RepositoryExceptions>
-
-    suspend fun addImagePart(imagePart: ImagePart): Resource<Long, RepositoryExceptions>
-
-    suspend fun updateTextPart(textPart: TextPart): Resource<Unit, RepositoryExceptions>
-
-    suspend fun updateTodoPart(todoPart: TodoPart): Resource<Unit, RepositoryExceptions>
-
-    suspend fun updateImagePart(imagePart: ImagePart): Resource<Unit, RepositoryExceptions>
-
-    suspend fun deleteTextPart(textPart: TextPart): Resource<Unit, RepositoryExceptions>
-
-    suspend fun deleteTodoPart(todoPart: TodoPart): Resource<Unit, RepositoryExceptions>
-
-    suspend fun deleteImagePart(imagePart: ImagePart): Resource<Unit, RepositoryExceptions>
+    suspend fun deleteTextPart(textPart: TextPart)
+    suspend fun deleteTodoPart(todoPart: TodoPart)
+    suspend fun deleteImagePart(imagePart: ImagePart)
 
 }

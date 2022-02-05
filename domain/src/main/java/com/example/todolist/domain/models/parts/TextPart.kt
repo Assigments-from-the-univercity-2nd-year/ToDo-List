@@ -1,7 +1,6 @@
 package com.example.todolist.domain.models.parts
 
 import com.example.todolist.domain.repositories.PartsRepository
-import com.example.todolist.domain.repositories.RepositoryExceptions
 import com.example.todolist.domain.util.Resource
 
 class TextPart(
@@ -11,11 +10,11 @@ class TextPart(
     override val id: Long
 ) : Part(content, position, parentId, id) {
 
-    override suspend fun delete(partsRepository: PartsRepository): Resource<Unit, RepositoryExceptions> {
+    override suspend fun delete(partsRepository: PartsRepository) {
         return partsRepository.deleteTextPart(this)
     }
 
-    override suspend fun update(partsRepository: PartsRepository): Resource<Unit, RepositoryExceptions> {
+    override suspend fun update(partsRepository: PartsRepository) {
         return partsRepository.updateTextPart(this)
     }
 

@@ -10,11 +10,11 @@ data class ImagePart(
     override val id: Long
 ) : Part(content, position, parentId, id) {
 
-    override suspend fun delete(partsRepository: PartsRepository): Resource<Unit, Throwable> {
+    override suspend fun delete(partsRepository: PartsRepository) {
         return partsRepository.deleteImagePart(this)
     }
 
-    override suspend fun update(partsRepository: PartsRepository): Resource<Unit, Throwable> {
+    override suspend fun update(partsRepository: PartsRepository) {
         return partsRepository.updateImagePart(this)
     }
 

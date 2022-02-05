@@ -8,11 +8,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TaskDbModelDao : TaskLocalDataSource {
 
-    @Query("SELECT * FROM taskdbmodel WHERE folderId = :folderId")
-    override fun getTasksOfFolder(folderId: Long): Flow<List<TaskDbModel>>
+    @Query("SELECT * FROM taskdbmodel WHERE parentFolderId = :parentFolderId")
+    override fun getSubTasksFlow(parentFolderId: Long): Flow<List<TaskDbModel>>
 
-    @Query("SELECT folderId FROM taskdbmodel WHERE id = :taskId")
-    override suspend fun getParentFolderIdOfTask(taskId: Long): Long
+    @Query("SELECT * FROM taskdbmodel WHERE parentFolderId = :parentFolderId")
+    override suspend fun getSubTasks(parentFolderId: Long): List<TaskDbModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     override suspend fun addTask(task: TaskDbModel): Long

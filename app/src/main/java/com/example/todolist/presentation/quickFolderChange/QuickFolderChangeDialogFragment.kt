@@ -10,11 +10,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.example.todolist.R
 import com.example.todolist.domain.useCases.folderUseCases.GetStarredFoldersUseCase
-import com.example.todolist.domain.util.Resource
 import com.example.todolist.presentation.entities.components.mapToPresentation
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -27,25 +25,7 @@ class QuickFolderChangeDialogFragment @Inject constructor(
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         val adapter = ArrayAdapter<String>(requireContext(), R.layout.item_folder_pinned)
-        val pinnedFolders = getStarredFoldersUseCase()
-
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            pinnedFolders.collect {resourceOfList ->
-                when (resourceOfList) {
-                    is Resource.Success -> {
-                        val pinnedFolderList = resourceOfList.data.map {
-                            it.mapToPresentation()
-                        }
-                        val list = List(pinnedFolderList.size) {
-                            pinnedFolderList[it].title + " (${pinnedFolderList[it].numberOfSubComponents})"
-                        }
-                        adapter.clear()
-                        adapter.addAll(list)
-                    }
-                    is Resource.Failure -> TODO()
-                }
-            }
-        }
+        adapter.addAll(args.pinnedFolders.map { "${it.title} + (${it.numberOfSubComponents})" })
 
         return MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.quickfolderchangedialogfragment_selectthefolder)
@@ -56,4 +36,5 @@ class QuickFolderChangeDialogFragment @Inject constructor(
                 )
             }.create()
     }
+
 }

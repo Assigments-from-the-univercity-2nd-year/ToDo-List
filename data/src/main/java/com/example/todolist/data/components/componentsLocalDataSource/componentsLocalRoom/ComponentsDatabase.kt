@@ -32,7 +32,8 @@ abstract class ComponentsDatabase : RoomDatabase() {
 
             /*applicationScope*/
             CoroutineScope(SupervisorJob()).launch {
-                val rootFolder = folderDao.addFolder(FolderDbModel("All", null))
+                val rootFolderId = 1L
+                val rootFolder = folderDao.addFolder(FolderDbModel("All", rootFolderId))
                 val folder = folderDao.addFolder(FolderDbModel("Folder name", rootFolder))
 
                 taskDao.addTask(TaskDbModel("Do your homework!", rootFolder))

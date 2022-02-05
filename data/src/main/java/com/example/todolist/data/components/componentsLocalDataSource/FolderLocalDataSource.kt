@@ -5,13 +5,15 @@ import kotlinx.coroutines.flow.Flow
 
 interface FolderLocalDataSource {
 
-    suspend fun getRootFolder(): FolderDbModel
+    suspend fun getRootFolder(): FolderDbModel?
 
-    fun getPinnedFolders(): Flow<List<FolderDbModel>>
+    suspend fun getPinnedFolders(): List<FolderDbModel>
 
-    fun getFoldersOfFolder(folderId: Long): Flow<List<FolderDbModel>>
+    fun getSubFoldersFlow(parentFolderId: Long): Flow<List<FolderDbModel>>
 
-    suspend fun getParentFolderIdOfFolder(folderId: Long): Long
+    suspend fun getSubFolders(parentFolderId: Long): List<FolderDbModel>
+
+    fun getFolderFlow(folderId: Long): Flow<FolderDbModel>
 
     suspend fun getFolder(folderId: Long): FolderDbModel
 

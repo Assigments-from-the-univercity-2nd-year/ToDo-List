@@ -1,29 +1,25 @@
 package com.example.todolist.domain.models.components
 
 import com.example.todolist.domain.repositories.ComponentsRepository
-import com.example.todolist.domain.repositories.RepositoryExceptions
-import com.example.todolist.domain.util.Resource
 
 data class Task constructor(
-    override var title: String,
-    override var folderId: Long,
-    var isImportant: Boolean,
-    var isCompleted: Boolean,
-    override val createdDate: Long,
-    override var modifiedDate: Long,
-    override val id: Long
-) : Component(title, folderId, createdDate, modifiedDate, id) {
+    override val title: String = "New task",
+    override val parentFolderId: Long,
+             val isImportant: Boolean = false,
+             val isCompleted: Boolean = false,
+    override val createdDate: Long = System.currentTimeMillis(),
+    override val modifiedDate: Long = System.currentTimeMillis(),
+    override val id: Long = 0,
+) : Component(title, parentFolderId, createdDate, modifiedDate, id) {
 
-    override suspend fun delete(
-        componentsRepository: ComponentsRepository
-    ): Resource<Unit, RepositoryExceptions> {
-        return componentsRepository.deleteTask(this)
+    override suspend fun delete(componentsRepository: ComponentsRepository) {
+        componentsRepository.deleteTask(this)
+        updateModificationDateOfParentFolder(componentsRepository)
     }
 
-    override suspend fun update(
-        componentsRepository: ComponentsRepository
-    ): Resource<Unit, RepositoryExceptions> {
-        return componentsRepository.updateTask(this)
+    override suspend fun update(componentsRepository: ComponentsRepository) {
+        componentsRepository.updateTask(this)
+        updateModificationDateOfParentFolder(componentsRepository)
     }
 
 }

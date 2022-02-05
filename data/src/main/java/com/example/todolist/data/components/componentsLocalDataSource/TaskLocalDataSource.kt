@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface TaskLocalDataSource {
 
-    fun getTasksOfFolder(folderId: Long): Flow<List<TaskDbModel>>
+    fun getSubTasksFlow(parentFolderId: Long): Flow<List<TaskDbModel>>
 
-    suspend fun getParentFolderIdOfTask(taskId: Long): Long
+    suspend fun getSubTasks(parentFolderId: Long): List<TaskDbModel>
 
     suspend fun addTask(task: TaskDbModel): Long
 

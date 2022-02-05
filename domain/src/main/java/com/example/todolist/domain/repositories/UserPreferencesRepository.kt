@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserPreferencesRepository {
 
-    fun getFilterPreferences(): Flow<Resource<FilterPreferences, RepositoryExceptions>>
+    fun getFilterPreferences(): Flow<FilterPreferences>
 
-    suspend fun updateHideCompleted(hideCompleted: Boolean): Resource<Unit, RepositoryExceptions>
+    suspend fun updateHideCompleted(hideCompleted: Boolean)
 
-    suspend fun updateSortOrderDbModel(sortOrder: SortOrder): Resource<Unit, RepositoryExceptions>
+    suspend fun updateSortOrderDbModel(sortOrder: SortOrder)
 
 }

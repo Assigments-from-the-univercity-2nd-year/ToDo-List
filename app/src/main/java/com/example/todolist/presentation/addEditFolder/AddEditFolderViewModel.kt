@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.todolist.databinding.DialogFragmentAddEditFolderBinding
 import com.example.todolist.di.ApplicationScope
 import com.example.todolist.domain.models.components.FolderCreatingDTO
-import com.example.todolist.domain.repositories.RepositoryExceptions
 import com.example.todolist.domain.useCases.folderUseCases.AddFolderUseCase
 import com.example.todolist.domain.useCases.folderUseCases.AddFolderUseCase.AddFolderUseCaseException
 import com.example.todolist.domain.useCases.folderUseCases.UpdateFolderUseCase

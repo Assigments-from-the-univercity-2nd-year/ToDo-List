@@ -10,12 +10,8 @@ abstract class Part(
     open val id: Long
 ) {
 
-    abstract suspend fun delete(
-        partsRepository: PartsRepository
-    ): Resource<Unit, Throwable>
+    abstract suspend fun delete(partsRepository: PartsRepository)
 
-    abstract suspend fun update(
-        partsRepository: PartsRepository
-    ): Resource<Unit, Throwable>
+    abstract suspend fun update(partsRepository: PartsRepository)
 
 }

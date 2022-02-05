@@ -2,15 +2,13 @@ package com.example.todolist.domain.useCases.textPartUseCases
 
 import com.example.todolist.domain.models.parts.TextPart
 import com.example.todolist.domain.repositories.PartsRepository
-import com.example.todolist.domain.repositories.RepositoryExceptions
-import com.example.todolist.domain.util.Resource
 import javax.inject.Inject
 
 class AddTextPartUseCase @Inject constructor(
     private val partsRepository: PartsRepository
 ) {
 
-    suspend operator fun invoke(taskId: Long, partPosition: Int): Resource<Long, RepositoryExceptions> {
+    suspend operator fun invoke(taskId: Long, partPosition: Int): Long {
         require(taskId > 0) {
             "id of task is less or equals than 0: id = $taskId"
         }

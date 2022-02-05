@@ -18,7 +18,6 @@ class DeleteAllCompletedViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun onConfirmClicked() = applicationScope.launch {
-        val rootFolder = getRootFolderUseCase().onFailure { TODO() }
-        deleteCompletedTasksOfFolderUseCase(rootFolder)
+        deleteCompletedTasksOfFolderUseCase(getRootFolderUseCase())
     }
 }

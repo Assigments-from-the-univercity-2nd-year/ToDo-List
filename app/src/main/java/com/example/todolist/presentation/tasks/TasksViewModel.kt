@@ -1,16 +1,17 @@
 package com.example.todolist.presentation.tasks
 
 import android.content.res.Resources
-import androidx.lifecycle.SavedStateHandle
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.todolist.R
 import com.example.todolist.domain.models.components.Component
 import com.example.todolist.domain.models.components.Folder
+import com.example.todolist.domain.models.components.Task
 import com.example.todolist.domain.models.userPreferences.SortOrder
 import com.example.todolist.domain.useCases.folderUseCases.GetComponentsOfFolderUseCase
-import com.example.todolist.domain.useCases.folderUseCases.GetFolderUseCase
+import com.example.todolist.domain.useCases.folderUseCases.GetFolderFlowUseCase
 import com.example.todolist.domain.useCases.folderUseCases.GetRootFolderUseCase
 import com.example.todolist.domain.useCases.folderUseCases.UpdateFolderUseCase
 import com.example.todolist.domain.useCases.tasksUseCases.AddTaskUseCase
@@ -18,13 +19,11 @@ import com.example.todolist.domain.useCases.tasksUseCases.DeleteTaskUseCase
 import com.example.todolist.domain.useCases.tasksUseCases.UpdateTaskUseCase
 import com.example.todolist.domain.useCases.userPreferencesUseCases.UpdateHideCompletedUseCase
 import com.example.todolist.domain.useCases.userPreferencesUseCases.UpdateSortOrderUseCase
-import com.example.todolist.domain.util.onFailure
 import com.example.todolist.presentation.*
 import com.example.todolist.presentation.entities.components.*
 import com.example.todolist.presentation.tasks.componentAdapter.ComponentFingerprint
 import com.example.todolist.presentation.tasks.componentAdapter.folder.FolderFingerprint
 import com.example.todolist.presentation.tasks.componentAdapter.task.TaskFingerprint
-import dagger.assisted.Assisted
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,7 +35,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TasksViewModel @Inject constructor(
     private val getRootFolderUseCase: GetRootFolderUseCase,
-    private val getFolderUseCase: GetFolderUseCase,
+    private val getFolderFlowUseCase: GetFolderFlowUseCase,
     private val getComponentsOfFolderUseCase: GetComponentsOfFolderUseCase,
 
     private val updateSortOrderUseCase: UpdateSortOrderUseCase,
@@ -63,54 +62,52 @@ class TasksViewModel @Inject constructor(
 
     init {
         fetchTasksData()
+        Log.i("TAG", "initing!!!")
     }
 
     private fun fetchTasksData() = viewModelScope.launch {
-        val rootFolder = getRootFolderUseCase().onFailure { TODO() }
+        val rootFolder = getRootFolderUseCase()
+        Log.i("TAG", "fetchTasksData: rootFolder is $rootFolder")
         navigateToFolder(rootFolder.id)
     }
 
     private suspend fun navigateToFolder(folderId: Long) {
-        val currentFolder = getFolderUseCase(folderId)
-        currentFolder.collect { folderResource ->
-            val folder = folderResource.onFailure { TODO() }
-            fetchComponentsData(folder)
-        }
-    }
-
-    private suspend fun fetchComponentsData(folder: Folder) {
-        getComponentsOfFolderUseCase(folder).collect {
-            val listOfComponents = it
-                .onFailure { TODO() }
-                .mapListOfComponentsToPresentation()
-
-            _uiState.value = TasksUiState(
-                isLoading = false,
-                fabAnimation = _uiState.value.fabAnimation,
-                folderData = folder.mapToPresentation(),
-                components = listOfComponents,
-            )
+        val currentFolderFlow = getFolderFlowUseCase(folderId)
+        currentFolderFlow.collect { currentFolder ->
+            getComponentsOfFolderUseCase(currentFolder).collect {
+                _uiState.value = TasksUiState(
+                    isLoading = false,
+                    fabAnimation = _uiState.value.fabAnimation,
+                    folderData = currentFolder.mapToPresentation(),
+                    components = it.mapListOfComponentsToPresentation(),
+                )
+                Log.i("TAG", "navigateToFolder: state updated!")
+                Log.i("TAG", "state: ${_uiState.value}")
+            }
         }
     }
 
     private fun List<Component>.mapListOfComponentsToPresentation(): List<ComponentUiState> {
-        TODO()
+        return this.map {
+            when(it) {
+                is Task -> it.mapToPresentation()
+                is Folder -> it.mapToPresentation()
+                else -> throw NoSuchElementException()
+            }
+        }
     }
 
     fun isCurrentFolderRoot(): Boolean {
-        val folderData = _uiState.value.folderData
-        return if (folderData != null) {
-            folderData.id == folderData.folderId
-        } else {
-            false
-        }
+        val folderData = _uiState.value.folderData ?: return false
+        return folderData.id == folderData.folderId
     }
 
     fun getTitleName(resources: Resources): String {
         return if (isCurrentFolderRoot()) {
             resources.getString(R.string.taskfragment_all_tasks_title)
         } else {
-            _uiState.value.folderData?.title
+            _uiState.value.folderData
+                ?.title
                 ?: resources.getString(R.string.taskfragment_loading_title)
         }
     }
@@ -169,7 +166,8 @@ class TasksViewModel @Inject constructor(
     }
 
     fun onHomeButtonSelected() = viewModelScope.launch {
-        navigateToFolder(_uiState.value.folderData?.folderId ?: TODO())
+        val folderId = _uiState.value.folderData?.folderId ?: return@launch
+        navigateToFolder(folderId)
     }
 
     private fun onTaskSwiped(task: TaskUiState) = viewModelScope.launch {
@@ -249,9 +247,8 @@ class TasksViewModel @Inject constructor(
     }
 
     fun onEditFolderClicked() = viewModelScope.launch {
-        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToEditFolderScreen(
-            _uiState.value.folderData ?: TODO()
-        ))
+        val folderData = _uiState.value.folderData ?: return@launch
+        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToEditFolderScreen(folderData))
     }
 
     /*fun taskMovedToFolder(component: Component?, folder: Folder?) = viewModelScope.launch {

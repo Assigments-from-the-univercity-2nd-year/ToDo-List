@@ -5,8 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class TaskDbModel(
-    val title: String?,
-    val folderId: Long,
+    val title: String,
+    val parentFolderId: Long,
     val isImportant: Boolean = false,
     val isCompleted: Boolean = false,
     val createdDate: Long = System.currentTimeMillis(),

@@ -1,17 +1,14 @@
 package com.example.todolist.domain.useCases.imagePartUseCases
 
 import com.example.todolist.domain.models.parts.ImagePart
-import com.example.todolist.domain.models.parts.TodoPart
 import com.example.todolist.domain.repositories.PartsRepository
-import com.example.todolist.domain.repositories.RepositoryExceptions
-import com.example.todolist.domain.util.Resource
 import javax.inject.Inject
 
 class AddImagePartUseCase @Inject constructor(
     private val partsRepository: PartsRepository
 ) {
 
-    suspend operator fun invoke(content: ByteArray, taskId: Long, partPosition: Int): Resource<Long, RepositoryExceptions> {
+    suspend operator fun invoke(content: ByteArray, taskId: Long, partPosition: Int): Long {
         require(taskId > 0) {
             "id of task is less or equals than 0: id = $taskId"
         }

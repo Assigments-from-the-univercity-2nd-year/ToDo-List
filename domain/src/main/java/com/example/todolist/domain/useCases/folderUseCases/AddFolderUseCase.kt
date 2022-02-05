@@ -13,22 +13,17 @@ class AddFolderUseCase @Inject constructor(
 
     suspend operator fun invoke(folderCreatingDTO: FolderCreatingDTO): Resource<Long, AddFolderUseCaseException> {
         // checking if user input valid or no. If no - return error
-        isUserInputCorrect(folderCreatingDTO).onFailure { return it }
+        /*isUserInputCorrect(folderCreatingDTO).onFailure { return it }
 
         val insertedFolderId: Long = componentsRepository.addFolder(folderCreatingDTO)
-            .onFailure { return Resource.Failure(
-                AddFolderUseCaseException.CantFindInsertedFolderInDatabase(it.reason)
-            ) }
-        val parentFolder: Folder = componentsRepository.getParentFolderOfFolder(insertedFolderId)
-            .onFailure { return  Resource.Failure(
-                AddFolderUseCaseException.CantFindParentFolderInDatabase(it.reason)
-            ) }
+        val parentFolder: Folder = //componentsRepository.getParentFolderOfFolder(insertedFolderId)
         componentsRepository.updateFolder(parentFolder.copy(modifiedDate = System.currentTimeMillis()))
             .onFailure { return Resource.Failure(
                 AddFolderUseCaseException.CantUpdateParentFolderInDatabase(it.reason)
             ) }
 
-        return Resource.Success(insertedFolderId)
+        return Resource.Success(insertedFolderId)*/
+        TODO()
     }
 
     private fun isUserInputCorrect(folderCreatingDTO: FolderCreatingDTO): Resource<Unit, AddFolderUseCaseException> {

@@ -1,3 +1,4 @@
+/*
 package com.example.todolist.domain.useCases.todoPartUseCases
 
 import com.example.todolist.domain.models.parts.TodoPart
@@ -12,4 +13,4 @@ class DeleteTodoPartUseCase constructor(
     suspend operator fun invoke(todoPart: TodoPart): Resource<Unit, RepositoryExceptions> =
         partsRepository.deleteTodoPart(todoPart)
 
-}
+}*/

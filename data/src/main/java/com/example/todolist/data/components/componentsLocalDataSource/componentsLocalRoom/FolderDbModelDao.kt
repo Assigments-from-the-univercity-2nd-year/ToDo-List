@@ -8,19 +8,22 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FolderDbModelDao : FolderLocalDataSource {
 
-    @Query("SELECT * FROM folderdbmodel WHERE folderId IS NULL")
+    @Query("SELECT * FROM folderdbmodel WHERE id = parentFolderId")
     override suspend fun getRootFolder(): FolderDbModel
 
     @Query("SELECT * FROM folderdbmodel WHERE isPinned = 1")
-    override fun getPinnedFolders(): Flow<List<FolderDbModel>>
+    override suspend fun getPinnedFolders(): List<FolderDbModel>
 
-    @Query("SELECT * FROM folderdbmodel WHERE folderId = :folderId")
-    override fun getFoldersOfFolder(folderId: Long): Flow<List<FolderDbModel>>
+    @Query("SELECT * FROM folderdbmodel WHERE parentFolderId = :parentFolderId AND parentFolderId != id")
+    override fun getSubFoldersFlow(parentFolderId: Long): Flow<List<FolderDbModel>>
 
-    @Query("SELECT folderId FROM folderdbmodel WHERE id = :folderId")
-    override suspend fun getParentFolderIdOfFolder(folderId: Long): Long
+    @Query("SELECT * FROM folderdbmodel WHERE parentFolderId = :parentFolderId AND parentFolderId != id")
+    override suspend fun getSubFolders(parentFolderId: Long): List<FolderDbModel>
 
-    @Query("SELECT * FROM folderdbmodel WHERE folderId = :folderId")
+    @Query("SELECT * FROM folderdbmodel WHERE id = :folderId")
+    override fun getFolderFlow(folderId: Long): Flow<FolderDbModel>
+
+    @Query("SELECT * FROM folderdbmodel WHERE parentFolderId = :folderId")
     override suspend fun getFolder(folderId: Long): FolderDbModel
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

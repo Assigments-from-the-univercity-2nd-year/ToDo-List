@@ -1,3 +1,4 @@
+/*
 package com.example.todolist.domain.useCases.textPartUseCases
 
 import com.example.todolist.domain.models.parts.TextPart
@@ -12,4 +13,4 @@ class DeleteTextPartUseCase constructor(
     suspend operator fun invoke(textPart: TextPart): Resource<Unit, RepositoryExceptions> =
         partsRepository.deleteTextPart(textPart)
 
-}
+}*/

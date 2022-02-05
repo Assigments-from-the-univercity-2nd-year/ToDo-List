@@ -9,30 +9,24 @@ import kotlinx.coroutines.flow.Flow
 
 interface ComponentsRepository {
 
-    suspend fun getRootFolder(): Resource<Folder, RepositoryExceptions>
+    fun getSubFoldersFlow(parentFolder: Folder): Flow<List<Folder>>
+    fun getSubTasksFlow(parentFolder: Folder): Flow<List<Task>>
+    fun getFolderFlow(folderId: Long): Flow<Folder>
 
-    fun getSubFoldersOfFolder(folder: Folder): Flow<Resource<List<Folder>, RepositoryExceptions>>
+    suspend fun getRootFolder(): Folder
+    suspend fun getPinnedFolders(): List<Folder>
 
-    suspend fun getParentFolderOfTask(taskId: Long): Resource<Folder, RepositoryExceptions>
+    //suspend fun getTask(taskId: Long): Task
+    suspend fun getFolder(folderId: Long): Folder
 
-    suspend fun getParentFolderOfFolder(folderId: Long): Resource<Folder, RepositoryExceptions>
+    suspend fun addTask(task: Task): Long
+    suspend fun addFolder(folderCreatingDTO: FolderCreatingDTO): Long
 
-    fun getTasksOfFolder(folder: Folder): Flow<Resource<List<Task>, RepositoryExceptions>>
+    suspend fun updateTask(task: Task)
+    suspend fun updateFolder(folder: Folder)
 
-    fun getPinnedFolders(): Flow<Resource<List<Folder>, RepositoryExceptions>>
-
-    suspend fun addTask(task: Task): Resource<Long, RepositoryExceptions>
-
-    suspend fun addFolder(folderCreatingDTO: FolderCreatingDTO): Resource<Long, RepositoryExceptions>
-
-    suspend fun updateTask(task: Task): Resource<Unit, RepositoryExceptions>
-
-    suspend fun updateFolder(folder: Folder): Resource<Unit, RepositoryExceptions>
-
-    suspend fun deleteTask(task: Task): Resource<Unit, RepositoryExceptions>
-
-    suspend fun deleteCompletedTasks(): Resource<Unit, RepositoryExceptions>
-
-    suspend fun deleteFolder(folder: Folder): Resource<Unit, RepositoryExceptions>
+    suspend fun deleteTask(task: Task)
+    suspend fun deleteCompletedTasks()
+    suspend fun deleteFolder(folder: Folder)
 
 }

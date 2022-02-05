@@ -15,30 +15,15 @@ class GetComponentsOfFolderUseCase constructor(
     private val userPreferencesRepository: UserPreferencesRepository
 ) {
 
-    operator fun invoke(folder: Folder): Flow<Resource<List<Component>, GetComponentsOfFolderUseCaseException>> {
+    operator fun invoke(folder: Folder): Flow<List<Component>> {
         return combine(
-            componentsRepository.getSubFoldersOfFolder(folder),
-            componentsRepository.getTasksOfFolder(folder),
+            componentsRepository.getSubFoldersFlow(folder),
+            componentsRepository.getSubTasksFlow(folder),
             userPreferencesRepository.getFilterPreferences()
-        ) { foldersRes,
-            tasksRes,
-            preferencesRes ->
-
-            val folders = foldersRes.onFailure {
-                return@combine Resource.Failure(GetComponentsOfFolderUseCaseException.ProblemWithTasksFlow(it.reason))
-            }
-            val tasks = tasksRes.onFailure {
-                return@combine Resource.Failure(GetComponentsOfFolderUseCaseException.ProblemWithFolderFlow(it.reason))
-            }
-            val preferences = preferencesRes.onFailure {
-                return@combine Resource.Failure(GetComponentsOfFolderUseCaseException.ProblemWithFilterPreferencesFlow(it.reason))
-            }
-
-            Resource.Success(
-                folders.plus(tasks)
-                    .also { filtrateComponents(it, preferences.hideCompleted) }
-                    .also { sortComponents(it, preferences.sortOrder) }
-            )
+        ) { folders, tasks, preferences ->
+            folders.plus(tasks)
+                .also { filtrateComponents(it, preferences.hideCompleted) }
+                .also { sortComponents(it, preferences.sortOrder) }
         }
     }
 
@@ -71,12 +56,6 @@ class GetComponentsOfFolderUseCase constructor(
             }
             else -> 0
         }
-
     }
 
-    sealed class GetComponentsOfFolderUseCaseException : Throwable() {
-        data class ProblemWithTasksFlow(override val cause: Throwable) : GetComponentsOfFolderUseCaseException()
-        data class ProblemWithFolderFlow(override val cause: Throwable) : GetComponentsOfFolderUseCaseException()
-        data class ProblemWithFilterPreferencesFlow(override val cause: Throwable) : GetComponentsOfFolderUseCaseException()
-    }
 }
