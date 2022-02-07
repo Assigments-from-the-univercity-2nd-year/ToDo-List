@@ -5,7 +5,6 @@ import com.example.todolist.di.ApplicationScope
 import com.example.todolist.domain.useCases.folderUseCases.DeleteCompletedTasksOfFolderUseCase
 import com.example.todolist.domain.useCases.folderUseCases.DeleteFolderUseCase
 import com.example.todolist.presentation.entities.components.FolderUiState
-import com.example.todolist.presentation.entities.components.mapToDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -19,11 +18,11 @@ class DeleteFolderViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun onDeleteFolderClicked(folder: FolderUiState) = applicationScope.launch {
-        deleteFolderUseCase(folder.mapToDomain())
+        deleteFolderUseCase(folder.id)
     }
 
     fun onDeleteCompletedInFolderClicked(folder: FolderUiState) = applicationScope.launch {
-        deleteCompletedTasksOfFolderUseCase(folder.mapToDomain())
+        deleteCompletedTasksOfFolderUseCase(folder.id)
     }
 
 }

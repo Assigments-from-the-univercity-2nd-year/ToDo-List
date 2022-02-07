@@ -14,7 +14,6 @@ import com.example.todolist.domain.useCases.tasksUseCases.*
 import com.example.todolist.domain.useCases.textPartUseCases.AddTextPartUseCase
 import com.example.todolist.domain.useCases.todoPartUseCases.AddTodoPartUseCase
 import com.example.todolist.domain.useCases.todoPartUseCases.UpdateTodoPartUseCase
-import com.example.todolist.presentation.entities.components.mapToDomain
 import com.example.todolist.presentation.entities.parts.PartUiState
 import com.example.todolist.presentation.entities.parts.TodoPartUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -189,15 +188,17 @@ class AddEditTaskViewModel @Inject constructor(
 
     // Modifying task
     fun updateTaskTitle(title: String) = viewModelScope.launch {
-        _uiState.value.taskData?.let {
+        //TODO: implement
+        /*_uiState.value.taskData?.let {
             updateTaskUseCase(it.copy(title = title).mapToDomain())
-        }
+        }*/
     }
 
     fun updateTaskImportance(isImportant: Boolean) = viewModelScope.launch {
-        _uiState.value.taskData?.let {
+        //TODO: implement
+        /*_uiState.value.taskData?.let {
             updateTaskUseCase(it.copy(isImportant = isImportant).mapToDomain())
-        }
+        }*/
     }
 
     // Making events for Fragment

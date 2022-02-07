@@ -8,8 +8,8 @@ class DeleteTaskUseCase @Inject constructor(
     private val componentsRepository: ComponentsRepository
 ) {
 
-    suspend operator fun invoke(task: Task) {
-        componentsRepository.deleteTask(task)
+    suspend operator fun invoke(taskId: Long) {
+        componentsRepository.deleteTask(taskId)
     }
 
 }

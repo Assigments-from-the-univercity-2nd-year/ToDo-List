@@ -19,13 +19,13 @@ class ComponentsRepositoryImpl(
     private val taskLocalDataSource: TaskLocalDataSource,
 ) : ComponentsRepository {
 
-    override fun getSubFoldersFlow(parentFolder: Folder): Flow<List<Folder>> {
-        return folderLocalDataSource.getSubFoldersFlow(parentFolder.id)
+    override fun getSubFoldersFlow(parentFolderId: Long): Flow<List<Folder>> {
+        return folderLocalDataSource.getSubFoldersFlow(parentFolderId)
             .map { it.mapFolderListToDomain() }
     }
 
-    override fun getSubTasksFlow(parentFolder: Folder): Flow<List<Task>> {
-        return taskLocalDataSource.getSubTasksFlow(parentFolder.id)
+    override fun getSubTasksFlow(parentFolderId: Long): Flow<List<Task>> {
+        return taskLocalDataSource.getSubTasksFlow(parentFolderId)
             .map { it.mapTaskListToDomain() }
     }
 
@@ -48,6 +48,10 @@ class ComponentsRepositoryImpl(
 
     override suspend fun getPinnedFolders(): List<Folder> {
         return folderLocalDataSource.getPinnedFolders().mapFolderListToDomain()
+    }
+
+    override suspend fun getTask(taskId: Long): Task {
+        TODO("Not yet implemented")
     }
 
     override suspend fun getFolder(folderId: Long): Folder {
@@ -76,16 +80,16 @@ class ComponentsRepositoryImpl(
         folderLocalDataSource.updateFolder(folder.mapToData())
     }
 
-    override suspend fun deleteTask(task: Task) {
-        taskLocalDataSource.deleteTask(task.mapToData())
+    override suspend fun deleteTask(taskId: Long) {
+        taskLocalDataSource.deleteTask(taskId)
     }
 
     override suspend fun deleteCompletedTasks() {
         taskLocalDataSource.deleteCompletedTasks()
     }
 
-    override suspend fun deleteFolder(folder: Folder) {
-        folderLocalDataSource.deleteFolder(folder.mapToData())
+    override suspend fun deleteFolder(folderId: Long) {
+        folderLocalDataSource.deleteFolder(folderId)
     }
 
     private suspend fun FolderDbModel.mapToDomain(): Folder {

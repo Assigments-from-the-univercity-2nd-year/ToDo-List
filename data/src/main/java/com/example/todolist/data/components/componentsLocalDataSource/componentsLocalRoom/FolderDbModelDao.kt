@@ -32,7 +32,7 @@ interface FolderDbModelDao : FolderLocalDataSource {
     @Update
     override suspend fun updateFolder(folder: FolderDbModel)
 
-    @Delete
-    override suspend fun deleteFolder(folder: FolderDbModel)
+    @Query("DELETE FROM folderdbmodel WHERE id = :folderId")
+    override suspend fun deleteFolder(folderId: Long)
 
 }

@@ -20,8 +20,8 @@ interface TaskDbModelDao : TaskLocalDataSource {
     @Update
     override suspend fun updateTask(task: TaskDbModel)
 
-    @Delete
-    override suspend fun deleteTask(task: TaskDbModel)
+    @Query("DELETE FROM taskdbmodel WHERE id = :taskId")
+    override suspend fun deleteTask(taskId: Long)
 
     @Query("DELETE FROM taskdbmodel WHERE taskdbmodel.isCompleted = 1")
     override suspend fun deleteCompletedTasks()

@@ -99,7 +99,7 @@ class TasksViewModel @Inject constructor(
 
     fun isCurrentFolderRoot(): Boolean {
         val folderData = _uiState.value.folderData ?: return false
-        return folderData.id == folderData.folderId
+        return folderData.id == folderData.parentFolderId
     }
 
     fun getTitleName(resources: Resources): String {
@@ -157,7 +157,8 @@ class TasksViewModel @Inject constructor(
     }
 
     private fun onTaskCheckChanged(task: TaskUiState, isChecked: Boolean) = viewModelScope.launch {
-        updateTaskUseCase(task.copy(isCompleted = isChecked).mapToDomain())
+        //TODO: implement
+        //updateTaskUseCase(task.copy(isCompleted = isChecked).mapToDomain())
     }
 
     private fun onSubFolderSelected(folder: FolderUiState) = viewModelScope.launch {
@@ -166,12 +167,12 @@ class TasksViewModel @Inject constructor(
     }
 
     fun onHomeButtonSelected() = viewModelScope.launch {
-        val folderId = _uiState.value.folderData?.folderId ?: return@launch
+        val folderId = _uiState.value.folderData?.parentFolderId ?: return@launch
         navigateToFolder(folderId)
     }
 
     private fun onTaskSwiped(task: TaskUiState) = viewModelScope.launch {
-        deleteTaskUseCase(task.mapToDomain())
+        deleteTaskUseCase(task.id)
         tasksEventChannel.send(TasksEvent.MessageEvent.ShowUndoDeleteTaskMessage(task))
     }
 
@@ -181,7 +182,8 @@ class TasksViewModel @Inject constructor(
     }
 
     fun onUndoDeleteClicked(task: TaskUiState) = viewModelScope.launch {
-        addTaskUseCase(task.mapToDomain())
+        //TODO: implement
+        //addTaskUseCase(task.mapToDomain())
     }
 
     fun onAddNewTaskClicked() = viewModelScope.launch {

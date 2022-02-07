@@ -21,6 +21,6 @@ interface FolderLocalDataSource {
 
     suspend fun updateFolder(folder: FolderDbModel)
 
-    suspend fun deleteFolder(folder: FolderDbModel)
+    suspend fun deleteFolder(folderId: Long)
 
 }

@@ -9,24 +9,24 @@ import kotlinx.coroutines.flow.Flow
 
 interface ComponentsRepository {
 
-    fun getSubFoldersFlow(parentFolder: Folder): Flow<List<Folder>>
-    fun getSubTasksFlow(parentFolder: Folder): Flow<List<Task>>
+    fun getSubFoldersFlow(parentFolderId: Long): Flow<List<Folder>>
+    fun getSubTasksFlow(parentFolderId: Long): Flow<List<Task>>
     fun getFolderFlow(folderId: Long): Flow<Folder>
 
     suspend fun getRootFolder(): Folder
     suspend fun getPinnedFolders(): List<Folder>
 
-    //suspend fun getTask(taskId: Long): Task
+    suspend fun getTask(taskId: Long): Task
     suspend fun getFolder(folderId: Long): Folder
 
     suspend fun addTask(task: Task): Long
     suspend fun addFolder(folderCreatingDTO: FolderCreatingDTO): Long
 
-    suspend fun updateTask(task: Task)
-    suspend fun updateFolder(folder: Folder)
+    suspend fun updateTask(task: Task) //TODO: change argument to taskUpdatingDTO
+    suspend fun updateFolder(folder: Folder) //TODO: change argument to folderUpdatingDTO
 
-    suspend fun deleteTask(task: Task)
+    suspend fun deleteTask(taskId: Long)
     suspend fun deleteCompletedTasks()
-    suspend fun deleteFolder(folder: Folder)
+    suspend fun deleteFolder(folderId: Long)
 
 }

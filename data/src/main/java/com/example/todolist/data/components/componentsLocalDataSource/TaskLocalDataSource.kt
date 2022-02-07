@@ -13,7 +13,7 @@ interface TaskLocalDataSource {
 
     suspend fun updateTask(task: TaskDbModel)
 
-    suspend fun deleteTask(task: TaskDbModel)
+    suspend fun deleteTask(taskId: Long)
 
     suspend fun deleteCompletedTasks()
 

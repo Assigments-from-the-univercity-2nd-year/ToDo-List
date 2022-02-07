@@ -8,8 +8,9 @@ class DeleteFolderUseCase @Inject constructor(
     private val componentsRepository: ComponentsRepository
 ) {
 
-    suspend operator fun invoke(folder: Folder) {
-        folder.delete(componentsRepository)
+    suspend operator fun invoke(folderId: Long) {
+        //TODO: implement
+        //folder.delete(componentsRepository)
     }
 
 }

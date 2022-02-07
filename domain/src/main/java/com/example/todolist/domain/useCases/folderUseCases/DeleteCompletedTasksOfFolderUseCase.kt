@@ -8,8 +8,9 @@ class DeleteCompletedTasksOfFolderUseCase @Inject constructor(
     private val componentsRepository: ComponentsRepository
 ) {
 
-    suspend operator fun invoke(folder: Folder) {
-        folder.deleteCompletedTasks(componentsRepository)
+    suspend operator fun invoke(folderId: Long) {
+        //TODO: implement
+        //folder.deleteCompletedTasks(componentsRepository)
     }
 
 }

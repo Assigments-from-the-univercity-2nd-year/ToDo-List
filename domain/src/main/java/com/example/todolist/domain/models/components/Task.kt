@@ -13,7 +13,7 @@ data class Task constructor(
 ) : Component(title, parentFolderId, createdDate, modifiedDate, id) {
 
     override suspend fun delete(componentsRepository: ComponentsRepository) {
-        componentsRepository.deleteTask(this)
+        componentsRepository.deleteTask(this.id)
         updateModificationDateOfParentFolder(componentsRepository)
     }
 

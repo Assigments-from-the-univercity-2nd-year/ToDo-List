@@ -17,8 +17,8 @@ class GetComponentsOfFolderUseCase constructor(
 
     operator fun invoke(folder: Folder): Flow<List<Component>> {
         return combine(
-            componentsRepository.getSubFoldersFlow(folder),
-            componentsRepository.getSubTasksFlow(folder),
+            componentsRepository.getSubFoldersFlow(folder.id),
+            componentsRepository.getSubTasksFlow(folder.id),
             userPreferencesRepository.getFilterPreferences()
         ) { folders, tasks, preferences ->
             folders.plus(tasks)
