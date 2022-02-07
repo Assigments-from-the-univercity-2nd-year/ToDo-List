@@ -150,10 +150,13 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
                         findNavController().navigate(action)*/
                     }
                     is TasksViewModel.TasksEvent.NavigationEvent.NavigateToAddFolderScreen -> {
-                        /*val action = TasksFragmentDirections.actionGlobalAddEditFolderDialogFragment(
-                            viewModel.currentFolder.value!!
-                        )
-                        findNavController().navigate(action)*/
+                        viewModel.uiState.value?.folderData
+                            ?.let {
+                                val action = TasksFragmentDirections.actionGlobalAddEditFolderDialogFragment(
+                                    it, null
+                                )
+                                findNavController().navigate(action)
+                            }
                     }
                     is TasksViewModel.TasksEvent.NavigationEvent.NavigateToEditTaskScreen -> {
                         /*val action =

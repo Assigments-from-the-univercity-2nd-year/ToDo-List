@@ -1,14 +1,13 @@
 package com.example.todolist.domain.useCases.folderUseCases
 
-import com.example.todolist.domain.models.userPreferences.SortOrder
 import com.example.todolist.domain.models.components.Component
 import com.example.todolist.domain.models.components.Folder
 import com.example.todolist.domain.models.components.Task
+import com.example.todolist.domain.models.userPreferences.SortOrder
 import com.example.todolist.domain.repositories.ComponentsRepository
 import com.example.todolist.domain.repositories.UserPreferencesRepository
-import com.example.todolist.domain.util.Resource
-import com.example.todolist.domain.util.onFailure
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 
 class GetComponentsOfFolderUseCase constructor(
     private val componentsRepository: ComponentsRepository,
@@ -22,22 +21,22 @@ class GetComponentsOfFolderUseCase constructor(
             userPreferencesRepository.getFilterPreferences()
         ) { folders, tasks, preferences ->
             folders.plus(tasks)
-                .also { filtrateComponents(it, preferences.hideCompleted) }
-                .also { sortComponents(it, preferences.sortOrder) }
+                .filtrateComponents(preferences.hideCompleted)
+                .sortComponents(preferences.sortOrder)
         }
     }
 
-    private fun filtrateComponents(components: List<Component>, hideCompleted: Boolean) =
-        components.filter { !(it is Task && it.isCompleted && hideCompleted) }
+    private fun List<Component>.filtrateComponents(hideCompleted: Boolean) =
+        this.filter { !(it is Task && it.isCompleted && hideCompleted) }
 
-    private fun sortComponents(components: List<Component>, sortOrder: SortOrder) =
+    private fun List<Component>.sortComponents(sortOrder: SortOrder) =
         when (sortOrder) {
             SortOrder.BY_DATE -> {
-                components.sortedByDescending { it.modifiedDate }
+                this.sortedByDescending { it.modifiedDate }
                     .sortedWith(ComponentsComparator)
             }
             SortOrder.BY_NAME -> {
-                components.sortedBy { it.title }
+                this.sortedBy { it.title }
                     .sortedWith(ComponentsComparator)
             }
         }

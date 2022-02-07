@@ -14,6 +14,9 @@ interface TaskDbModelDao : TaskLocalDataSource {
     @Query("SELECT * FROM taskdbmodel WHERE parentFolderId = :parentFolderId")
     override suspend fun getSubTasks(parentFolderId: Long): List<TaskDbModel>
 
+    @Query("SELECT * FROM taskdbmodel WHERE id = :taskId")
+    override suspend fun getTask(taskId: Long): TaskDbModel
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     override suspend fun addTask(task: TaskDbModel): Long
 

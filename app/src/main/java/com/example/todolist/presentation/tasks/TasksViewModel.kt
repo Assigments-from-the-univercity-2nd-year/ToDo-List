@@ -17,6 +17,7 @@ import com.example.todolist.domain.useCases.folderUseCases.UpdateFolderUseCase
 import com.example.todolist.domain.useCases.tasksUseCases.AddTaskUseCase
 import com.example.todolist.domain.useCases.tasksUseCases.DeleteTaskUseCase
 import com.example.todolist.domain.useCases.tasksUseCases.UpdateTaskUseCase
+import com.example.todolist.domain.useCases.tasksUseCases.updateTaskCheckUseCase
 import com.example.todolist.domain.useCases.userPreferencesUseCases.UpdateHideCompletedUseCase
 import com.example.todolist.domain.useCases.userPreferencesUseCases.UpdateSortOrderUseCase
 import com.example.todolist.presentation.*
@@ -43,6 +44,7 @@ class TasksViewModel @Inject constructor(
 
     private val updateFolderUseCase: UpdateFolderUseCase,
     private val updateTaskUseCase: UpdateTaskUseCase,
+    private val updateTaskCheckUseCase: updateTaskCheckUseCase,
 
     private val deleteTaskUseCase: DeleteTaskUseCase,
 
@@ -157,8 +159,7 @@ class TasksViewModel @Inject constructor(
     }
 
     private fun onTaskCheckChanged(task: TaskUiState, isChecked: Boolean) = viewModelScope.launch {
-        //TODO: implement
-        //updateTaskUseCase(task.copy(isCompleted = isChecked).mapToDomain())
+        updateTaskCheckUseCase(task.id, isChecked)
     }
 
     private fun onSubFolderSelected(folder: FolderUiState) = viewModelScope.launch {
@@ -182,8 +183,14 @@ class TasksViewModel @Inject constructor(
     }
 
     fun onUndoDeleteClicked(task: TaskUiState) = viewModelScope.launch {
-        //TODO: implement
-        //addTaskUseCase(task.mapToDomain())
+        addTaskUseCase(
+            Task(
+                title = task.title,
+                parentFolderId = task.parentFolderId,
+                isImportant = task.isImportant,
+                isCompleted = task.isCompleted,
+            )
+        )
     }
 
     fun onAddNewTaskClicked() = viewModelScope.launch {

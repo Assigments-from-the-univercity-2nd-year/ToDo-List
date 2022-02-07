@@ -14,7 +14,7 @@ class FolderViewHolder(
         binding.apply {
             textviewItemfolderFoldername.text = component.title
             textviewItemfolderNumberofitemsinfolder.text = component.numberOfSubComponents
-            imageviewItemfolderPinning.isVisible = component.isPinned
+            imageviewItemfolderPinning.isVisible = component.isStarred
 
             root.setOnClickListener {
                 onFolderClicked(component)

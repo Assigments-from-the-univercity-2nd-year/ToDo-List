@@ -11,8 +11,8 @@ interface FolderDbModelDao : FolderLocalDataSource {
     @Query("SELECT * FROM folderdbmodel WHERE id = parentFolderId")
     override suspend fun getRootFolder(): FolderDbModel
 
-    @Query("SELECT * FROM folderdbmodel WHERE isPinned = 1")
-    override suspend fun getPinnedFolders(): List<FolderDbModel>
+    @Query("SELECT * FROM folderdbmodel WHERE isStarred = 1")
+    override suspend fun getStarredFolders(): List<FolderDbModel>
 
     @Query("SELECT * FROM folderdbmodel WHERE parentFolderId = :parentFolderId AND parentFolderId != id")
     override fun getSubFoldersFlow(parentFolderId: Long): Flow<List<FolderDbModel>>

@@ -8,7 +8,7 @@ class GetStarredFoldersUseCase constructor(
 ) {
 
     suspend operator fun invoke(): List<Folder> {
-        return componentsRepository.getPinnedFolders()
+        return componentsRepository.getStarredFolders()
     }
 
 }

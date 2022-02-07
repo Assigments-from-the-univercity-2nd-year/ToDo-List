@@ -9,6 +9,8 @@ interface TaskLocalDataSource {
 
     suspend fun getSubTasks(parentFolderId: Long): List<TaskDbModel>
 
+    suspend fun getTask(taskId: Long): TaskDbModel
+
     suspend fun addTask(task: TaskDbModel): Long
 
     suspend fun updateTask(task: TaskDbModel)

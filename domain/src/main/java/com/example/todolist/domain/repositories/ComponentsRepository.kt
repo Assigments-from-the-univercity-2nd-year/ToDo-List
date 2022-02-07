@@ -14,7 +14,7 @@ interface ComponentsRepository {
     fun getFolderFlow(folderId: Long): Flow<Folder>
 
     suspend fun getRootFolder(): Folder
-    suspend fun getPinnedFolders(): List<Folder>
+    suspend fun getStarredFolders(): List<Folder>
 
     suspend fun getTask(taskId: Long): Task
     suspend fun getFolder(folderId: Long): Folder

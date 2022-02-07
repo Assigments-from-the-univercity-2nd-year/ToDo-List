@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class FolderDbModel(
     val title: String,
     val parentFolderId: Long,
-    val isPinned: Boolean = false,
+    val isStarred: Boolean = false,
     val createdDate: Long = System.currentTimeMillis(),
     val modifiedDate: Long = System.currentTimeMillis(),
     @PrimaryKey(autoGenerate = true)

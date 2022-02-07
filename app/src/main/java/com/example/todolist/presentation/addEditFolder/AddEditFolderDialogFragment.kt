@@ -30,7 +30,7 @@ class AddEditFolderDialogFragment : DialogFragment() {
         val binding = DialogFragmentAddEditFolderBinding.inflate(layoutInflater)
         binding.edittextModalbottomsheetaddeditfolderFoldername
             .setText(args.currentFolder?.title)
-        binding.checkboxModalbottomsheetaddeditfolderPinning.isChecked = args.currentFolder?.isPinned ?: false
+        binding.checkboxModalbottomsheetaddeditfolderPinning.isChecked = args.currentFolder?.isStarred ?: false
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.addeditfolderdialogfragment_title)

@@ -1,7 +1,7 @@
 package com.example.todolist.presentation.entities.components
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import com.example.todolist.domain.models.components.Task as DomainTask
 
 @Parcelize

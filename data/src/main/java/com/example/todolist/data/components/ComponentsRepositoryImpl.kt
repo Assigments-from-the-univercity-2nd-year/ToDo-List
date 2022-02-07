@@ -46,12 +46,12 @@ class ComponentsRepositoryImpl(
         return rootFolder.mapToDomain()
     }
 
-    override suspend fun getPinnedFolders(): List<Folder> {
-        return folderLocalDataSource.getPinnedFolders().mapFolderListToDomain()
+    override suspend fun getStarredFolders(): List<Folder> {
+        return folderLocalDataSource.getStarredFolders().mapFolderListToDomain()
     }
 
     override suspend fun getTask(taskId: Long): Task {
-        TODO("Not yet implemented")
+        return taskLocalDataSource.getTask(taskId).mapToDomain()
     }
 
     override suspend fun getFolder(folderId: Long): Folder {
@@ -67,7 +67,7 @@ class ComponentsRepositoryImpl(
             FolderDbModel(
                 title = folderCreatingDTO.title,
                 parentFolderId = folderCreatingDTO.folderId,
-                isPinned = folderCreatingDTO.isPinned
+                isStarred = folderCreatingDTO.isPinned
             )
         )
     }
@@ -96,7 +96,7 @@ class ComponentsRepositoryImpl(
         return Folder(
             title = title,
             parentFolderId = parentFolderId,
-            isPinned = isPinned,
+            isStarred = isStarred,
             createdDate = createdDate,
             modifiedDate = modifiedDate,
             id = id,
@@ -126,7 +126,7 @@ class ComponentsRepositoryImpl(
         return FolderDbModel(
             title = title,
             parentFolderId = parentFolderId,
-            isPinned = isPinned,
+            isStarred = isStarred,
             createdDate = createdDate,
             modifiedDate = modifiedDate,
             id = id,

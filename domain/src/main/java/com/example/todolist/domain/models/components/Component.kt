@@ -19,19 +19,19 @@ abstract class Component(
     val modifiedDateFormatted: String
         get() = getDateFormatted(modifiedDate)
 
-    abstract suspend fun delete(componentsRepository: ComponentsRepository)
+    //abstract suspend fun delete(componentsRepository: ComponentsRepository)
 
-    abstract suspend fun update(componentsRepository: ComponentsRepository)
+    //abstract suspend fun update(componentsRepository: ComponentsRepository)
 
-    suspend fun getParentFolder(componentsRepository: ComponentsRepository): Folder {
+    /*suspend fun getParentFolder(componentsRepository: ComponentsRepository): Folder {
         return componentsRepository.getFolder(this.parentFolderId)
-    }
+    }*/
 
-    protected suspend fun updateModificationDateOfParentFolder(componentsRepository: ComponentsRepository) {
+    /*protected suspend fun updateModificationDateOfParentFolder(componentsRepository: ComponentsRepository) {
         getParentFolder(componentsRepository)
             .copy(modifiedDate = System.currentTimeMillis())
             .update(componentsRepository)
-    }
+    }*/
 
     protected open fun getDateFormatted(date: Long): String {
         return when (System.currentTimeMillis() - date) {

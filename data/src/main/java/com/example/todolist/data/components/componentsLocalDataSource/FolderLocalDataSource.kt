@@ -7,7 +7,7 @@ interface FolderLocalDataSource {
 
     suspend fun getRootFolder(): FolderDbModel?
 
-    suspend fun getPinnedFolders(): List<FolderDbModel>
+    suspend fun getStarredFolders(): List<FolderDbModel>
 
     fun getSubFoldersFlow(parentFolderId: Long): Flow<List<FolderDbModel>>
 
