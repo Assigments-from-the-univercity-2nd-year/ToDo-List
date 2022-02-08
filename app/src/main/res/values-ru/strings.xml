@@ -5,7 +5,7 @@
     <!-- dialog_fragment_add_edit_folder.xml -->
     <string name="addeditfolder_foldernamehint">Имя папки</string>
     <string name="addeditfolder_newfolderinittext">Новая папка</string>
-    <string name="addeditfolder_pinned">Закрепить</string>
+    <string name="addeditfolder_starred">Закрепить</string>
 
     <!-- fragment_add_edit_task.xml -->
     <string name="addedittask_taskname">Имя задачи</string>
@@ -45,7 +45,7 @@
 
     <!-- TasksFragment -->
     <string name="taskfragment_all_tasks_title">Все задачи</string>
-    <string name="taskfragment_loading_title">Загрузка...</string>
+    <string name="taskfragment_loading_title">Загрузка…</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

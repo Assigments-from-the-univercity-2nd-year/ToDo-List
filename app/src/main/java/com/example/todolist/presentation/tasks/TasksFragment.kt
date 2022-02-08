@@ -150,6 +150,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
                         findNavController().navigate(action)*/
                     }
                     is TasksViewModel.TasksEvent.NavigationEvent.NavigateToAddFolderScreen -> {
+                        //TODO: validate datat in viewModel. There shold be all data in the event
                         viewModel.uiState.value?.folderData
                             ?.let {
                                 val action = TasksFragmentDirections.actionGlobalAddEditFolderDialogFragment(
@@ -168,10 +169,15 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
                         findNavController().navigate(action)*/
                     }
                     is TasksViewModel.TasksEvent.NavigationEvent.NavigateToEditFolderScreen -> {
-                        /*val action = TasksFragmentDirections.actionGlobalAddEditFolderDialogFragment(
-                            event.parentFolder, viewModel.currentFolder.value!!
-                        )
-                        findNavController().navigate(action)*/
+                        viewModel.uiState.value?.folderData
+                            ?.let {
+                                val action =
+                                    TasksFragmentDirections.actionGlobalAddEditFolderDialogFragment(
+                                        parentFolder = event.parentFolder,
+                                        currentFolder = it,
+                                    )
+                                findNavController().navigate(action)
+                            }
                     }
                     is TasksViewModel.TasksEvent.NavigationEvent.NavigateToDeleteAllCompletedScreen -> {
                         val action =

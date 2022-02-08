@@ -4,7 +4,7 @@
     <!-- dialog_fragment_add_edit_folder.xml -->
     <string name="addeditfolder_foldernamehint">Folder name</string>
     <string name="addeditfolder_newfolderinittext">New folder</string>
-    <string name="addeditfolder_pinned">Pinned</string>
+    <string name="addeditfolder_starred">Starred</string>
 
     <!-- fragment_add_edit_task.xml -->
     <string name="addedittask_taskname">Task name</string>
@@ -44,7 +44,7 @@
 
     <!-- TasksFragment -->
     <string name="taskfragment_all_tasks_title">All tasks</string>
-    <string name="taskfragment_loading_title">Loading...</string>
+    <string name="taskfragment_loading_title">Loading…</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

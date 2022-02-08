@@ -7,15 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todolist.databinding.DialogFragmentAddEditFolderBinding
 import com.example.todolist.di.ApplicationScope
-import com.example.todolist.domain.models.components.FolderCreatingDTO
 import com.example.todolist.domain.useCases.folderUseCases.AddFolderUseCase
 import com.example.todolist.domain.useCases.folderUseCases.AddFolderUseCase.AddFolderUseCaseException
 import com.example.todolist.domain.useCases.folderUseCases.UpdateFolderUseCase
 import com.example.todolist.domain.util.Resource
 import com.example.todolist.presentation.ADD_FOLDER_RESULT_OK
 import com.example.todolist.presentation.EDIT_FOLDER_RESULT_OK
-//import com.example.todolist.presentation.entities.FolderUiState
-//import com.example.todolist.presentation.entities.mapToDomain
+import com.example.todolist.presentation.entities.components.FolderUiState
 import com.example.todolist.util.exhaustive
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -38,34 +36,29 @@ class AddEditFolderViewModel @Inject constructor(
         binding: DialogFragmentAddEditFolderBinding,
         args: AddEditFolderDialogFragmentArgs
     ) {
-/*
         val folderName: String = binding.edittextModalbottomsheetaddeditfolderFoldername.text.toString()
-        val isPinned: Boolean = binding.checkboxModalbottomsheetaddeditfolderPinning.isChecked
+        val isStarred: Boolean = binding.checkboxModalbottomsheetaddeditfolderPinning.isChecked
         val currentFolder: FolderUiState? = args.currentFolder
 
         applicationScope.launch {
-            if (isNewFolder(currentFolder)) {
-                addNewFolder(folderName, isPinned, binding, args)
+            if (currentFolder == null) { // if is a new folder
+                addNewFolder(folderName, isStarred, binding, args)
             } else {
-                editFolder(folderName, isPinned, currentFolder!!, binding)
+                editFolder(folderName, isStarred, currentFolder.id, binding)
             }
-        }*/
+        }
     }
-
-    //private fun isNewFolder(currentFolder: FolderUiState?): Boolean = currentFolder == null
 
     private suspend fun addNewFolder(
         folderName: String,
-        isPinned: Boolean,
+        isStarred: Boolean,
         binding: DialogFragmentAddEditFolderBinding,
         args: AddEditFolderDialogFragmentArgs
     ) {
         val addingResult = addFolderUseCase.invoke(
-            FolderCreatingDTO(
-                title = folderName,
-                folderId = args.parentFolder.id,
-                isPinned = isPinned
-            )
+            title = folderName,
+            parentFolderId = args.parentFolder.id,
+            isStarred = isStarred
         )
 
         when (addingResult) {
@@ -77,24 +70,20 @@ class AddEditFolderViewModel @Inject constructor(
             is Resource.Failure -> when (addingResult.reason) {
                 AddFolderUseCaseException.BlankNameError ->
                     binding.edittextModalbottomsheetaddeditfolderFoldername.error = "Name is blank!"
-                is AddFolderUseCaseException.CantFindInsertedFolderInDatabase ->
-                    showInvalidInputMessage("Error: can't find inserted folder.")
-                is AddFolderUseCaseException.CantFindParentFolderInDatabase ->
-                    showInvalidInputMessage("Error: can't find parent folder for this folder.")
-                is AddFolderUseCaseException.CantUpdateParentFolderInDatabase ->
-                    showInvalidInputMessage("Error: can't update parent folder of created folder.")
             }
         }.exhaustive
     }
 
     private suspend fun editFolder(
-        folderName: String,
-        isPinned: Boolean,
-        //currentFolder: FolderUiState,
+        folderTitle: String,
+        isStarred: Boolean,
+        folderId: Long,
         binding: DialogFragmentAddEditFolderBinding
-    ) {/*
-        val updatingResult = updateFolderUseCase.invoke(
-            currentFolder.copy(title = folderName, isPinned = isPinned).mapToDomain()
+    ) {
+        val updatingResult = updateFolderUseCase(
+            folderId,
+            folderTitle,
+            isStarred,
         )
 
         when (updatingResult) {
@@ -102,16 +91,15 @@ class AddEditFolderViewModel @Inject constructor(
                 addEditFolderEventChannel.send(
                     AddEditFolderEvent.NavigateBackWithResult(EDIT_FOLDER_RESULT_OK)
                 )
-                TODO("Log")
             }
             is Resource.Failure -> {
                 when (updatingResult.reason) {
-                    RepositoryExceptions.UnknownException -> {
+                    UpdateFolderUseCase.UpdateFolderUseCaseException.BlankNameError -> {
                         binding.edittextModalbottomsheetaddeditfolderFoldername.error = "Name is blank!"
                     }
                 }
             }
-        }.exhaustive*/
+        }.exhaustive
     }
 
     fun hideKeyboard(view: View) {
@@ -131,4 +119,5 @@ class AddEditFolderViewModel @Inject constructor(
         data class NavigateBackWithResult(val result: Int) : AddEditFolderEvent()
         data class ShowInvalidInputMessage(val msg: String) : AddEditFolderEvent()
     }
+
 }

@@ -7,7 +7,6 @@ import com.example.todolist.data.components.componentsLocalDataSource.entities.F
 import com.example.todolist.data.components.componentsLocalDataSource.entities.TaskDbModel
 import com.example.todolist.domain.models.components.Component
 import com.example.todolist.domain.models.components.Folder
-import com.example.todolist.domain.models.components.FolderCreatingDTO
 import com.example.todolist.domain.models.components.Task
 import com.example.todolist.domain.repositories.ComponentsRepository
 import kotlinx.coroutines.delay
@@ -62,12 +61,12 @@ class ComponentsRepositoryImpl(
         return taskLocalDataSource.addTask(task.mapToData())
     }
 
-    override suspend fun addFolder(folderCreatingDTO: FolderCreatingDTO): Long {
+    override suspend fun addFolder(folder: Folder): Long {
         return folderLocalDataSource.addFolder(
             FolderDbModel(
-                title = folderCreatingDTO.title,
-                parentFolderId = folderCreatingDTO.folderId,
-                isStarred = folderCreatingDTO.isPinned
+                title = folder.title,
+                parentFolderId = folder.parentFolderId,
+                isStarred = folder.isStarred
             )
         )
     }

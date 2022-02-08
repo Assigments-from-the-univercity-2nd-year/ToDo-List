@@ -76,7 +76,7 @@ class TasksViewModel @Inject constructor(
     private suspend fun navigateToFolder(folderId: Long) {
         val currentFolderFlow = getFolderFlowUseCase(folderId)
         currentFolderFlow.collect { currentFolder ->
-            getComponentsOfFolderUseCase(currentFolder).collect {
+            getComponentsOfFolderUseCase(currentFolder.id).collect {
                 _uiState.value = TasksUiState(
                     isLoading = false,
                     fabAnimation = _uiState.value.fabAnimation,

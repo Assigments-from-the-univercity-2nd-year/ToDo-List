@@ -1,7 +1,6 @@
 package com.example.todolist.domain.useCases.folderUseCases
 
 import com.example.todolist.domain.models.components.Folder
-import com.example.todolist.domain.models.components.FolderCreatingDTO
 import com.example.todolist.domain.repositories.ComponentsRepository
 import com.example.todolist.domain.util.Resource
 import com.example.todolist.domain.util.onFailure
@@ -11,24 +10,29 @@ class AddFolderUseCase @Inject constructor(
     private val componentsRepository: ComponentsRepository,
 ) {
 
-    suspend operator fun invoke(folderCreatingDTO: FolderCreatingDTO): Resource<Long, AddFolderUseCaseException> {
-        // checking if user input valid or no. If no - return error
-        /*isUserInputCorrect(folderCreatingDTO).onFailure { return it }
+    suspend operator fun invoke(
+        title: String,
+        parentFolderId: Long,
+        isStarred: Boolean,
+    ): Resource<Long, AddFolderUseCaseException> {
+        require(parentFolderId > 0)
+        isUserInputCorrect(title).onFailure { return it }
+        val folder = Folder(
+            title = title,
+            parentFolderId = parentFolderId,
+            isStarred = isStarred,
+        )
 
-        val insertedFolderId: Long = componentsRepository.addFolder(folderCreatingDTO)
-        val parentFolder: Folder = //componentsRepository.getParentFolderOfFolder(insertedFolderId)
+        val insertedFolderId: Long = componentsRepository.addFolder(folder)
+        val parentFolder: Folder = componentsRepository.getFolder(parentFolderId)
         componentsRepository.updateFolder(parentFolder.copy(modifiedDate = System.currentTimeMillis()))
-            .onFailure { return Resource.Failure(
-                AddFolderUseCaseException.CantUpdateParentFolderInDatabase(it.reason)
-            ) }
 
-        return Resource.Success(insertedFolderId)*/
-        TODO()
+        return Resource.Success(insertedFolderId)
     }
 
-    private fun isUserInputCorrect(folderCreatingDTO: FolderCreatingDTO): Resource<Unit, AddFolderUseCaseException> {
+    private fun isUserInputCorrect(title: String): Resource<Unit, AddFolderUseCaseException> {
         return when {
-            folderCreatingDTO.title.isBlank() -> {
+            title.isBlank() -> {
                 Resource.Failure(reason = AddFolderUseCaseException.BlankNameError)
             }
             else -> {
@@ -37,11 +41,8 @@ class AddFolderUseCase @Inject constructor(
         }
     }
 
-    sealed class AddFolderUseCaseException : Throwable() {
+    sealed class AddFolderUseCaseException : Exception() {
         object BlankNameError : AddFolderUseCaseException()
-        data class CantFindInsertedFolderInDatabase(override val cause: Throwable) : AddFolderUseCaseException()
-        data class CantFindParentFolderInDatabase(override val cause: Throwable) : AddFolderUseCaseException()
-        data class CantUpdateParentFolderInDatabase(override val cause: Throwable) : AddFolderUseCaseException()
     }
 
 }

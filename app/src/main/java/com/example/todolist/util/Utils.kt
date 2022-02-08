@@ -9,12 +9,12 @@ import java.io.IOException
 val <T> T.exhaustive: T
     get() = this
 
-fun Bitmap.toByteArray() : Resource<ByteArray, Throwable> {
+fun Bitmap.toByteArray() : ByteArray {
     ByteArrayOutputStream().use { stream ->
         if (!this.compress(Bitmap.CompressFormat.JPEG, 100, stream)) {
-            return Resource.Failure(IOException("Couldn't convert Bitmap to ByteArray."))
+            throw IOException("Couldn't convert Bitmap to ByteArray.")
         }
-        return Resource.Success(stream.toByteArray())
+        return stream.toByteArray()
     }
 }
 

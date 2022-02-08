@@ -1,10 +1,7 @@
 package com.example.todolist.domain.repositories
 
-import com.example.todolist.domain.models.components.Component
 import com.example.todolist.domain.models.components.Folder
-import com.example.todolist.domain.models.components.FolderCreatingDTO
 import com.example.todolist.domain.models.components.Task
-import com.example.todolist.domain.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface ComponentsRepository {
@@ -20,10 +17,10 @@ interface ComponentsRepository {
     suspend fun getFolder(folderId: Long): Folder
 
     suspend fun addTask(task: Task): Long
-    suspend fun addFolder(folderCreatingDTO: FolderCreatingDTO): Long
+    suspend fun addFolder(folder: Folder): Long
 
-    suspend fun updateTask(task: Task) //TODO: change argument to taskUpdatingDTO
-    suspend fun updateFolder(folder: Folder) //TODO: change argument to folderUpdatingDTO
+    suspend fun updateTask(task: Task)
+    suspend fun updateFolder(folder: Folder)
 
     suspend fun deleteTask(taskId: Long)
     suspend fun deleteCompletedTasks()
