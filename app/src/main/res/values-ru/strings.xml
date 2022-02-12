@@ -35,6 +35,7 @@
 
     <!-- AddEditFolderDialogFragment -->
     <string name="addeditfolderdialogfragment_addfolder">Добавить папку</string>
+    <string name="addeditfolderdialogfragment_editfolder">Изменит папку</string>
     <string name="addeditfolderdialogfragment_title">Выберете имя папки</string>
 
     <!-- DeleteFolderDialogFragment -->

@@ -34,6 +34,7 @@
 
     <!-- AddEditFolderDialogFragment -->
     <string name="addeditfolderdialogfragment_addfolder">Add folder</string>
+    <string name="addeditfolderdialogfragment_editfolder">Edit folder</string>
     <string name="addeditfolderdialogfragment_title">Select folder name</string>
 
     <!-- DeleteFolderDialogFragment -->

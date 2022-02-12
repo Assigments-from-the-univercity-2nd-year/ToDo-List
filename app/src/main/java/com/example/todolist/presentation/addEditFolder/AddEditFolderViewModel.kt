@@ -16,10 +16,9 @@ import com.example.todolist.presentation.EDIT_FOLDER_RESULT_OK
 import com.example.todolist.presentation.entities.components.FolderUiState
 import com.example.todolist.util.exhaustive
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -95,7 +94,9 @@ class AddEditFolderViewModel @Inject constructor(
             is Resource.Failure -> {
                 when (updatingResult.reason) {
                     UpdateFolderUseCase.UpdateFolderUseCaseException.BlankNameError -> {
-                        binding.edittextModalbottomsheetaddeditfolderFoldername.error = "Name is blank!"
+                        withContext(Dispatchers.Main) {
+                            binding.edittextModalbottomsheetaddeditfolderFoldername.setError("Name is blank!")
+                        }
                     }
                 }
             }

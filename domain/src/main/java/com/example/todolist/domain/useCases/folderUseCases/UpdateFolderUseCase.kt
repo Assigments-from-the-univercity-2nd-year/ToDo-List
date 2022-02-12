@@ -17,12 +17,11 @@ class UpdateFolderUseCase constructor(
         isUserInputCorrect(title).onFailure { return it }
 
         val folder = componentsRepository.getFolder(folderId) //TODO: if folder doesn't exists
+        val parentFolder = componentsRepository.getFolder(folder.parentFolderId)
         componentsRepository.updateFolder(
-            componentsRepository
-                .getFolder(folderId)
-                .copy(title = title, isStarred = isStarred)
+            folder.copy(title = title, isStarred = isStarred)
         )
-        componentsRepository.updateFolder(folder)
+        componentsRepository.updateFolder(parentFolder)
         return Resource.Success(Unit)
     }
 

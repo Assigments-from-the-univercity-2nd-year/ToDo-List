@@ -4,12 +4,12 @@ import com.example.todolist.domain.models.components.Folder
 import com.example.todolist.domain.repositories.ComponentsRepository
 import javax.inject.Inject
 
-class GetStarredFoldersUseCase @Inject constructor(
-    private val componentsRepository: ComponentsRepository,
+class GetFolderUseCase @Inject constructor(
+    private val componentsRepository: ComponentsRepository
 ) {
 
-    suspend operator fun invoke(): List<Folder> {
-        return componentsRepository.getStarredFolders()
+    suspend operator fun invoke(folderId: Long): Folder {
+        return componentsRepository.getFolder(folderId)
     }
 
 }

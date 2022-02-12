@@ -54,7 +54,9 @@ class ComponentsRepositoryImpl(
     }
 
     override suspend fun getFolder(folderId: Long): Folder {
-        return folderLocalDataSource.getFolder(folderId).mapToDomain()
+        return folderLocalDataSource
+            .getFolder(folderId)
+            .mapToDomain()
     }
 
     override suspend fun addTask(task: Task): Long {

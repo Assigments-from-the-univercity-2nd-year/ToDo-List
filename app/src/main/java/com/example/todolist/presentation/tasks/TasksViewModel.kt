@@ -10,10 +10,7 @@ import com.example.todolist.domain.models.components.Component
 import com.example.todolist.domain.models.components.Folder
 import com.example.todolist.domain.models.components.Task
 import com.example.todolist.domain.models.userPreferences.SortOrder
-import com.example.todolist.domain.useCases.folderUseCases.GetComponentsOfFolderUseCase
-import com.example.todolist.domain.useCases.folderUseCases.GetFolderFlowUseCase
-import com.example.todolist.domain.useCases.folderUseCases.GetRootFolderUseCase
-import com.example.todolist.domain.useCases.folderUseCases.UpdateFolderUseCase
+import com.example.todolist.domain.useCases.folderUseCases.*
 import com.example.todolist.domain.useCases.tasksUseCases.AddTaskUseCase
 import com.example.todolist.domain.useCases.tasksUseCases.DeleteTaskUseCase
 import com.example.todolist.domain.useCases.tasksUseCases.UpdateTaskUseCase
@@ -36,7 +33,9 @@ import javax.inject.Inject
 @HiltViewModel
 class TasksViewModel @Inject constructor(
     private val getRootFolderUseCase: GetRootFolderUseCase,
+    private val getStarredFoldersUseCase: GetStarredFoldersUseCase,
     private val getFolderFlowUseCase: GetFolderFlowUseCase,
+    private val getFolderUseCase: GetFolderUseCase,
     private val getComponentsOfFolderUseCase: GetComponentsOfFolderUseCase,
 
     private val updateSortOrderUseCase: UpdateSortOrderUseCase,
@@ -155,7 +154,7 @@ class TasksViewModel @Inject constructor(
     }
 
     private fun onTaskSelected(task: TaskUiState) = viewModelScope.launch {
-        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToEditTaskScreen(task))
+        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToEditTaskScreen(task.id))
     }
 
     private fun onTaskCheckChanged(task: TaskUiState, isChecked: Boolean) = viewModelScope.launch {
@@ -194,13 +193,16 @@ class TasksViewModel @Inject constructor(
     }
 
     fun onAddNewTaskClicked() = viewModelScope.launch {
-        _uiState.value = _uiState.value.copy(fabAnimation = TasksUiState.FABAnimation.DO_NOTHING)
-        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToAddTaskScreen)
+        _uiState.value.folderData?.let {
+            _uiState.value = _uiState.value.copy(fabAnimation = TasksUiState.FABAnimation.DO_NOTHING)
+            tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToAddTaskScreen(it.id))
+        }
     }
 
     fun onAddNewFolderClicked() = viewModelScope.launch {
+        val folderData = _uiState.value.folderData ?: return@launch
         _uiState.value = _uiState.value.copy(fabAnimation = TasksUiState.FABAnimation.HIDE_FABS)
-        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToAddFolderScreen)
+        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToAddFolderScreen(folderData))
     }
 
     fun onAddButtonClicked() = viewModelScope.launch {
@@ -246,18 +248,15 @@ class TasksViewModel @Inject constructor(
     }
 
     fun onQuickFolderChangeClicked() = viewModelScope.launch {
-        //TODO: choose whether list of starred folders should be fetched here or in fragment
-        /*tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToQuickFolderChange(
-
-            /*folderDao.getPinnedFolders().onEach {
-                it.setNumberOfSubComponents(folderDao, taskDao)
-            }*/
-        ))*/
+        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToQuickFolderChange(
+            getStarredFoldersUseCase().map { it.mapToPresentation() }
+        ))
     }
 
     fun onEditFolderClicked() = viewModelScope.launch {
         val folderData = _uiState.value.folderData ?: return@launch
-        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToEditFolderScreen(folderData))
+        val parentFolder = getFolderUseCase(folderData.parentFolderId).mapToPresentation()
+        tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToEditFolderScreen(parentFolder, folderData))
     }
 
     /*fun taskMovedToFolder(component: Component?, folder: Folder?) = viewModelScope.launch {
@@ -289,11 +288,11 @@ class TasksViewModel @Inject constructor(
     sealed class TasksEvent {
 
         sealed class NavigationEvent {
-            object NavigateToAddTaskScreen : TasksEvent()
-            object NavigateToAddFolderScreen : TasksEvent()
+            data class NavigateToAddTaskScreen(val parentFolderId: Long) : TasksEvent()
+            data class NavigateToAddFolderScreen(val parentFolder: FolderUiState) : TasksEvent()
 
-            data class NavigateToEditTaskScreen(val task: TaskUiState) : TasksEvent()
-            data class NavigateToEditFolderScreen(val parentFolder: FolderUiState) : TasksEvent()
+            data class NavigateToEditTaskScreen(val taskId: Long) : TasksEvent()
+            data class NavigateToEditFolderScreen(val parentFolder: FolderUiState, val currentFolder: FolderUiState) : TasksEvent()
 
             object NavigateToDeleteAllCompletedScreen : TasksEvent()
             data class NavigateToDeleteFolderScreen(val folder: FolderUiState) : TasksEvent()

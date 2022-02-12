@@ -18,9 +18,8 @@
         android:name="com.example.todolist.presentation.addEditTask.AddEditTaskFragment"
         tools:layout="@layout/fragment_add_edit_task">
         <argument
-            android:name="task"
-            app:argType="com.example.todolist.presentation.entities.components.TaskUiState"
-            app:nullable="true" />
+            android:name="action"
+            app:argType="com.example.todolist.presentation.addEditTask.AddEditTaskAction" />
     </fragment>
     <dialog
         android:id="@+id/deleteAllCompletedDialogFragment"

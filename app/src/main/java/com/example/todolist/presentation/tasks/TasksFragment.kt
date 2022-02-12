@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentTasksBinding
 import com.example.todolist.domain.models.userPreferences.SortOrder
+import com.example.todolist.presentation.addEditTask.AddEditTaskAction
 import com.example.todolist.presentation.entities.components.FolderUiState
 import com.example.todolist.presentation.tasks.componentAdapter.ComponentAdapter
 import com.example.todolist.presentation.tasks.componentAdapter.itemDecorations.HorizontalItemDecoration
@@ -141,43 +142,33 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
             viewModel.tasksEvent.collect { event ->
                 when (event) {
                     is TasksViewModel.TasksEvent.NavigationEvent.NavigateToAddTaskScreen -> {
-                        /*val action =
+                        val action =
                             TasksFragmentDirections.actionTasksFragmentToAddEditTaskFragment(
-                                TODO()
-                                title = "New Task",
-                                folderId = viewModel.currentFolder.value?.id ?: 1L
+                                AddEditTaskAction.AddTask(parentFolderIdForTask = event.parentFolderId)
                             )
-                        findNavController().navigate(action)*/
+                        findNavController().navigate(action)
                     }
                     is TasksViewModel.TasksEvent.NavigationEvent.NavigateToAddFolderScreen -> {
-                        //TODO: validate datat in viewModel. There shold be all data in the event
-                        viewModel.uiState.value?.folderData
-                            ?.let {
-                                val action = TasksFragmentDirections.actionGlobalAddEditFolderDialogFragment(
-                                    it, null
-                                )
-                                findNavController().navigate(action)
-                            }
+                        val action =
+                            TasksFragmentDirections.actionGlobalAddEditFolderDialogFragment(
+                                event.parentFolder, null
+                            )
+                        findNavController().navigate(action)
                     }
                     is TasksViewModel.TasksEvent.NavigationEvent.NavigateToEditTaskScreen -> {
-                        /*val action =
+                        val action =
                             TasksFragmentDirections.actionTasksFragmentToAddEditTaskFragment(
-                                event.task,
-                                "Edit Task",
-                                viewModel.currentFolder.value?.id ?: 1L
+                                AddEditTaskAction.EditTask(event.taskId)
                             )
-                        findNavController().navigate(action)*/
+                        findNavController().navigate(action)
                     }
                     is TasksViewModel.TasksEvent.NavigationEvent.NavigateToEditFolderScreen -> {
-                        viewModel.uiState.value?.folderData
-                            ?.let {
-                                val action =
-                                    TasksFragmentDirections.actionGlobalAddEditFolderDialogFragment(
-                                        parentFolder = event.parentFolder,
-                                        currentFolder = it,
-                                    )
-                                findNavController().navigate(action)
-                            }
+                        val action =
+                            TasksFragmentDirections.actionGlobalAddEditFolderDialogFragment(
+                                parentFolder = event.parentFolder,
+                                currentFolder = event.currentFolder,
+                            )
+                        findNavController().navigate(action)
                     }
                     is TasksViewModel.TasksEvent.NavigationEvent.NavigateToDeleteAllCompletedScreen -> {
                         val action =

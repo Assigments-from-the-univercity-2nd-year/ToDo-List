@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.todolist.R
 import com.example.todolist.databinding.DialogFragmentAddEditFolderBinding
+import com.example.todolist.presentation.entities.components.FolderUiState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -36,7 +37,7 @@ class AddEditFolderDialogFragment : DialogFragment() {
             .setTitle(R.string.addeditfolderdialogfragment_title)
             .setView(binding.root)
             .setNegativeButton(R.string.cancel, null)
-            .setPositiveButton(R.string.addeditfolderdialogfragment_addfolder, null)
+            .setPositiveButton(getPositiveButtonName(args.currentFolder), null)
             .setOnDismissListener {
                 viewModel.hideKeyboard(binding.edittextModalbottomsheetaddeditfolderFoldername)
             }
@@ -75,5 +76,13 @@ class AddEditFolderDialogFragment : DialogFragment() {
         }
 
         return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    private fun getPositiveButtonName(currentFolder: FolderUiState?): Int {
+        return if (currentFolder == null) {
+            R.string.addeditfolderdialogfragment_addfolder
+        } else {
+            R.string.addeditfolderdialogfragment_editfolder
+        }
     }
 }

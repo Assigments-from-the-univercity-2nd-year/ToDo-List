@@ -23,7 +23,7 @@ interface FolderDbModelDao : FolderLocalDataSource {
     @Query("SELECT * FROM folderdbmodel WHERE id = :folderId")
     override fun getFolderFlow(folderId: Long): Flow<FolderDbModel>
 
-    @Query("SELECT * FROM folderdbmodel WHERE parentFolderId = :folderId")
+    @Query("SELECT * FROM folderdbmodel WHERE id = :folderId")
     override suspend fun getFolder(folderId: Long): FolderDbModel
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
