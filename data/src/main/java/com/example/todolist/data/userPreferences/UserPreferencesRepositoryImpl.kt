@@ -13,20 +13,6 @@ class UserPreferencesRepositoryImpl @Inject constructor(
 
     override fun getFilterPreferences(): Flow<FilterPreferences> {
         return userPreferencesLocalDataSource.getFilterPreferencesDbModel()
-            /*.catch { exception ->
-                Log.e(TAG, "Error reading preferences", exception)
-                if (exception is IOException) {
-                    emit(
-                        Resource.Failure(
-                            reason = RepositoryExceptions.CantFetchFilterPreferencesException(
-                                exception.cause
-                            )
-                        )
-                    )
-                } else {
-                    emit(Resource.Failure(reason = RepositoryExceptions.UnknownException(exception.cause)))
-                }
-            }*/
     }
 
     override suspend fun updateHideCompleted(hideCompleted: Boolean) {

@@ -21,8 +21,7 @@ abstract class ComponentsDatabase : RoomDatabase() {
     abstract fun folderDao(): FolderDbModelDao
 
     class CallBack @Inject constructor(
-        private val database: Provider<ComponentsDatabase>,
-        //private val applicationScope: CoroutineScope
+        private val database: Provider<ComponentsDatabase>
     ) : RoomDatabase.Callback() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
@@ -30,7 +29,6 @@ abstract class ComponentsDatabase : RoomDatabase() {
             val folderDao = database.get().folderDao()
             val taskDao = database.get().taskDao()
 
-            /*applicationScope*/
             CoroutineScope(SupervisorJob()).launch {
                 val rootFolderId = 1L
                 val rootFolder = folderDao.addFolder(FolderDbModel("All", rootFolderId))

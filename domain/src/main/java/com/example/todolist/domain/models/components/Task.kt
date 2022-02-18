@@ -1,7 +1,8 @@
 package com.example.todolist.domain.models.components
 
-import com.example.todolist.domain.repositories.ComponentsRepository
-
+/**
+ * This class stands for task
+ */
 data class Task constructor(
     override val title: String = "New task",
     override val parentFolderId: Long,

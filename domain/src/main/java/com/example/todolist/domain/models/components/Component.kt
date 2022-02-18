@@ -1,10 +1,12 @@
 package com.example.todolist.domain.models.components
 
-import com.example.todolist.domain.repositories.ComponentsRepository
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * A component that stands for [Folder] or [Task]
+ */
 abstract class Component(
     open val title: String,
     open val parentFolderId: Long,
@@ -18,20 +20,6 @@ abstract class Component(
 
     val modifiedDateFormatted: String
         get() = getDateFormatted(modifiedDate)
-
-    //abstract suspend fun delete(componentsRepository: ComponentsRepository)
-
-    //abstract suspend fun update(componentsRepository: ComponentsRepository)
-
-    /*suspend fun getParentFolder(componentsRepository: ComponentsRepository): Folder {
-        return componentsRepository.getFolder(this.parentFolderId)
-    }*/
-
-    /*protected suspend fun updateModificationDateOfParentFolder(componentsRepository: ComponentsRepository) {
-        getParentFolder(componentsRepository)
-            .copy(modifiedDate = System.currentTimeMillis())
-            .update(componentsRepository)
-    }*/
 
     protected open fun getDateFormatted(date: Long): String {
         return when (System.currentTimeMillis() - date) {

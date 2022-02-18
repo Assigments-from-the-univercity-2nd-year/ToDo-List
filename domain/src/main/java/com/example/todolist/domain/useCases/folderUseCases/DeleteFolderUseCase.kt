@@ -6,10 +6,18 @@ import com.example.todolist.domain.repositories.ComponentsRepository
 import com.example.todolist.domain.useCases.tasksUseCases.DeleteTaskUseCase
 import javax.inject.Inject
 
+/**
+ * This use case is used for deleting a folder
+ */
 class DeleteFolderUseCase @Inject constructor(
     private val componentsRepository: ComponentsRepository
 ) {
 
+    /**
+     * delete a folder with id equal to [folderId]
+     *
+     * @param folderId an id of folder to delete
+     */
     suspend operator fun invoke(folderId: Long) {
         val folder = componentsRepository.getFolder(folderId)
         folder.subComponents.forEach {

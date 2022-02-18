@@ -6,10 +6,24 @@ import com.example.todolist.domain.util.Resource
 import com.example.todolist.domain.util.onFailure
 import javax.inject.Inject
 
+/**
+ * This use case is used for adding a folder
+ */
 class AddFolderUseCase @Inject constructor(
     private val componentsRepository: ComponentsRepository,
 ) {
 
+    /**
+     * Adds a folder with corresponding [title] and [isStarred]
+     * to a certain folders with [parentFolderId]
+     *
+     * @param title the title of folder to add
+     * @param parentFolderId the id of parent folder
+     * @param isStarred is this folder starred
+     *
+     * @return a [Resource] which is an id of inserted folder or an type
+     * of error of type [AddFolderUseCaseException]
+     */
     suspend operator fun invoke(
         title: String,
         parentFolderId: Long,

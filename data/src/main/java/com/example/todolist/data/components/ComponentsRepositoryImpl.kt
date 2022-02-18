@@ -34,14 +34,12 @@ class ComponentsRepositoryImpl(
     }
 
     override suspend fun getRootFolder(): Folder {
-        Log.d("TAG", "getRootFolder: started!")
         var rootFolder =  folderLocalDataSource.getRootFolder()
         while(rootFolder == null) {
             Log.i("TAG", "getRootFolder: root folder is $rootFolder")
             delay(500)
             rootFolder = folderLocalDataSource.getRootFolder()
         }
-        Log.d("TAG", "getRootFolder: finished!")
         return rootFolder.mapToDomain()
     }
 
@@ -106,20 +104,15 @@ class ComponentsRepositoryImpl(
     }
 
     private suspend fun getSubComponents(parentFolderId: Long): List<Component> {
-        Log.d("TAG", "getSubComponents: started!")
-        val subFoldersList = folderLocalDataSource.getSubFolders(parentFolderId)
-        val foldersList = subFoldersList.mapFolderListToDomain()
-        /*val foldersList = folderLocalDataSource
+        val foldersList = folderLocalDataSource
             .getSubFolders(parentFolderId)
             .mapFolderListToDomain()
-            as List<Component>*/
-        Log.d("TAG", "getSubComponents: first step completed!")
+            as List<Component>
         val tasksList = taskLocalDataSource
             .getSubTasks(parentFolderId)
             .mapTaskListToDomain()
             as List<Component>
 
-        Log.d("TAG", "getSubComponents: finished!")
         return foldersList.plus(tasksList)
     }
 

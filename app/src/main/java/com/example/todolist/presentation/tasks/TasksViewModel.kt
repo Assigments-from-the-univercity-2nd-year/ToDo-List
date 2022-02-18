@@ -13,7 +13,6 @@ import com.example.todolist.domain.models.userPreferences.SortOrder
 import com.example.todolist.domain.useCases.folderUseCases.*
 import com.example.todolist.domain.useCases.tasksUseCases.AddTaskUseCase
 import com.example.todolist.domain.useCases.tasksUseCases.DeleteTaskUseCase
-import com.example.todolist.domain.useCases.tasksUseCases.UpdateTaskUseCase
 import com.example.todolist.domain.useCases.tasksUseCases.updateTaskCheckUseCase
 import com.example.todolist.domain.useCases.userPreferencesUseCases.UpdateHideCompletedUseCase
 import com.example.todolist.domain.useCases.userPreferencesUseCases.UpdateSortOrderUseCase
@@ -41,8 +40,6 @@ class TasksViewModel @Inject constructor(
     private val updateSortOrderUseCase: UpdateSortOrderUseCase,
     private val updateHideCompletedUseCase: UpdateHideCompletedUseCase,
 
-    private val updateFolderUseCase: UpdateFolderUseCase,
-    private val updateTaskUseCase: UpdateTaskUseCase,
     private val updateTaskCheckUseCase: updateTaskCheckUseCase,
 
     private val deleteTaskUseCase: DeleteTaskUseCase,
@@ -51,24 +48,37 @@ class TasksViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TasksUiState())
+
+    /**
+     * the ui state for [TasksFragment]
+     */
     val uiState = _uiState.asLiveData()
 
     private val tasksEventChannel = Channel<TasksEvent>()
+
+    /**
+     * the event channel to collect by [TasksFragment]
+     */
     val tasksEvent = tasksEventChannel.receiveAsFlow()
 
+    /**
+     * a list of Fingerprints with corresponding actions
+     */
     val fingerprintsWithAction = initFingerprintsWithAction()
+
+    /**
+     * a list of Fingerprints
+     */
     val fingerprints = fingerprintsWithAction.map { it.fingerprint }
 
     //    val searchQuery = state.getLiveData("searchQuery", "")
 
     init {
         fetchTasksData()
-        Log.i("TAG", "initing!!!")
     }
 
     private fun fetchTasksData() = viewModelScope.launch {
         val rootFolder = getRootFolderUseCase()
-        Log.i("TAG", "fetchTasksData: rootFolder is $rootFolder")
         navigateToFolder(rootFolder.id)
     }
 
@@ -98,11 +108,23 @@ class TasksViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Check whether [uiState] points to root folder or not
+     *
+     * @return true if the folder is root, otherwise false
+     */
     fun isCurrentFolderRoot(): Boolean {
         val folderData = _uiState.value.folderData ?: return false
         return folderData.id == folderData.parentFolderId
     }
 
+    /**
+     * returns name for title to display in header
+     *
+     * @param resources variable to have access to android resources
+     *
+     * @return the title
+     */
     fun getTitleName(resources: Resources): String {
         return if (isCurrentFolderRoot()) {
             resources.getString(R.string.taskfragment_all_tasks_title)
@@ -145,10 +167,20 @@ class TasksViewModel @Inject constructor(
         )
     }
 
+    /**
+     * update sort order based on user prefer
+     *
+     * @param sortOrder the way user want to sort tasks and folders
+     */
     fun onSortOrderSelected(sortOrder: SortOrder) = viewModelScope.launch {
         updateSortOrderUseCase(sortOrder)
     }
 
+    /**
+     * hide or show completed tasks based on user prefer
+     *
+     * @param hideCompleted do we need to hide completed tasks
+     */
     fun onHideCompletedSelected(hideCompleted: Boolean) = viewModelScope.launch {
         updateHideCompletedUseCase(hideCompleted)
     }
@@ -163,9 +195,11 @@ class TasksViewModel @Inject constructor(
 
     private fun onSubFolderSelected(folder: FolderUiState) = viewModelScope.launch {
         navigateToFolder(folderId = folder.id)
-        // TODO: change search query and collapse searching
     }
 
+    /**
+     * Call this function if user press home button
+     */
     fun onHomeButtonSelected() = viewModelScope.launch {
         val folderId = _uiState.value.folderData?.parentFolderId ?: return@launch
         navigateToFolder(folderId)
@@ -181,6 +215,11 @@ class TasksViewModel @Inject constructor(
         tasksEventChannel.send(TasksEvent.NotifyAdapterItemChanged(position))
     }
 
+    /**
+     * call this function if user want to undo deletion
+     *
+     * @param task the deleted task
+     */
     fun onUndoDeleteClicked(task: TaskUiState) = viewModelScope.launch {
         addTaskUseCase(
             Task(
@@ -192,6 +231,9 @@ class TasksViewModel @Inject constructor(
         )
     }
 
+    /**
+     * call this function if user want to add a new task
+     */
     fun onAddNewTaskClicked() = viewModelScope.launch {
         _uiState.value.folderData?.let {
             _uiState.value = _uiState.value.copy(fabAnimation = TasksUiState.FABAnimation.DO_NOTHING)
@@ -199,12 +241,18 @@ class TasksViewModel @Inject constructor(
         }
     }
 
+    /**
+     * call this function if user want to add a new folder
+     */
     fun onAddNewFolderClicked() = viewModelScope.launch {
         val folderData = _uiState.value.folderData ?: return@launch
         _uiState.value = _uiState.value.copy(fabAnimation = TasksUiState.FABAnimation.HIDE_FABS)
         tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToAddFolderScreen(folderData))
     }
 
+    /**
+     * call this function if user clicked the add button
+     */
     fun onAddButtonClicked() = viewModelScope.launch {
         _uiState.value = _uiState.value.copy(
             fabAnimation = when (_uiState.value.fabAnimation) {
@@ -214,6 +262,9 @@ class TasksViewModel @Inject constructor(
         )
     }
 
+    /**
+     * call this function when a result comes from other fragments
+     */
     fun onAddEditResult(result: Int) {
         when (result) {
             ADD_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task added")
@@ -222,17 +273,21 @@ class TasksViewModel @Inject constructor(
         }
     }
 
+    /**
+     * call this function when a result comes from other fragments
+     */
     fun onAddEditFolderResult(result: Int) = viewModelScope.launch {
         when (result) {
             ADD_FOLDER_RESULT_OK -> showTaskSavedConfirmationMessage("Folder added")
             EDIT_FOLDER_RESULT_OK -> {
                 showTaskSavedConfirmationMessage("Folder updated")
-                //TODO: WTF?
-                //currentFolder.postValue(folderDao.getFolder(currentFolder.value!!.id))
             }
         }
     }
 
+    /**
+     * quick change of folder
+     */
     fun onQuickFolderChangeResult(result: FolderUiState?) = viewModelScope.launch {
         if (result != null) {
             navigateToFolder(result.id)
@@ -243,16 +298,25 @@ class TasksViewModel @Inject constructor(
         tasksEventChannel.send(TasksEvent.MessageEvent.ShowTaskSavedConfirmationMessage(msg))
     }
 
+    /**
+     * call this function if user want to delete all completed tasks
+     */
     fun onDeleteAllCompletedClicked() = viewModelScope.launch {
         tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToDeleteAllCompletedScreen)
     }
 
+    /**
+     * call this function if user want to navigate to other folder
+     */
     fun onQuickFolderChangeClicked() = viewModelScope.launch {
         tasksEventChannel.send(TasksEvent.NavigationEvent.NavigateToQuickFolderChange(
             getStarredFoldersUseCase().map { it.mapToPresentation() }
         ))
     }
 
+    /**
+     * call this function if user want to edit folder information
+     */
     fun onEditFolderClicked() = viewModelScope.launch {
         val folderData = _uiState.value.folderData ?: return@launch
         val parentFolder = getFolderUseCase(folderData.parentFolderId).mapToPresentation()
@@ -285,6 +349,9 @@ class TasksViewModel @Inject constructor(
         }
     }*/
 
+    /**
+     * the events to consume by the [TasksFragment]
+     */
     sealed class TasksEvent {
 
         sealed class NavigationEvent {

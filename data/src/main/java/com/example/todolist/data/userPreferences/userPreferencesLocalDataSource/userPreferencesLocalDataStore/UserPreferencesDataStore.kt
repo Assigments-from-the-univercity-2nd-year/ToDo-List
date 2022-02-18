@@ -20,8 +20,8 @@ class UserPreferencesDataStore @Inject constructor(
 
     private val dataStore = context.createDataStore("user_preferences")
 
-    private val preferencesFlow = dataStore.data
-        .map { preferences ->
+    override fun getFilterPreferencesDbModel(): Flow<FilterPreferences> {
+        return dataStore.data.map { preferences ->
             val sortOrderDbModel = SortOrder.valueOf(
                 preferences[PreferencesKeys.SORT_ORDER] ?: SortOrder.BY_DATE.name
             )
@@ -29,9 +29,7 @@ class UserPreferencesDataStore @Inject constructor(
 
             FilterPreferences(sortOrderDbModel, hideCompleted)
         }
-
-    override fun getFilterPreferencesDbModel(): Flow<FilterPreferences> =
-        preferencesFlow
+    }
 
     override suspend fun updateSortOrderDbModel(sortOrderModel: SortOrder) {
         dataStore.edit { preferences ->

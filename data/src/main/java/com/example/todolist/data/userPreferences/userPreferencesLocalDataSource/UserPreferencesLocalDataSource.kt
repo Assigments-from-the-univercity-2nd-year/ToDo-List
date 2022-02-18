@@ -9,7 +9,6 @@ interface UserPreferencesLocalDataSource {
     fun getFilterPreferencesDbModel(): Flow<FilterPreferences>
 
     suspend fun updateHideCompleted(hideCompleted: Boolean)
-
     suspend fun updateSortOrderDbModel(sortOrderModel: SortOrder)
 
 }

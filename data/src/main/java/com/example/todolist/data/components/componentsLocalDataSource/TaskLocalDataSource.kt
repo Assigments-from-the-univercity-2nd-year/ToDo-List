@@ -8,7 +8,6 @@ interface TaskLocalDataSource {
     fun getSubTasksFlow(parentFolderId: Long): Flow<List<TaskDbModel>>
 
     suspend fun getSubTasks(parentFolderId: Long): List<TaskDbModel>
-
     suspend fun getTask(taskId: Long): TaskDbModel
 
     suspend fun addTask(task: TaskDbModel): Long
@@ -16,7 +15,6 @@ interface TaskLocalDataSource {
     suspend fun updateTask(task: TaskDbModel)
 
     suspend fun deleteTask(taskId: Long)
-
     suspend fun deleteCompletedTasks()
 
 }
