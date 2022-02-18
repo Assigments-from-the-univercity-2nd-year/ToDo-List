@@ -1,0 +1,423 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>TasksViewModel</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><link href="../../../styles/prism.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script><script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script><script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>  </head>
+  <body>
+    <div class="navigation-wrapper" id="navigation-wrapper">
+      <div id="leftToggler"><span class="icon-toggler"></span></div>
+      <div class="library-name"><a href="../../../index.html">app</a></div>
+      <div></div>
+      <div class="pull-right d-flex"><button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+      </div>
+    </div>
+    <div id="container">
+      <div id="leftColumn">
+        <div id="sideMenu"></div>
+      </div>
+      <div id="main">
+        <div class="main-content" id="content" pageIds="app::com.example.todolist.presentation.tasks/TasksViewModel///PointingToDeclaration//492899073">
+          <div class="breadcrumbs"><a href="../../../index.html">app</a>/<a href="../index.html">com.example.todolist.presentation.tasks</a>/<a href="index.html">TasksViewModel</a></div>
+          <div class="cover ">
+            <h1 class="cover"><span>Tasks</span><wbr></wbr><span>View</span><wbr></wbr><span><span>Model</span></span></h1>
+            <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">TasksViewModel</a> <span><span class="token annotation">@</span><span data-unresolved-link="javax.inject/Inject///PointingToDeclaration/"><span class="token annotation">Inject</span></span> </span><span class="token keyword">constructor</span><span class="token punctuation">(</span>getRootFolderUseCase<span class="token operator">: </span><span data-unresolved-link="com.example.todolist.domain.useCases.folderUseCases/GetRootFolderUseCase///PointingToDeclaration/">GetRootFolderUseCase</span><span class="token punctuation">, </span>getStarredFoldersUseCase<span class="token operator">: </span><span data-unresolved-link="com.example.todolist.domain.useCases.folderUseCases/GetStarredFoldersUseCase///PointingToDeclaration/">GetStarredFoldersUseCase</span><span class="token punctuation">, </span>getFolderFlowUseCase<span class="token operator">: </span><span data-unresolved-link="com.example.todolist.domain.useCases.folderUseCases/GetFolderFlowUseCase///PointingToDeclaration/">GetFolderFlowUseCase</span><span class="token punctuation">, </span>getFolderUseCase<span class="token operator">: </span><span data-unresolved-link="com.example.todolist.domain.useCases.folderUseCases/GetFolderUseCase///PointingToDeclaration/">GetFolderUseCase</span><span class="token punctuation">, </span>getComponentsOfFolderUseCase<span class="token operator">: </span><span data-unresolved-link="com.example.todolist.domain.useCases.folderUseCases/GetComponentsOfFolderUseCase///PointingToDeclaration/">GetComponentsOfFolderUseCase</span><span class="token punctuation">, </span>updateSortOrderUseCase<span class="token operator">: </span><span data-unresolved-link="com.example.todolist.domain.useCases.userPreferencesUseCases/UpdateSortOrderUseCase///PointingToDeclaration/">UpdateSortOrderUseCase</span><span class="token punctuation">, </span>updateHideCompletedUseCase<span class="token operator">: </span><span data-unresolved-link="com.example.todolist.domain.useCases.userPreferencesUseCases/UpdateHideCompletedUseCase///PointingToDeclaration/">UpdateHideCompletedUseCase</span><span class="token punctuation">, </span>updateTaskCheckUseCase<span class="token operator">: </span><span data-unresolved-link="com.example.todolist.domain.useCases.tasksUseCases/updateTaskCheckUseCase///PointingToDeclaration/">updateTaskCheckUseCase</span><span class="token punctuation">, </span>deleteTaskUseCase<span class="token operator">: </span><span data-unresolved-link="com.example.todolist.domain.useCases.tasksUseCases/DeleteTaskUseCase///PointingToDeclaration/">DeleteTaskUseCase</span><span class="token punctuation">, </span>addTaskUseCase<span class="token operator">: </span><span data-unresolved-link="com.example.todolist.domain.useCases.tasksUseCases/AddTaskUseCase///PointingToDeclaration/">AddTaskUseCase</span><span class="token punctuation">)</span> : <a href="https://developer.android.com/reference/kotlin/androidx/lifecycle/ViewModel.html">ViewModel</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+          </div>
+          <div class="tabbedcontent">
+            <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="Types">Types</button><button class="section-tab" data-togglable="Functions">Functions</button><button class="section-tab" data-togglable="Properties">Properties</button></div>
+            <div class="tabs-section-body">
+              <h2 class="">Types</h2>
+              <div class="table" data-togglable="Types"><a data-name="-2080743382%2FClasslikes%2F492899073" anchor-label="FingerprintsWithAction" id="-2080743382%2FClasslikes%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-fingerprints-with-action/index.html"><span>Fingerprints</span><wbr></wbr><span>With</span><wbr></wbr><span><span>Action</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2080743382%2FClasslikes%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-fingerprints-with-action/index.html">FingerprintsWithAction</a><span class="token punctuation">(</span>fingerprint<span class="token operator">: </span><a href="../../com.example.todolist.presentation.tasks.componentAdapter/-component-fingerprint/index.html">ComponentFingerprint</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token punctuation">, </span>onSwipe<span class="token operator">: </span><span class="token punctuation">(</span><span class="token keyword"></span>position<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-991410775%2FClasslikes%2F492899073" anchor-label="TasksEvent" id="-991410775%2FClasslikes%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="-tasks-event/index.html"><span>Tasks</span><wbr></wbr><span><span>Event</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-991410775%2FClasslikes%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-tasks-event/index.html">TasksEvent</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">the events to consume by the <a href="../-tasks-fragment/index.html">TasksFragment</a></p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h2 class="">Functions</h2>
+              <div class="table" data-togglable="Functions"><a data-name="-1936886459%2FFunctions%2F492899073" anchor-label="clear" id="-1936886459%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="index.html#-1936886459%2FFunctions%2F492899073"><span><span>clear</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1936886459%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation">@</span><a href="https://developer.android.com/reference/kotlin/androidx/annotation/MainThread.html"><span class="token annotation">MainThread</span></a></div></div><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-1936886459%2FFunctions%2F492899073"><span class="token function">clear</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-215894976%2FFunctions%2F492899073" anchor-label="getTag" id="-215894976%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="index.html#-215894976%2FFunctions%2F492899073"><span>get</span><wbr></wbr><span><span>Tag</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-215894976%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html#-215894976%2FFunctions%2F492899073">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="index.html#-215894976%2FFunctions%2F492899073"><span class="token function">getTag</span></a><span class="token punctuation">(</span>p0<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html#-215894976%2FFunctions%2F492899073">T</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="1766114636%2FFunctions%2F492899073" anchor-label="getTitleName" id="1766114636%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="get-title-name.html"><span>get</span><wbr></wbr><span>Title</span><wbr></wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1766114636%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="get-title-name.html"><span class="token function">getTitleName</span></a><span class="token punctuation">(</span>resources<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/android/content/res/Resources.html">Resources</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">returns name for title to display in header</p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-442368741%2FFunctions%2F492899073" anchor-label="isCurrentFolderRoot" id="-442368741%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="is-current-folder-root.html"><span>is</span><wbr></wbr><span>Current</span><wbr></wbr><span>Folder</span><wbr></wbr><span><span>Root</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-442368741%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="is-current-folder-root.html"><span class="token function">isCurrentFolderRoot</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Check whether <a href="ui-state.html">uiState</a> points to root folder or not</p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="1398874317%2FFunctions%2F492899073" anchor-label="onAddButtonClicked" id="1398874317%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="on-add-button-clicked.html"><span>on</span><wbr></wbr><span>Add</span><wbr></wbr><span>Button</span><wbr></wbr><span><span>Clicked</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1398874317%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="on-add-button-clicked.html"><span class="token function">onAddButtonClicked</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/Job///PointingToDeclaration/">Job</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">call this function if user clicked the add button</p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="965350337%2FFunctions%2F492899073" anchor-label="onAddEditFolderResult" id="965350337%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="on-add-edit-folder-result.html"><span>on</span><wbr></wbr><span>Add</span><wbr></wbr><span>Edit</span><wbr></wbr><span>Folder</span><wbr></wbr><span><span>Result</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="965350337%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="on-add-edit-folder-result.html"><span class="token function">onAddEditFolderResult</span></a><span class="token punctuation">(</span>result<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/Job///PointingToDeclaration/">Job</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">call this function when a result comes from other fragments</p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-1052781233%2FFunctions%2F492899073" anchor-label="onAddEditResult" id="-1052781233%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="on-add-edit-result.html"><span>on</span><wbr></wbr><span>Add</span><wbr></wbr><span>Edit</span><wbr></wbr><span><span>Result</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1052781233%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="on-add-edit-result.html"><span class="token function">onAddEditResult</span></a><span class="token punctuation">(</span>result<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">call this function when a result comes from other fragments</p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="1409370527%2FFunctions%2F492899073" anchor-label="onAddNewFolderClicked" id="1409370527%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="on-add-new-folder-clicked.html"><span>on</span><wbr></wbr><span>Add</span><wbr></wbr><span>New</span><wbr></wbr><span>Folder</span><wbr></wbr><span><span>Clicked</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1409370527%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="on-add-new-folder-clicked.html"><span class="token function">onAddNewFolderClicked</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/Job///PointingToDeclaration/">Job</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">call this function if user want to add a new folder</p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-1500352138%2FFunctions%2F492899073" anchor-label="onAddNewTaskClicked" id="-1500352138%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="on-add-new-task-clicked.html"><span>on</span><wbr></wbr><span>Add</span><wbr></wbr><span>New</span><wbr></wbr><span>Task</span><wbr></wbr><span><span>Clicked</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1500352138%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="on-add-new-task-clicked.html"><span class="token function">onAddNewTaskClicked</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/Job///PointingToDeclaration/">Job</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">call this function if user want to add a new task</p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-1930136507%2FFunctions%2F492899073" anchor-label="onCleared" id="-1930136507%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="index.html#-1930136507%2FFunctions%2F492899073"><span>on</span><wbr></wbr><span><span>Cleared</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1930136507%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html#-1930136507%2FFunctions%2F492899073"><span class="token function">onCleared</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="664955143%2FFunctions%2F492899073" anchor-label="onDeleteAllCompletedClicked" id="664955143%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="on-delete-all-completed-clicked.html"><span>on</span><wbr></wbr><span>Delete</span><wbr></wbr><span>All</span><wbr></wbr><span>Completed</span><wbr></wbr><span><span>Clicked</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="664955143%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="on-delete-all-completed-clicked.html"><span class="token function">onDeleteAllCompletedClicked</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/Job///PointingToDeclaration/">Job</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">call this function if user want to delete all completed tasks</p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="457379114%2FFunctions%2F492899073" anchor-label="onEditFolderClicked" id="457379114%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="on-edit-folder-clicked.html"><span>on</span><wbr></wbr><span>Edit</span><wbr></wbr><span>Folder</span><wbr></wbr><span><span>Clicked</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="457379114%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="on-edit-folder-clicked.html"><span class="token function">onEditFolderClicked</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/Job///PointingToDeclaration/">Job</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">call this function if user want to edit folder information</p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="1149558874%2FFunctions%2F492899073" anchor-label="onHideCompletedSelected" id="1149558874%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="on-hide-completed-selected.html"><span>on</span><wbr></wbr><span>Hide</span><wbr></wbr><span>Completed</span><wbr></wbr><span><span>Selected</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1149558874%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="on-hide-completed-selected.html"><span class="token function">onHideCompletedSelected</span></a><span class="token punctuation">(</span>hideCompleted<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/Job///PointingToDeclaration/">Job</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">hide or show completed tasks based on user prefer</p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="738225557%2FFunctions%2F492899073" anchor-label="onHomeButtonSelected" id="738225557%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="on-home-button-selected.html"><span>on</span><wbr></wbr><span>Home</span><wbr></wbr><span>Button</span><wbr></wbr><span><span>Selected</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="738225557%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="on-home-button-selected.html"><span class="token function">onHomeButtonSelected</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/Job///PointingToDeclaration/">Job</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">Call this function if user press home button</p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-1448329755%2FFunctions%2F492899073" anchor-label="onQuickFolderChangeClicked" id="-1448329755%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="on-quick-folder-change-clicked.html"><span>on</span><wbr></wbr><span>Quick</span><wbr></wbr><span>Folder</span><wbr></wbr><span>Change</span><wbr></wbr><span><span>Clicked</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1448329755%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="on-quick-folder-change-clicked.html"><span class="token function">onQuickFolderChangeClicked</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/Job///PointingToDeclaration/">Job</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">call this function if user want to navigate to other folder</p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="2033004283%2FFunctions%2F492899073" anchor-label="onQuickFolderChangeResult" id="2033004283%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="on-quick-folder-change-result.html"><span>on</span><wbr></wbr><span>Quick</span><wbr></wbr><span>Folder</span><wbr></wbr><span>Change</span><wbr></wbr><span><span>Result</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2033004283%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="on-quick-folder-change-result.html"><span class="token function">onQuickFolderChangeResult</span></a><span class="token punctuation">(</span>result<span class="token operator">: </span><a href="../../com.example.todolist.presentation.entities.components/-folder-ui-state/index.html">FolderUiState</a><span class="token operator">?</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/Job///PointingToDeclaration/">Job</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">quick change of folder</p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="450923954%2FFunctions%2F492899073" anchor-label="onSortOrderSelected" id="450923954%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="on-sort-order-selected.html"><span>on</span><wbr></wbr><span>Sort</span><wbr></wbr><span>Order</span><wbr></wbr><span><span>Selected</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="450923954%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="on-sort-order-selected.html"><span class="token function">onSortOrderSelected</span></a><span class="token punctuation">(</span>sortOrder<span class="token operator">: </span><span data-unresolved-link="com.example.todolist.domain.models.userPreferences/SortOrder///PointingToDeclaration/">SortOrder</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/Job///PointingToDeclaration/">Job</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">update sort order based on user prefer</p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="1215697263%2FFunctions%2F492899073" anchor-label="onUndoDeleteClicked" id="1215697263%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="on-undo-delete-clicked.html"><span>on</span><wbr></wbr><span>Undo</span><wbr></wbr><span>Delete</span><wbr></wbr><span><span>Clicked</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1215697263%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="on-undo-delete-clicked.html"><span class="token function">onUndoDeleteClicked</span></a><span class="token punctuation">(</span>task<span class="token operator">: </span><a href="../../com.example.todolist.presentation.entities.components/-task-ui-state/index.html">TaskUiState</a><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines/Job///PointingToDeclaration/">Job</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><p class="paragraph">call this function if user want to undo deletion</p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-1567230750%2FFunctions%2F492899073" anchor-label="setTagIfAbsent" id="-1567230750%2FFunctions%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="index.html#-1567230750%2FFunctions%2F492899073"><span>set</span><wbr></wbr><span>Tag</span><wbr></wbr><span>If</span><wbr></wbr><span><span>Absent</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1567230750%2FFunctions%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword"></span><span class="token keyword">fun </span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="index.html#-1567230750%2FFunctions%2F492899073">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="index.html#-1567230750%2FFunctions%2F492899073"><span class="token function">setTagIfAbsent</span></a><span class="token punctuation">(</span>p0<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span>p1<span class="token operator">: </span><a href="index.html#-1567230750%2FFunctions%2F492899073">T</a><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html#-1567230750%2FFunctions%2F492899073">T</a><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h2 class="">Properties</h2>
+              <div class="table" data-togglable="Properties"><a data-name="-1889843215%2FProperties%2F492899073" anchor-label="fingerprints" id="-1889843215%2FProperties%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="fingerprints.html">fingerprints</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1889843215%2FProperties%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><a data-name="-1889843215%2FProperties%2F492899073" anchor-label="fingerprints" id="-1889843215%2FProperties%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="fingerprints.html">fingerprints</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../../com.example.todolist.presentation.tasks.componentAdapter/-component-fingerprint/index.html">ComponentFingerprint</a><span class="token operator">&lt;</span><span class="token operator">*</span><span class="token punctuation">, </span><span class="token operator">*</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-1889843215%2FProperties%2F492899073" anchor-label="fingerprints" id="-1889843215%2FProperties%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a><p class="paragraph">a list of Fingerprints</p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="-1661528139%2FProperties%2F492899073" anchor-label="fingerprintsWithAction" id="-1661528139%2FProperties%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="fingerprints-with-action.html">fingerprintsWithAction</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1661528139%2FProperties%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><a data-name="-1661528139%2FProperties%2F492899073" anchor-label="fingerprintsWithAction" id="-1661528139%2FProperties%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="fingerprints-with-action.html">fingerprintsWithAction</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-fingerprints-with-action/index.html">TasksViewModel.FingerprintsWithAction</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="-1661528139%2FProperties%2F492899073" anchor-label="fingerprintsWithAction" id="-1661528139%2FProperties%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a><p class="paragraph">a list of Fingerprints with corresponding actions</p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="1143784372%2FProperties%2F492899073" anchor-label="tasksEvent" id="1143784372%2FProperties%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="tasks-event.html">tasksEvent</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1143784372%2FProperties%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><a data-name="1143784372%2FProperties%2F492899073" anchor-label="tasksEvent" id="1143784372%2FProperties%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="tasks-event.html">tasksEvent</a><span class="token operator">: </span><span data-unresolved-link="kotlinx.coroutines.flow/Flow///PointingToDeclaration/">Flow</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-tasks-event/index.html">TasksViewModel.TasksEvent</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="1143784372%2FProperties%2F492899073" anchor-label="tasksEvent" id="1143784372%2FProperties%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a><p class="paragraph">the event channel to collect by <a href="../-tasks-fragment/index.html">TasksFragment</a></p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+<a data-name="2121418941%2FProperties%2F492899073" anchor-label="uiState" id="2121418941%2FProperties%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a>
+                <div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release">
+                  <div class="main-subrow keyValue ">
+                    <div class=""><span class="inline-flex">
+                        <div><a href="ui-state.html">uiState</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2121418941%2FProperties%2F492899073"></span>
+                          <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                        </span></span></div>
+                    <div>
+                      <div class="title">
+                        <div class="platform-hinted " data-platform-hinted="data-platform-hinted" data-togglable="Properties"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><a data-name="2121418941%2FProperties%2F492899073" anchor-label="uiState" id="2121418941%2FProperties%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">val </span><a href="ui-state.html">uiState</a><span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/lifecycle/LiveData.html">LiveData</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../-tasks-ui-state/index.html">TasksUiState</a><span class="token operator">&gt;</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><div class="brief "><a data-name="2121418941%2FProperties%2F492899073" anchor-label="uiState" id="2121418941%2FProperties%2F492899073" data-filterable-set=":app:dokkaHtml/release"></a><p class="paragraph">the ui state for <a href="../-tasks-fragment/index.html">TasksFragment</a></p></div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2022 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+    </div>
+  </body>
+</html>
+
